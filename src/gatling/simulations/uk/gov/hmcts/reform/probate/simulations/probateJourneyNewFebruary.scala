@@ -7,7 +7,6 @@ import uk.gov.hmcts.reform.probate.performance.simulations.checks.PaymentSession
 import uk.gov.hmcts.reform.probate.performance.simulations.checks.{CsrfCheck, CsrfCheckForPayment, CurrentPageUrl, PaymentSessionToken}
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
-import uk.gov.hmcts.reform.probate.performance.simulations.checks
 
 class probateJourneyNewFebruary extends Simulation{
 

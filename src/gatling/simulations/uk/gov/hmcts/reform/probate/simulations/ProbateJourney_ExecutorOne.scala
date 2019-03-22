@@ -521,5 +521,5 @@ class ProbateJourney_ExecutorOne extends Simulation {
       )
     )
 
-  setUp(scn.inject(atOnceUsers(1))).protocols(httpProtocol)
+  setUp(scn.inject(atOnceUsers(2))).protocols(httpProtocol)
 }

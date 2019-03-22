@@ -15,7 +15,7 @@ import jodd.lagarto.dom.NodeSelector
 
 class ProbateJourney_ExecutorTwo extends Simulation {
 
-  val userFeeder = csv("probate_executors2.csv").queue
+  val userFeeder = csv("probate_executors3.csv").queue
 
   val httpProtocol = http
     .baseURL("https://probate-frontend-sprod.service.core-compute-sprod.internal")
@@ -137,7 +137,7 @@ class ProbateJourney_ExecutorTwo extends Simulation {
       .check(regex("signed out")))
 
   val scn = scenario("ProbateExecutorTwo")
-    .repeat(50)(
+    .repeat(1)(
       exec(
         ProbHome,
         ProbLogin,
@@ -145,5 +145,5 @@ class ProbateJourney_ExecutorTwo extends Simulation {
       )
   )
 
-  setUp(scn.inject(atOnceUsers(1))).protocols(httpProtocol)
+  setUp(scn.inject(atOnceUsers(2))).protocols(httpProtocol)
 }
