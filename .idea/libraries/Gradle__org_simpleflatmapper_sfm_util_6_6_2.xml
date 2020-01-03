@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.simpleflatmapper:sfm-util:6.6.2">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.simpleflatmapper/sfm-util/6.6.2/4e9690ff59e2858c48de8e4b0bafdd983d2144c1/sfm-util-6.6.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.simpleflatmapper/sfm-util/6.6.2/f1c44088dae9b421be216251db3273e9c5ca36cf/sfm-util-6.6.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

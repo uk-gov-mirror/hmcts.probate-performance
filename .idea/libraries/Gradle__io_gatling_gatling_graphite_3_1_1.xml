@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: io.gatling:gatling-graphite:3.1.1">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.gatling/gatling-graphite/3.1.1/a1e7c44cff3c17059aed5855971420a552a3d5d3/gatling-graphite-3.1.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.gatling/gatling-graphite/3.1.1/10441d9faec2b9062f09bee3af293704df76314a/gatling-graphite-3.1.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

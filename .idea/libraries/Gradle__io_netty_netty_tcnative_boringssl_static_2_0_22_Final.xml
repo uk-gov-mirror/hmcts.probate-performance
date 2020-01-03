@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: io.netty:netty-tcnative-boringssl-static:2.0.22.Final">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-tcnative-boringssl-static/2.0.22.Final/acdee1770675427b15988028238ab33efdf74fda/netty-tcnative-boringssl-static-2.0.22.Final.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-tcnative-boringssl-static/2.0.22.Final/d08edb9874da7d9b5d4c3a2e5eb73da266ddf75d/netty-tcnative-boringssl-static-2.0.22.Final-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
