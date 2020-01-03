@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/PerformanceTest_xxx.iml" filepath="$PROJECT_DIR$/PerformanceTest_xxx.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/probate-performance.iml" filepath="$PROJECT_DIR$/.idea/modules/probate-performance.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/probate-performance_gatling.iml" filepath="$PROJECT_DIR$/.idea/modules/probate-performance_gatling.iml" group="probate-performance" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/probate-performance_main.iml" filepath="$PROJECT_DIR$/.idea/modules/probate-performance_main.iml" group="probate-performance" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/probate-performance_test.iml" filepath="$PROJECT_DIR$/.idea/modules/probate-performance_test.iml" group="probate-performance" />
+    </modules>
+  </component>
+</project>

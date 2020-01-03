@@ -1,0 +1,10 @@
+{
+  "simulation": "uk.gov.hmcts.reform.probate.performance.simulations.ProbateCaveat",
+  "simulationId": "probatecaveat",
+  "start": 1578006173065,
+  "description": "",
+  "scenarios": ["Probate_Caveat"],
+  "assertions": [
+
+  ]
+}
