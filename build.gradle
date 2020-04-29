@@ -1,5 +1,5 @@
 plugins {
-    id 'org.owasp.dependencycheck' version '3.3.4'
+    id 'org.owasp.dependencycheck' version '5.1.0'
     id 'scala'
     id 'com.github.lkishalmi.gatling' version '3.0.2'
     id 'java-gradle-plugin'
@@ -31,22 +31,29 @@ repositories {
     jcenter()
 }
 
+ScalaCompileOptions.metaClass.daemonServer = true
+ScalaCompileOptions.metaClass.fork = true
+ScalaCompileOptions.metaClass.useAnt = false
+ScalaCompileOptions.metaClass.useCompileDaemon = false
 
 dependencies {
     compile 'org.scala-lang:scala-library:2.12.8'
 
     gatlingCompile 'com.warrenstrange:googleauth:1.1.5'
-    compile group: 'io.gatling', name: 'gatling-app', version: '3.1.1'
+    compile group: 'io.gatling', name: 'gatling-app', version: '3.2.0'
 
-    compile group: 'io.gatling', name: 'gatling-recorder', version: '3.1.1'
-    compile group: 'io.gatling.highcharts', name: 'gatling-charts-highcharts', version: '3.1.1'
+    compile group: 'io.gatling', name: 'gatling-recorder', version: '3.2.0'
+    compile group: 'io.gatling.highcharts', name: 'gatling-charts-highcharts', version: '3.2.0'
 
 }
 
 gatling {
-    toolVersion '3.1.1'
+    toolVersion '3.2.0'
     scalaVersion '2.12.8'
-    simulations = [ 'uk.gov.hmcts.reform.probate.performance.simulations.ProbateCaveat']
+    simulations = [ 
+        //'uk.gov.hmcts.reform.probate.simulations.ProbateCaveat'
+        'uk.gov.hmcts.reform.probate.simulations.Probate_ApplicationSimulation'
+        ]
 }
 
 test {
