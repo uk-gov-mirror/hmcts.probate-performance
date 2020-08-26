@@ -360,7 +360,8 @@ class IntestacyJourney_Payment extends Simulation {
       .check(CsrfCheck.save))
       .pause(1)
       .exec(http("request_1070")
-        .get("/relationship-to-deceased")
+        .get("/relationship-to-deceased"))
+
   val probDeclaration =
 
     exec(http("PROBATEThree_030_DeclarationSummary")
@@ -383,7 +384,7 @@ class IntestacyJourney_Payment extends Simulation {
     exec(http("PROBATEThree_030_DeclarationSummary")
         .post("/any-other-children")
         .formParam("_csrf", "U8DPk0nC-edxk-YNNkJ0H6L8pJ6sqqVLuw2E")
-        .formParam("anyOtherChildren", "Yes")
+        .formParam("anyOtherChildren", "Yes"))
 
       val declaration=
     exec(http("PROBATEThree_040_Declaration")

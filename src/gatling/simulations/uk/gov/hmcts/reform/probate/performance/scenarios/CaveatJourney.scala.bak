@@ -2,7 +2,7 @@ package uk.gov.hmcts.reform.probate.performance.caveat
 
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
-import uk.gov.hmcts.reform.probate.performance.simulations.checks.CsrfCheck
+import uk.gov.hmcts.reform.probate.performance.scenarios.checks.CsrfCheck
 //import uk.gov.hmcts.reform.idam.User
 
 import uk.gov.hmcts.reform.cmc.performance.utils._

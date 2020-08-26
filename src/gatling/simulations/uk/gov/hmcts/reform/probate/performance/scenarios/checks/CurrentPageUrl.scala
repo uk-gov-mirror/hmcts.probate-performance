@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.probate.performance.simulations.checks
+package uk.gov.hmcts.reform.probate.performance.scenarios.checks
 
 import io.gatling.core.Predef._
 import io.gatling.core.check.CheckBuilder
