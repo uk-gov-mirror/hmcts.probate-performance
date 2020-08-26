@@ -27,17 +27,16 @@ object Login {
   val ProbateLogin = group("Probate_Login") {
 
     exec(http("Probate_020_005_Login")
-      .post(IdamURL + "login?ui_locales=en&response_type=code&state=${state}&client_id=probate&redirect_uri=" + BaseURL + "/oauth2/callback")
-      //.disableFollowRedirect
+      .post(IdamURL + "/login?ui_locales=en&response_type=code&state=${state}&client_id=probate&redirect_uri=" + BaseURL + "/oauth2/callback")
+      .disableFollowRedirect
       .headers(IdamHeader)
       .formParam("username", CitizenUsername)
       .formParam("password", CitizenPassword)
       .formParam("save", "Sign in")
       .formParam("selfRegistrationEnabled", "true")
       .formParam("_csrf", "${csrf}")
-      .check(headerRegex("location", "(?<=code=)(.*)&state").saveAs("authCode"))
+      .check(headerRegex("Location", "(?<=code=)(.*)&state").saveAs("authCode"))
       .check(status.in(200, 302)))
-      .exec { session => println(session("Username: ${CitizenUsername}; Authcode: ${authCode}").as[String]); session }
 
   }
 
