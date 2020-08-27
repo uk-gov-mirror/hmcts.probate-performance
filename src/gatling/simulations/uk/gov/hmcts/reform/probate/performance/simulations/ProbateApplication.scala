@@ -18,7 +18,9 @@ class ProbateApplication extends Simulation {
   val ProbateNewApplication = scenario( "ProbateNewApplication").repeat(1) {
     exec(
       Homepage.ProbateHomepage,
-      Login.ProbateLogin
+      Login.ProbateLogin,
+      NewProbateApp_ExecOne_Apply.ProbateEligibility,
+      NewProbateApp_ExecOne_Apply.ProbateApplication
     )
   }
 
