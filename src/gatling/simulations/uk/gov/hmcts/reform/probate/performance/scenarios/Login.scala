@@ -17,7 +17,7 @@ object Login {
 
   val CommonHeader = Environment.commonHeader
 
-  val CitizenUsername = "perftest009@perftest12345.com"
+  val CitizenUsername = "perftest018@perftest12345.com"
   val CitizenPassword = "Pa55word11"
 
 
@@ -47,6 +47,6 @@ object Login {
 
   }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    //.pause(MinThinkTime seconds, MaxThinkTime seconds)
 
 }

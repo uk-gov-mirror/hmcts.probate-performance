@@ -230,7 +230,7 @@ object NewProbateApp_ExecOne_Apply {
       .formParam("_csrf", "${csrf}")
       .formParam("codicilsNumber", "1")
       .check(regex("Complete these steps"))
-      .check(regex("""1.</span> Tell us about the person who has died</h2> <span class="govuk-tag task-completed">Completed</span>""")))
+      .check(regex("""1.</span> Tell us about the person who has died\n    </h2>\n    \n        <span class="govuk-tag task-completed">Completed</span>""")))
 
     .exec(http("Probate_040_075_SectionTwoStart")
       .get(BaseURL + "/applicant-name")
@@ -357,7 +357,39 @@ object NewProbateApp_ExecOne_Apply {
       .formParam("newPostCode", "PR1 1RF")
       .formParam("country", "")
       .check(regex("Complete these steps"))
-      .check(regex("""2.</span> Give details about the executors</h2> <span class="govuk-tag task-completed">Completed</span>""")))
+      .check(regex("""2.</span> Give details about the executors\n    </h2>\n    \n        <span class="govuk-tag task-completed">Completed</span>""")))
+      //.check(status.not(500)))
+      //.exitHereIfFailed
+
+    .exec(http("Probate_040_140_SectionThreeStart")
+      .get(BaseURL + "/summary/declaration")
+      .headers(CommonHeader)
+      .headers(GetHeader)
+      .check(regex("Check your answers")))
+
+    .exec(http("Probate_040_145_Declaration")
+      .get(BaseURL + "/declaration")
+      .headers(CommonHeader)
+      .headers(GetHeader)
+      .check(CsrfCheck.save)
+      .check(regex("Check the legal statement and make your declaration")))
+
+    .exec(http("Probate_040_150_DeclarationSubmit")
+      .post(BaseURL + "/declaration")
+      .headers(CommonHeader)
+      .headers(PostHeader)
+      .formParam("_csrf", "${csrf}")
+      .formParam("declarationCheckbox", "true")
+      .check(CsrfCheck.save)
+      .check(regex("Notify the other executors")))
+
+    .exec(http("Probate_040_155_ExecutorsInviteSubmit")
+      .post(BaseURL + "/executors-invite")
+      .headers(CommonHeader)
+      .headers(PostHeader)
+      .formParam("_csrf", "${csrf}")
+      .check(regex("Complete these steps"))
+      .check(regex("Not declared")))
 
   }
 
