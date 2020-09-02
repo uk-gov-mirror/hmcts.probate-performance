@@ -17,7 +17,7 @@ object Login {
 
   val CommonHeader = Environment.commonHeader
 
-  val CitizenUsername = "perftest018@perftest12345.com"
+  val CitizenUsername = "perftest020@perftest12345.com"
   val CitizenPassword = "Pa55word11"
 
 
@@ -42,11 +42,11 @@ object Login {
       .get(BaseURL + "/oauth2/callback?code=${authCode}&state=${state}&client_id=probate&iss=" + IdamURL + "/o")
       .headers(CommonHeader)
       .headers(Map("accept-language" -> "en-GB,en;q=0.9",
-        "sec-fetch-site" -> "same-site"))
-    )
+        "sec-fetch-site" -> "same-site")))
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
 
   }
-
-    //.pause(MinThinkTime seconds, MaxThinkTime seconds)
 
 }

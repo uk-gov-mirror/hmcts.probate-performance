@@ -18,7 +18,7 @@ object Logout {
 
   val ProbateLogout = group("Probate_Logout") {
 
-    exec(http("Probate_050_005_Logout")
+    exec(http("Probate_060_005_Logout")
       .get(BaseURL + "/sign-out")
       .headers(CommonHeader)
       .headers(GetHeader)

@@ -6,7 +6,7 @@ import io.gatling.http.Predef._
 import io.gatling.http.check.status.HttpStatusCheckType
 
 object StatusCheck {
-  def save: CheckBuilder[HttpStatusCheckType,String,Int] = status.saveAs("httpStatus")
+  //def save: CheckBuilder[HttpStatusCheckType,String,Int] = status.saveAs("httpStatus")
 
   //doesn't like the above - required string,int; found response,int
   //something maybe to go here to evaluate the httpStatus

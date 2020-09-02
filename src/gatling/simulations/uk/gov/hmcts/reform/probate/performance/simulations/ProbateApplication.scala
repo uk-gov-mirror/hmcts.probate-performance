@@ -21,6 +21,11 @@ class ProbateApplication extends Simulation {
       Login.ProbateLogin,
       NewProbateApp_ExecOne_Apply.ProbateEligibility,
       NewProbateApp_ExecOne_Apply.ProbateApplication,
+      Logout.ProbateLogout,
+      NewProbateApp_ExecTwo_Declaration.ProbateDeclaration,
+      Homepage.ProbateHomepage,
+      Login.ProbateLogin,
+      NewProbateApp_ExecOne_Submit.ProbateSubmit,
       Logout.ProbateLogout
     )
   }
