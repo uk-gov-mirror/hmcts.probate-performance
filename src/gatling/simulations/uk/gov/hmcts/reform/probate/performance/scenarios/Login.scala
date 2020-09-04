@@ -17,24 +17,18 @@ object Login {
 
   val CommonHeader = Environment.commonHeader
 
-  val execOneLoginFeeder = csv("probate_execOne_logins.csv").queue
-
-  val CitizenUsername = "perftest031@perftest12345.com"
-  val CitizenPassword = "Pa55word11"
-
 
   val ProbateLogin = group("Probate_Login") {
 
-    feed(execOneLoginFeeder)
-    .exec(http("Probate_020_005_Login")
+    exec(http("Probate_020_005_Login")
       .post(IdamURL + "/login?ui_locales=en&response_type=code&state=${state}&client_id=probate&redirect_uri=" + BaseURL + "/oauth2/callback")
       .disableFollowRedirect
       .headers(CommonHeader)
       .headers(Map("accept-language" -> "en-GB,en;q=0.9",
         "content-type" -> "application/x-www-form-urlencoded",
         "sec-fetch-site" -> "same-origin"))
-      .formParam("username", CitizenUsername)
-      .formParam("password", CitizenPassword)
+      .formParam("username", "${email}")
+      .formParam("password", "${password}")
       .formParam("save", "Sign in")
       .formParam("selfRegistrationEnabled", "true")
       .formParam("_csrf", "${csrf}")

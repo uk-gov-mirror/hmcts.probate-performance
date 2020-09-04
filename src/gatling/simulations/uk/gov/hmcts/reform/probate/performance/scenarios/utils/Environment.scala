@@ -5,8 +5,11 @@ import io.gatling.http.Predef._
 
 object Environment {
 
-  val baseURL = "https://probate.perftest.platform.hmcts.net"
-  val idamURL = "https://idam-web-public.perftest.platform.hmcts.net"
+  //val baseURL = "https://probate.perftest.platform.hmcts.net"
+  //val idamURL = "https://idam-web-public.perftest.platform.hmcts.net"
+
+  val baseURL = "https://probate.aat.platform.hmcts.net"
+  val idamURL = "https://idam-web-public.aat.platform.hmcts.net"
 
   val minThinkTime = 1
   val maxThinkTime = 1

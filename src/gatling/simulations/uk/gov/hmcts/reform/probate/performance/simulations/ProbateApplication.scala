@@ -11,12 +11,16 @@ class ProbateApplication extends Simulation {
 
   val BaseURL = Environment.baseURL
 
+  val execOneLoginFeeder = csv("probate_execOne_logins.csv").queue
+
   val httpProtocol = Environment.HttpProtocol
     .baseUrl(BaseURL)
     .doNotTrackHeader("1")
 
   val ProbateNewApplication = scenario( "ProbateNewApplication").repeat(1) {
-    exec(
+
+    feed(execOneLoginFeeder)
+    .exec(
       Homepage.ProbateHomepage,
       Login.ProbateLogin,
       NewProbateApp_ExecOne_Apply.ProbateEligibility,

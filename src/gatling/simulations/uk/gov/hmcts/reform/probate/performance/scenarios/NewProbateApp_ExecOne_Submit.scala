@@ -25,7 +25,7 @@ object NewProbateApp_ExecOne_Submit {
       .headers(CommonHeader)
       .headers(GetHeader)
       .check(regex("Complete these steps"))
-      .check(regex("""copies-uk. role=.button. draggable=.false. class=.govuk-button govuk-button--start. data-module=.govuk-button.> \nStart""")))
+      .check(regex("""3.</span> Check your answers and make your legal declaration\n    </h2>\n    \n        <span class="govuk-tag task-completed">Completed</span>""")))
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
@@ -97,13 +97,12 @@ object NewProbateApp_ExecOne_Submit {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_060_045_PaymentStatusSubmit")
+    .exec(http("Probate_060_045_DocumentsSubmit")
       .post(BaseURL + "/documents")
       .headers(CommonHeader)
       .headers(PostHeader)
       .formParam("_csrf", "${csrf}")
       .formParam("sentDocuments", "true")
-      .check(CsrfCheck.save)
       .check(regex("Application complete")))
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
