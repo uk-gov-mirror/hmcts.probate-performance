@@ -17,13 +17,16 @@ object Login {
 
   val CommonHeader = Environment.commonHeader
 
-  val CitizenUsername = "perftest020@perftest12345.com"
+  val execOneLoginFeeder = csv("probate_execOne_logins.csv").queue
+
+  val CitizenUsername = "perftest031@perftest12345.com"
   val CitizenPassword = "Pa55word11"
 
 
   val ProbateLogin = group("Probate_Login") {
 
-    exec(http("Probate_020_005_Login")
+    feed(execOneLoginFeeder)
+    .exec(http("Probate_020_005_Login")
       .post(IdamURL + "/login?ui_locales=en&response_type=code&state=${state}&client_id=probate&redirect_uri=" + BaseURL + "/oauth2/callback")
       .disableFollowRedirect
       .headers(CommonHeader)

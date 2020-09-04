@@ -471,13 +471,14 @@ object NewProbateApp_ExecOne_Apply {
 
     //Get the invite ID associated with the second executor
 
-    exec(http("Probate_040_060_InviteIdList")
+    .exec(http("Probate_040_160_InviteIdList")
       .get(BaseURL + "/inviteIdList")
       .headers(CommonHeader)
       .headers(GetHeader)
-      .check(CsrfCheck.save)
-      //.check(regex("\\\"ids\\\":\\[\\\"(.+?)\\\"").saveAs("inviteId")))
-      .check(jsonPath("$.ids[0]").saveAs("inviteId")))
+      .check(regex("\\\"ids\\\":\\[\\\"(.+?)\\\"").saveAs("inviteId")))
+      //.check(jsonPath("$.ids[0]").saveAs("inviteId")))
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
   }
 

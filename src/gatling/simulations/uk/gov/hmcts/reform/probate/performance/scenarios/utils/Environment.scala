@@ -9,7 +9,7 @@ object Environment {
   val idamURL = "https://idam-web-public.perftest.platform.hmcts.net"
 
   val minThinkTime = 1
-  val maxThinkTime = 2
+  val maxThinkTime = 1
   val constantThinkTime = 7
   val minWaitForNextIteration = 120
   val maxWaitForNextIteration = 240
