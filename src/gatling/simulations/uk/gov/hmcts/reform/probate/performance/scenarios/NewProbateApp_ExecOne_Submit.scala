@@ -18,7 +18,7 @@ object NewProbateApp_ExecOne_Submit {
   val GetHeader = Environment.getHeader
   val PostHeader = Environment.postHeader
 
-  val ProbateSubmit = group("Probate_NewApp_ExecOne_Submit") {
+  val ProbateSubmit = group("Probate_Submit") {
 
     exec(http("Probate_060_005_GetCase")
       .get(BaseURL + "/get-case/${appId}?probateType=PA")

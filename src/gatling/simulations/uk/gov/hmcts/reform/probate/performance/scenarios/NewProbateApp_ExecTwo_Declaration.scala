@@ -18,7 +18,7 @@ object NewProbateApp_ExecTwo_Declaration {
   val GetHeader = Environment.getHeader
   val PostHeader = Environment.postHeader
 
-  val ProbateDeclaration = group("Probate_NewApp_ExecTwo_Declaration") {
+  val ProbateDeclaration = group("Probate_Declaration") {
 
     //inviteIdList was invoked prior to the first executor logging out, to retrieve the invite id for the
     //second executor

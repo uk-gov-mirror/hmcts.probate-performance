@@ -19,7 +19,7 @@ object NewProbateApp_ExecOne_Apply {
   val GetHeader = Environment.getHeader
   val PostHeader = Environment.postHeader
 
-  val ProbateEligibility = group("Probate_NewApp_ExecOne_Eligibility") {
+  val ProbateEligibility = group("Probate_Eligibility") {
 
     exec(http("Probate_030_005_DeathCertificate")
       .get(BaseURL + "/death-certificate")
@@ -131,7 +131,7 @@ object NewProbateApp_ExecOne_Apply {
 
   }
 
-  val ProbateApplication = group("Probate_NewApp_ExecOne_Apply") {
+  val ProbateApplication = group("Probate_Apply") {
 
     exec(http("Probate_040_005_ContinueApplication")
       .get(BaseURL + "/get-case/${appId}?probateType=PA")
