@@ -29,7 +29,13 @@ object NewProbateApp_ExecTwo_Declaration {
 
     //Simulate clicking the email link to display the page with a pin input box
 
-    exec(http("Probate_050_005_InviteId")
+    exec {
+      session =>
+        println("INVITE ID: " + session("inviteId").as[String])
+        session
+    }
+
+    .exec(http("Probate_050_005_InviteId")
       .get(BaseURL + "/executors/invitation/${inviteId}")
       .headers(CommonHeader)
       .headers(GetHeader)

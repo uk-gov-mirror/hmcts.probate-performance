@@ -4,6 +4,7 @@ import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import uk.gov.hmcts.reform.probate.performance.scenarios.checks.{CsrfCheck, CurrentPageUrl}
 import uk.gov.hmcts.reform.probate.performance.scenarios.utils.Environment
+import java.io.{BufferedWriter, FileWriter}
 
 import scala.concurrent.duration._
 
@@ -102,7 +103,27 @@ object NewProbateApp_ExecOne_Apply {
       .formParam("_csrf", "${csrf}")
       .formParam("mentalCapacity", "optionYes")
       .check(regex("a href=./get-case/([0-9]+).probateType=PA").find.saveAs("appId"))
-      .check(regex("In progress")))
+      .check(regex("In progress"))
+      .check(status.saveAs("statusValue")))
+      //Write out the email address and case id to a csv file
+      .doIf(session=>session("statusValue").as[String].contains("200")) {
+        exec {
+          session =>
+            val fw = new BufferedWriter(new FileWriter("EmailAndCaseID.csv", true))
+            try {
+              fw.write(session("email").as[String] + ","+session("appId").as[String] + "\r\n")
+            }
+            finally fw.close()
+            session
+        }
+      }
+
+    .exec {
+      session =>
+        println("EXEC1 EMAIL: " + session("email").as[String])
+        println("CASE ID: " + session("appId").as[String])
+        session
+    }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
@@ -424,8 +445,9 @@ object NewProbateApp_ExecOne_Apply {
       .formParam("postTown", "Perf Test Town")
       .formParam("newPostCode", "PR1 1RF")
       .formParam("country", "")
-      .check(regex("Complete these steps"))
-      .check(regex("""2.</span> Give details about the executors\n    </h2>\n    \n        <span class="govuk-tag task-completed">Completed</span>""")))
+      //PCQ (Equality/diversity survey) might pop up at this point, so cater for either outcome in the text check
+      //.check(regex("""2.</span> Give details about the executors\n    </h2>\n    \n        <span class="govuk-tag task-completed">Completed</span>""")))
+      .check(regex("2.</span> Give details about the executors(?s).*?<span class=.govuk-tag task-completed.>Completed</span>|Equality and diversity questions")))
       //.check(status.not(500)))
       //.exitHereIfFailed
 
