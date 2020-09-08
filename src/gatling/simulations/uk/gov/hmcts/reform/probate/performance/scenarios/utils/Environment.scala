@@ -9,6 +9,7 @@ object Environment {
   val idamURL = "https://idam-web-public.perftest.platform.hmcts.net"
   //val baseURL = "https://probate.aat.platform.hmcts.net"
   //val idamURL = "https://idam-web-public.aat.platform.hmcts.net"
+  val paymentURL = "https://www.payments.service.gov.uk"
 
   val minThinkTime = 1
   val maxThinkTime = 2

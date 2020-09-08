@@ -10,6 +10,7 @@ import scala.concurrent.duration._
 object ProbateCaveat {
 
   val BaseURL = Environment.baseURL
+  val PaymentURL = Environment.paymentURL
 
   val MinThinkTime = Environment.minThinkTime
   val MaxThinkTime = Environment.maxThinkTime
@@ -159,13 +160,71 @@ object ProbateCaveat {
       .headers(PostHeader)
       .formParam("_csrf", "${csrf}")
       .formParam("bilingual", "optionNo")
-      .check(CsrfCheck.save)
       .check(regex("Check your answers|Equality and diversity questions")))
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    //stuck here with a 500 in perftest - try in AAT
+    .exec(http("ProbateCaveat_010_065_PaymentBreakdown")
+      .get(BaseURL + "/caveats/payment-breakdown")
+      .headers(CommonHeader)
+      .headers(GetHeader)
+      .check(CsrfCheck.save)
+      .check(regex("Application fee")))
 
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+    .exec(http("ProbateCaveat_010_070_PaymentBreakdownSubmit")
+      .post(BaseURL + "/caveats/payment-breakdown")
+      .headers(CommonHeader)
+      .headers(PostHeader)
+      .formParam("_csrf", "${csrf}")
+      .check(regex("Enter card details"))
+      .check(css("input[name='csrfToken']", "value").saveAs("csrf"))
+      .check(css("input[name='chargeId']", "value").saveAs("ChargeId")))
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+    .exec(http("ProbateCaveat_010_075_CheckCard")
+      .post(PaymentURL + "/check_card/${ChargeId}")
+      .headers(PostHeader)
+      .formParam("cardNo", "4444333322221111")
+      .check(jsonPath("$.accepted").is("true"))
+      .check(bodyString.saveAs("responseBody")))
+    .exec { session => println(session("responseBody").as[String]); session}
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+    .exec(http("ProbateCaveat_010_080_CardDetailsSubmit")
+      .post(PaymentURL + "/card_details/${ChargeId}")
+      .headers(PostHeader)
+      .formParam("chargeId", "${ChargeId}")
+      .formParam("csrfToken", "${csrf}")
+      .formParam("cardNo", "4444333322221111")
+      .formParam("expiryMonth", "08")
+      .formParam("expiryYear", "21")
+      .formParam("cardholderName", "Perf Tester")
+      .formParam("cvc", "123")
+      .formParam("addressCountry", "")
+      .formParam("addressLine1", "1 Perf Test Road")
+      .formParam("addressLine2", "")
+      .formParam("addressCity", "Perf Test Town")
+      .formParam("addressPostcode", "PR1 1RF")
+      .formParam("email", "perftest12345@perftest12345.com")
+      .check(regex("Confirm your payment"))
+      .check(css("input[name='csrfToken']", "value").saveAs("csrf"))
+      .check(bodyString.saveAs("responseBody")))
+      .exec { session => println(session("responseBody").as[String]); session}
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+    .exec(http("ProbateCaveat_010_085_CardDetailsConfirmSubmit")
+      .post(PaymentURL + "/card_details/${ChargeId}/confirm")
+      .headers(PostHeader)
+      .formParam("chargeId", "${ChargeId}")
+      .formParam("csrfToken", "${csrf}")
+      .check(regex("Application complete")))
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
   }
 
