@@ -215,7 +215,29 @@ object NewProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_040_040_DocumentUploadSubmit")
+    .exec(http("Probate_040_040_DocumentUpload")
+      .post(BaseURL + "/document-upload")
+      .header("Accept", "application/json")
+      .header("Accept-Encoding", "gzip, deflate, br")
+      .header("Accept-Language", "en-GB,en;q=0.5")
+      .header("Content-Type", "multipart/form-data")
+      .header("TE", "Trailers")
+      .header("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36")
+      .header("x-csrf-token", "${csrf}")
+      .header("X-Requested-With", "XMLHttpRequest")
+      .formParam("isUploadingDocument", "true")
+      .bodyPart(RawFileBodyPart("file", "2MB.pdf")
+        .fileName("2MB.pdf")
+        .transferEncoding("binary"))
+      .asMultipartForm
+      .check(status.is(200))
+      .check(currentLocation.is(BaseURL + "/document-upload"))
+      .check(regex("/document-upload/remove/0.>Remove</a>"))
+      .check(regex("Upload the death certificate")))
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+    .exec(http("Probate_040_041_DocumentUploadSubmit")
       .post(BaseURL + "/document-upload")
       .headers(CommonHeader)
       .headers(PostHeader)
