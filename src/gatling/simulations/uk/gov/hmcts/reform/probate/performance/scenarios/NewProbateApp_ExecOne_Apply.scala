@@ -498,9 +498,10 @@ object NewProbateApp_ExecOne_Apply {
       .headers(CommonHeader)
       .headers(GetHeader)
       .check(regex("\\\"ids\\\":\\[\\\"(.+?)\\\"").saveAs("inviteId")))
-      //.check(jsonPath("$.ids[0]").saveAs("inviteId")))
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+    .exec(flushHttpCache)
 
   }
 

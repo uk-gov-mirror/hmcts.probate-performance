@@ -188,9 +188,7 @@ object ProbateCaveat {
       .post(PaymentURL + "/check_card/${ChargeId}")
       .headers(PostHeader)
       .formParam("cardNo", "4444333322221111")
-      .check(jsonPath("$.accepted").is("true"))
-      .check(bodyString.saveAs("responseBody")))
-    .exec { session => println(session("responseBody").as[String]); session}
+      .check(jsonPath("$.accepted").is("true")))
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
@@ -204,7 +202,7 @@ object ProbateCaveat {
       .formParam("expiryYear", "21")
       .formParam("cardholderName", "Perf Tester")
       .formParam("cvc", "123")
-      .formParam("addressCountry", "")
+      .formParam("addressCountry", "GB")
       .formParam("addressLine1", "1 Perf Test Road")
       .formParam("addressLine2", "")
       .formParam("addressCity", "Perf Test Town")

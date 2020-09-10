@@ -85,6 +85,8 @@ object NewProbateApp_ExecTwo_Declaration {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
+    .exec(flushHttpCache)
+
   }
 
 }
