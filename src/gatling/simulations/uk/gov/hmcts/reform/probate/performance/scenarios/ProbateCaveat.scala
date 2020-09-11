@@ -3,9 +3,11 @@ package uk.gov.hmcts.reform.probate.performance.scenarios
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import uk.gov.hmcts.reform.probate.performance.scenarios.checks.{CsrfCheck, CurrentPageUrl}
-import uk.gov.hmcts.reform.probate.performance.scenarios.utils.Environment
+import uk.gov.hmcts.reform.probate.performance.scenarios.utils.{Environment, Common}
+import java.io.{BufferedWriter, FileWriter}
 
 import scala.concurrent.duration._
+import scala.util.Random
 
 object ProbateCaveat {
 
@@ -18,6 +20,8 @@ object ProbateCaveat {
   val CommonHeader = Environment.commonHeader
   val GetHeader = Environment.getHeader
   val PostHeader = Environment.postHeader
+
+  val rnd = new Random()
 
   val ProbateCaveat = group("Probate_Caveat") {
 
@@ -44,8 +48,8 @@ object ProbateCaveat {
       .headers(CommonHeader)
       .headers(PostHeader)
       .formParam("_csrf", "${csrf}")
-      .formParam("firstName", "Perf")
-      .formParam("lastName", "Test")
+      .formParam("firstName", "Perf" + Common.randomString(5))
+      .formParam("lastName", "Test" + Common.randomString(5))
       .check(CsrfCheck.save)
       .check(regex("What is your email address")))
 
@@ -56,7 +60,7 @@ object ProbateCaveat {
       .headers(CommonHeader)
       .headers(PostHeader)
       .formParam("_csrf", "${csrf}")
-      .formParam("email", "perftest123@perftest12345.com")
+      .formParam("email", "caveat@perftest" + Common.randomString(8) + ".com")
       .check(CsrfCheck.save)
       .check(regex("What is your address")))
 
@@ -67,11 +71,11 @@ object ProbateCaveat {
       .headers(CommonHeader)
       .headers(PostHeader)
       .formParam("_csrf", "${csrf}")
-      .formParam("addressLine1", "1 Perf Test Road")
+      .formParam("addressLine1", rnd.nextInt(1000).toString + " Perf" + Common.randomString(5)  + " Road")
       .formParam("addressLine2", "")
       .formParam("addressLine3", "")
-      .formParam("postTown", "Perf Test Town")
-      .formParam("newPostCode", "PR1 1RF")
+      .formParam("postTown", "Perf " + Common.randomString(5) + " Town")
+      .formParam("newPostCode", Common.getPostcode())
       .formParam("country", "")
       .check(CsrfCheck.save)
       .check(regex("full name of the person")))
@@ -83,8 +87,8 @@ object ProbateCaveat {
       .headers(CommonHeader)
       .headers(PostHeader)
       .formParam("_csrf", "${csrf}")
-      .formParam("firstName", "Perf")
-      .formParam("lastName", "Tester")
+      .formParam("firstName", "Perf" + Common.randomString(5))
+      .formParam("lastName", "Tester" + Common.randomString(5))
       .check(CsrfCheck.save)
       .check(regex("What was the date that they died")))
 
@@ -95,9 +99,9 @@ object ProbateCaveat {
       .headers(CommonHeader)
       .headers(PostHeader)
       .formParam("_csrf", "${csrf}")
-      .formParam("dod-day", "12")
-      .formParam("dod-month", "12")
-      .formParam("dod-year", "2012")
+      .formParam("dod-day", Common.getDay())
+      .formParam("dod-month", Common.getMonth())
+      .formParam("dod-year", Common.getDodYear())
       .check(CsrfCheck.save)
       .check(regex("date of birth")))
 
@@ -119,9 +123,9 @@ object ProbateCaveat {
       .headers(CommonHeader)
       .headers(PostHeader)
       .formParam("_csrf", "${csrf}")
-      .formParam("dob-day", "12")
-      .formParam("dob-month", "12")
-      .formParam("dob-year", "1912")
+      .formParam("dob-day", Common.getDay())
+      .formParam("dob-month", Common.getMonth())
+      .formParam("dob-year", Common.getDobYear())
       .check(CsrfCheck.save)
       .check(regex("known by any other names")))
 
@@ -143,11 +147,11 @@ object ProbateCaveat {
       .headers(CommonHeader)
       .headers(PostHeader)
       .formParam("_csrf", "${csrf}")
-      .formParam("addressLine1", "1 Perf Test Road")
+      .formParam("addressLine1", rnd.nextInt(1000).toString + " Perf" + Common.randomString(5)  + " Road")
       .formParam("addressLine2", "")
       .formParam("addressLine3", "")
-      .formParam("postTown", "Perf Test Town")
-      .formParam("newPostCode", "PR1 1RF")
+      .formParam("postTown", "Perf " + Common.randomString(5) + " Town")
+      .formParam("newPostCode", Common.getPostcode())
       .formParam("country", "")
       .check(CsrfCheck.save)
       .check(regex("English and Welsh")))
@@ -198,20 +202,18 @@ object ProbateCaveat {
       .formParam("chargeId", "${ChargeId}")
       .formParam("csrfToken", "${csrf}")
       .formParam("cardNo", "4444333322221111")
-      .formParam("expiryMonth", "08")
-      .formParam("expiryYear", "21")
-      .formParam("cardholderName", "Perf Tester")
-      .formParam("cvc", "123")
+      .formParam("expiryMonth", Common.getMonth())
+      .formParam("expiryYear", "23")
+      .formParam("cardholderName", "Perf Tester" + Common.randomString(5))
+      .formParam("cvc", (100 + rnd.nextInt(900)).toString())
       .formParam("addressCountry", "GB")
-      .formParam("addressLine1", "1 Perf Test Road")
+      .formParam("addressLine1", rnd.nextInt(1000).toString + " Perf" + Common.randomString(5)  + " Road")
       .formParam("addressLine2", "")
-      .formParam("addressCity", "Perf Test Town")
-      .formParam("addressPostcode", "PR1 1RF")
-      .formParam("email", "perftest12345@perftest12345.com")
+      .formParam("addressCity", "Perf " + Common.randomString(5) + " Town")
+      .formParam("addressPostcode", "PR1 1RF") //Common.getPostcode()
+      .formParam("email", "caveat@perftest" + Common.randomString(8) + ".com")
       .check(regex("Confirm your payment"))
-      .check(css("input[name='csrfToken']", "value").saveAs("csrf"))
-      .check(bodyString.saveAs("responseBody")))
-      .exec { session => println(session("responseBody").as[String]); session}
+      .check(css("input[name='csrfToken']", "value").saveAs("csrf")))
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
@@ -220,7 +222,29 @@ object ProbateCaveat {
       .headers(PostHeader)
       .formParam("chargeId", "${ChargeId}")
       .formParam("csrfToken", "${csrf}")
-      .check(regex("Application complete")))
+      .check(regex("Application complete"))
+      .check(regex("Your reference number is</span><br>(?s).*?<strong class=.govuk-!-font-weight-bold. aria-label=..>([0-9|-]*)<").saveAs("referenceNo"))
+      .check(status.saveAs("statusValue")))
+      //.check(bodyString.saveAs("responseBody")))
+      //.exec { session => println(session("responseBody").as[String]); session}
+      //Write out the caveat reference number to a csv file
+      .doIf(session=>session("statusValue").as[String].contains("200")) {
+        exec {
+          session =>
+            val fw = new BufferedWriter(new FileWriter("SubmittedCaveats.csv", true))
+            try {
+              fw.write(session("referenceNo").as[String] + "\r\n")
+            }
+            finally fw.close()
+            session
+        }
+      }
+
+    .exec {
+      session =>
+        println("CAVEAT REFERENCE NO: " + session("referenceNo").as[String])
+        session
+    }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 

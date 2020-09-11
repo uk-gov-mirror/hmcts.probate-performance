@@ -3,10 +3,11 @@ package uk.gov.hmcts.reform.probate.performance.scenarios
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import uk.gov.hmcts.reform.probate.performance.scenarios.checks.{CsrfCheck, CurrentPageUrl}
-import uk.gov.hmcts.reform.probate.performance.scenarios.utils.Environment
+import uk.gov.hmcts.reform.probate.performance.scenarios.utils.{Environment, Common}
 import java.io.{BufferedWriter, FileWriter}
 
 import scala.concurrent.duration._
+import scala.util.Random
 
 object NewProbateApp_ExecOne_Apply {
 
@@ -18,6 +19,8 @@ object NewProbateApp_ExecOne_Apply {
   val CommonHeader = Environment.commonHeader
   val GetHeader = Environment.getHeader
   val PostHeader = Environment.postHeader
+
+  val rnd = new Random()
 
   val ProbateEligibility = group("Probate_Eligibility") {
 
@@ -166,8 +169,8 @@ object NewProbateApp_ExecOne_Apply {
       .headers(CommonHeader)
       .headers(PostHeader)
       .formParam("_csrf", "${csrf}")
-      .formParam("firstName", "Perf")
-      .formParam("lastName", "Tester")
+      .formParam("firstName", "Perf" + Common.randomString(5))
+      .formParam("lastName", "Test" + Common.randomString(5))
       .check(CsrfCheck.save)
       .check(regex("What was their date of birth")))
 
@@ -178,9 +181,9 @@ object NewProbateApp_ExecOne_Apply {
       .headers(CommonHeader)
       .headers(PostHeader)
       .formParam("_csrf", "${csrf}")
-      .formParam("dob-day", "12")
-      .formParam("dob-month", "12")
-      .formParam("dob-year", "1912")
+      .formParam("dob-day", Common.getDay())
+      .formParam("dob-month", Common.getMonth())
+      .formParam("dob-year", Common.getDobYear())
       .check(CsrfCheck.save)
       .check(regex("What was the date that they died")))
 
@@ -191,9 +194,9 @@ object NewProbateApp_ExecOne_Apply {
       .headers(CommonHeader)
       .headers(PostHeader)
       .formParam("_csrf", "${csrf}")
-      .formParam("dod-day", "12")
-      .formParam("dod-month", "12")
-      .formParam("dod-year", "2012")
+      .formParam("dod-day", Common.getDay())
+      .formParam("dod-month", Common.getMonth())
+      .formParam("dod-year", Common.getDodYear())
       .check(CsrfCheck.save)
       .check(regex("What was the permanent address")))
 
@@ -204,11 +207,11 @@ object NewProbateApp_ExecOne_Apply {
       .headers(CommonHeader)
       .headers(PostHeader)
       .formParam("_csrf", "${csrf}")
-      .formParam("addressLine1", "1 Perf Test Road")
+      .formParam("addressLine1", rnd.nextInt(1000).toString + " Perf" + Common.randomString(5)  + " Road")
       .formParam("addressLine2", "")
       .formParam("addressLine3", "")
-      .formParam("postTown", "Perf Test Town")
-      .formParam("newPostCode", "PR1 1RF")
+      .formParam("postTown", "Perf " + Common.randomString(5) + " Town")
+      .formParam("newPostCode", Common.getPostcode())
       .formParam("country", "")
       .check(CsrfCheck.save)
       .check(regex("Upload the death certificate")))
@@ -333,8 +336,8 @@ object NewProbateApp_ExecOne_Apply {
       .headers(CommonHeader)
       .headers(PostHeader)
       .formParam("_csrf", "${csrf}")
-      .formParam("firstName", "Perf")
-      .formParam("lastName", "Applicant")
+      .formParam("firstName", "Perf" + Common.randomString(5))
+      .formParam("lastName", "ExecOne" + Common.randomString(5))
       .check(CsrfCheck.save)
       .check(regex("exactly what appears on the will")))
 
@@ -367,11 +370,11 @@ object NewProbateApp_ExecOne_Apply {
       .headers(CommonHeader)
       .headers(PostHeader)
       .formParam("_csrf", "${csrf}")
-      .formParam("addressLine1", "1 Perf Test Road")
+      .formParam("addressLine1", rnd.nextInt(1000).toString + " Perf" + Common.randomString(5)  + " Road")
       .formParam("addressLine2", "")
       .formParam("addressLine3", "")
-      .formParam("postTown", "Perf Test Town")
-      .formParam("newPostCode", "PR1 1RF")
+      .formParam("postTown", "Perf " + Common.randomString(5) + " Town")
+      .formParam("newPostCode", Common.getPostcode())
       .formParam("country", "")
       .check(CsrfCheck.save)
       .check(regex("How many past and present executors")))
@@ -449,7 +452,7 @@ object NewProbateApp_ExecOne_Apply {
       .headers(CommonHeader)
       .headers(PostHeader)
       .formParam("_csrf", "${csrf}")
-      .formParam("email", "exec-two@perftest12345.com")
+      .formParam("email", "exec-two@perftest" + Common.randomString(8) + ".com")
       .formParam("mobile", "07000000001")
       .check(CsrfCheck.save)
       .check(regex("permanent address")))
@@ -461,11 +464,11 @@ object NewProbateApp_ExecOne_Apply {
       .headers(CommonHeader)
       .headers(PostHeader)
       .formParam("_csrf", "${csrf}")
-      .formParam("addressLine1", "1 Perf Test Road")
+      .formParam("addressLine1", rnd.nextInt(1000).toString + " Perf" + Common.randomString(5)  + " Road")
       .formParam("addressLine2", "")
       .formParam("addressLine3", "")
-      .formParam("postTown", "Perf Test Town")
-      .formParam("newPostCode", "PR1 1RF")
+      .formParam("postTown", "Perf " + Common.randomString(5) + " Town")
+      .formParam("newPostCode", Common.getPostcode())
       .formParam("country", "")
       //PCQ (Equality/diversity survey) might pop up at this point, so cater for either outcome in the text check
       //.check(regex("""2.</span> Give details about the executors\n    </h2>\n    \n        <span class="govuk-tag task-completed">Completed</span>""")))
