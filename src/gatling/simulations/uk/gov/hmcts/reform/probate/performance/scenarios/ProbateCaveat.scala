@@ -196,6 +196,9 @@ object ProbateCaveat {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
+    // Gov Pay does strict postcode validation, so won't accept all postcodes in the format XXN NXX
+    // Therefore, not using the postcode random function as payments with an invalid postcode fail
+
     .exec(http("ProbateCaveat_010_080_CardDetailsSubmit")
       .post(PaymentURL + "/card_details/${ChargeId}")
       .headers(PostHeader)

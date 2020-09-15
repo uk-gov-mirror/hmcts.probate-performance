@@ -51,8 +51,9 @@ gatling {
     toolVersion '3.2.0'
     scalaVersion '2.12.8'
     simulations = [
-        //'uk.gov.hmcts.reform.probate.performance.simulations.ProbateApplication'
-        'uk.gov.hmcts.reform.probate.performance.simulations.Caveat'
+        'uk.gov.hmcts.reform.probate.performance.simulations.ProbateApplication'
+        //'uk.gov.hmcts.reform.probate.performance.simulations.ProbateIntestacy'
+        //'uk.gov.hmcts.reform.probate.performance.simulations.Caveat'
         ]
 }
 
