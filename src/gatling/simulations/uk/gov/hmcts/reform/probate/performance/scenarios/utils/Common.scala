@@ -10,9 +10,14 @@ object Common {
   val rnd = new Random()
   val now = LocalDate.now()
   val patternYear = DateTimeFormatter.ofPattern("yyyy")
+  val patternDate = DateTimeFormatter.ofPattern("yyyyMMdd")
 
   def randomString(length: Int) = {
     rnd.alphanumeric.filter(_.isLetter).take(length).mkString
+  }
+
+  def getDate(): String = {
+    now.format(patternDate)
   }
 
   def getDay(): String = {

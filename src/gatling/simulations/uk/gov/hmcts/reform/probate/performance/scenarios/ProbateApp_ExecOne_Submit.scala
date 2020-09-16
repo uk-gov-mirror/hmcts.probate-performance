@@ -8,7 +8,7 @@ import uk.gov.hmcts.reform.probate.performance.scenarios.utils.{Environment, Com
 import scala.concurrent.duration._
 import scala.util.Random
 
-object NewProbateApp_ExecOne_Submit {
+object ProbateApp_ExecOne_Submit {
 
   val BaseURL = Environment.baseURL
   val PaymentURL = Environment.paymentURL

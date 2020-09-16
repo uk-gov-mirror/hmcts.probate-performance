@@ -115,7 +115,7 @@ object ProbateApp_Intestacy {
         session =>
           val fw = new BufferedWriter(new FileWriter("EmailAndCaseID.csv", true))
           try {
-            fw.write(session("email").as[String] + "," + session("appId").as[String] + ",INTESTACY\r\n")
+            fw.write(session("emailAddress").as[String] + "," + session("appId").as[String] + ",INTESTACY\r\n")
           }
           finally fw.close()
           session
@@ -124,7 +124,7 @@ object ProbateApp_Intestacy {
 
     .exec {
       session =>
-        println("APPLICANT EMAIL: " + session("email").as[String])
+        println("APPLICANT EMAIL: " + session("emailAddress").as[String])
         println("CASE ID: " + session("appId").as[String])
         println("APPLICATION TYPE: INTESTACY")
         session

@@ -9,7 +9,7 @@ import java.io.{BufferedWriter, FileWriter}
 import scala.concurrent.duration._
 import scala.util.Random
 
-object NewProbateApp_ExecOne_Apply {
+object ProbateApp_ExecOne_Apply {
 
   val BaseURL = Environment.baseURL
 
@@ -114,7 +114,7 @@ object NewProbateApp_ExecOne_Apply {
         session =>
           val fw = new BufferedWriter(new FileWriter("EmailAndCaseID.csv", true))
           try {
-            fw.write(session("email").as[String] + "," + session("appId").as[String] + ",PA\r\n")
+            fw.write(session("emailAddress").as[String] + "," + session("appId").as[String] + ",PA\r\n")
           }
           finally fw.close()
           session
@@ -123,7 +123,7 @@ object NewProbateApp_ExecOne_Apply {
 
     .exec {
       session =>
-        println("EXEC1 EMAIL: " + session("email").as[String])
+        println("EXEC1 EMAIL: " + session("emailAddress").as[String])
         println("CASE ID: " + session("appId").as[String])
         println("APPLICATION TYPE: PA")
         session

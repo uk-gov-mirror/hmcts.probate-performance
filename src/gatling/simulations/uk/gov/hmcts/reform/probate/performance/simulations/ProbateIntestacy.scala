@@ -19,14 +19,15 @@ class ProbateIntestacy extends Simulation {
 
   val ProbateNewIntestacyApplication = scenario( "ProbateNewIntestacyApplication").repeat(1) {
 
-    feed(execOneLoginFeeder)
-      .exec(
-        Homepage.ProbateHomepage,
-        Login.ProbateLogin,
-        ProbateApp_Intestacy.IntestacyEligibility,
-        ProbateApp_Intestacy.IntestacyApplication,
-        Logout.ProbateLogout
-      )
+    //feed(execOneLoginFeeder)
+    exec(
+      CreateUser.CreateCitizen,
+      Homepage.ProbateHomepage,
+      Login.ProbateLogin,
+      ProbateApp_Intestacy.IntestacyEligibility,
+      ProbateApp_Intestacy.IntestacyApplication,
+      Logout.ProbateLogout
+    )
   }
 
   setUp(

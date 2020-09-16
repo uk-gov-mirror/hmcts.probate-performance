@@ -19,17 +19,18 @@ class ProbateApplication extends Simulation {
 
   val ProbateNewApplication = scenario( "ProbateNewApplication").repeat(1) {
 
-    feed(execOneLoginFeeder)
-    .exec(
+    //feed(execOneLoginFeeder)
+    exec(
+      CreateUser.CreateCitizen,
       Homepage.ProbateHomepage,
       Login.ProbateLogin,
-      NewProbateApp_ExecOne_Apply.ProbateEligibility,
-      NewProbateApp_ExecOne_Apply.ProbateApplication,
+      ProbateApp_ExecOne_Apply.ProbateEligibility,
+      ProbateApp_ExecOne_Apply.ProbateApplication,
       Logout.ProbateLogout,
-      NewProbateApp_ExecTwo_Declaration.ProbateDeclaration,
+      ProbateApp_ExecTwo_Declaration.ProbateDeclaration,
       Homepage.ProbateHomepage,
       Login.ProbateLogin,
-      NewProbateApp_ExecOne_Submit.ProbateSubmit,
+      ProbateApp_ExecOne_Submit.ProbateSubmit,
       Logout.ProbateLogout
     )
   }

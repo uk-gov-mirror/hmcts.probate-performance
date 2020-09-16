@@ -7,7 +7,7 @@ import uk.gov.hmcts.reform.probate.performance.scenarios.utils.Environment
 
 import scala.concurrent.duration._
 
-object NewProbateApp_ExecTwo_Declaration {
+object ProbateApp_ExecTwo_Declaration {
 
   val BaseURL = Environment.baseURL
 

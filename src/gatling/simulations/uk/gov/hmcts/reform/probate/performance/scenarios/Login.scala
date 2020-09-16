@@ -27,7 +27,7 @@ object Login {
       .headers(Map("accept-language" -> "en-GB,en;q=0.9",
         "content-type" -> "application/x-www-form-urlencoded",
         "sec-fetch-site" -> "same-origin"))
-      .formParam("username", "${email}")
+      .formParam("username", "${emailAddress}")
       .formParam("password", "${password}")
       .formParam("save", "Sign in")
       .formParam("selfRegistrationEnabled", "true")
