@@ -15,7 +15,7 @@ class Caveat extends Simulation {
     .baseUrl(BaseURL)
     .doNotTrackHeader("1")
 
-  val ProbateNewCaveat = scenario( "ProbateNewCaveat").repeat(1) {
+  val ProbateNewCaveat = scenario( "ProbateNewCaveat").repeat(2) {
 
     exec(
       ProbateCaveat.ProbateCaveat

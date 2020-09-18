@@ -1,11 +1,13 @@
 package uk.gov.hmcts.reform.probate.performance.simulations
 
 import io.gatling.core.Predef._
+import io.gatling.http.Predef._
 import io.gatling.core.scenario.Simulation
 import uk.gov.hmcts.reform.probate.performance.scenarios._
 import uk.gov.hmcts.reform.probate.performance.scenarios.utils.Environment
 
 import scala.concurrent.duration._
+import scala.util.Random
 
 class Probate extends Simulation {
 
@@ -15,50 +17,73 @@ class Probate extends Simulation {
     .baseUrl(BaseURL)
     .doNotTrackHeader("1")
 
-  val probateAppUsers = 3
-  val probateIntestacyUsers = 3
-  val probateCaveatUsers = 3
-  val rampDurationMins = 1
-  val testDurationMins = 5
+  val rampUpDurationMins = 2
+  val rampDownDurationMins = 2
+  val testDurationMins = 60
+
+  //Must be doubles to ensure the calculations result in doubles not rounded integers
+  val probateHourlyTarget:Double = 88
+  val intestacyHourlyTarget:Double = 12
+  val caveatHourlyTarget:Double = 53
+
+  val continueAfterEligibilityPercentage = 58
+
+  val probateRatePerSec = probateHourlyTarget / testDurationMins / 60
+  val intestacyRatePerSec = intestacyHourlyTarget / testDurationMins / 60
+  val caveatRatePerSec = caveatHourlyTarget / testDurationMins / 60
+
+  val randomFeeder = Iterator.continually( Map( "perc" -> Random.nextInt(100)))
 
   before{
-    println(s"Probate Application Users: ${probateAppUsers}")
-    println(s"Probate Intestacy Users: ${probateIntestacyUsers}")
-    println(s"Probate Caveat Users: ${probateCaveatUsers}")
     println(s"Total Test Duration: ${testDurationMins} minutes")
   }
 
   val ProbateNewApplication = scenario( "ProbateNewApplication")
-    .forever() {
-      exec(
-        CreateUser.CreateCitizen,
-        Homepage.ProbateHomepage,
-        Login.ProbateLogin,
-        ProbateApp_ExecOne_Apply.ProbateEligibility,
-        ProbateApp_ExecOne_Apply.ProbateApplication,
-        Logout.ProbateLogout,
-        ProbateApp_ExecTwo_Declaration.ProbateDeclaration,
-        Homepage.ProbateHomepage,
-        Login.ProbateLogin,
-        ProbateApp_ExecOne_Submit.ProbateSubmit,
-        Logout.ProbateLogout
-      )
-    }
+    .feed(randomFeeder)
+      .exitBlockOnFail {
+        exec(
+          CreateUser.CreateCitizen,
+          Homepage.ProbateHomepage,
+          Login.ProbateLogin,
+          ProbateApp_ExecOne_Apply.ProbateEligibility
+        )
+        .doIf(session => session("perc").as[Int] < continueAfterEligibilityPercentage) {
+          exec(
+            ProbateApp_ExecOne_Apply.ProbateApplication,
+            Logout.ProbateLogout)
+          .exec(flushHttpCache)
+          .exec(
+            ProbateApp_ExecTwo_Declaration.ProbateDeclaration)
+          .exec(flushHttpCache)
+          .exec(
+            Homepage.ProbateHomepage,
+            Login.ProbateLogin,
+            ProbateApp_ExecOne_Submit.ProbateSubmit,
+            Logout.ProbateLogout)
+          }
+      }
+      .exec(DeleteUser.DeleteCitizen)
 
   val ProbateNewIntestacyApplication = scenario( "ProbateNewIntestacyApplication")
-    .forever() {
-      exec(
-        CreateUser.CreateCitizen,
-        Homepage.ProbateHomepage,
-        Login.ProbateLogin,
-        ProbateApp_Intestacy.IntestacyEligibility,
-        ProbateApp_Intestacy.IntestacyApplication,
-        Logout.ProbateLogout
-      )
-    }
+    .feed(randomFeeder)
+      .exitBlockOnFail {
+        exec(
+          CreateUser.CreateCitizen,
+          Homepage.ProbateHomepage,
+          Login.ProbateLogin,
+          ProbateApp_Intestacy.IntestacyEligibility
+        )
+        .doIf(session => session("perc").as[Int] < continueAfterEligibilityPercentage) {
+          exec(
+            ProbateApp_Intestacy.IntestacyApplication,
+            Logout.ProbateLogout
+          )
+        }
+      }
+      .exec(DeleteUser.DeleteCitizen)
 
   val ProbateNewCaveat = scenario( "ProbateNewCaveat")
-    .forever() {
+    .exitBlockOnFail {
       exec(
         ProbateCaveat.ProbateCaveat
       )
@@ -66,18 +91,23 @@ class Probate extends Simulation {
 
   setUp(
     ProbateNewApplication.inject(
-      rampUsers(probateAppUsers) during (rampDurationMins minutes)
+      rampUsersPerSec(0.00) to (probateRatePerSec) during (rampUpDurationMins minutes),
+      constantUsersPerSec(probateRatePerSec) during (testDurationMins minutes),
+      rampUsersPerSec(probateRatePerSec) to (0.00) during (rampDownDurationMins minutes)
     ),
     ProbateNewIntestacyApplication.inject(
-      nothingFor(10 seconds),
-      rampUsers(probateIntestacyUsers) during (rampDurationMins minutes)
+      nothingFor(20 seconds),
+      rampUsersPerSec(0.00) to (intestacyRatePerSec) during (rampUpDurationMins minutes),
+      constantUsersPerSec(intestacyRatePerSec) during (testDurationMins minutes),
+      rampUsersPerSec(intestacyRatePerSec) to (0.00) during (rampDownDurationMins minutes)
     ),
     ProbateNewCaveat.inject(
-      nothingFor(20 seconds),
-      rampUsers(probateCaveatUsers) during (rampDurationMins minutes)
+      nothingFor(40 seconds),
+      rampUsersPerSec(0.00) to (caveatRatePerSec) during (rampUpDurationMins minutes),
+      constantUsersPerSec(caveatRatePerSec) during (testDurationMins minutes),
+      rampUsersPerSec(caveatRatePerSec) to (0.00) during (rampDownDurationMins minutes)
     ),
   )
     .protocols(httpProtocol)
-    .maxDuration(testDurationMins minutes)
 
 }

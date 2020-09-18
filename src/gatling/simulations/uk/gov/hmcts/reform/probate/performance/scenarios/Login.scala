@@ -2,7 +2,6 @@ package uk.gov.hmcts.reform.probate.performance.scenarios
 
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
-import uk.gov.hmcts.reform.probate.performance.scenarios.checks.{CsrfCheck, CurrentPageUrl}
 import uk.gov.hmcts.reform.probate.performance.scenarios.utils.Environment
 
 import scala.concurrent.duration._
@@ -18,9 +17,9 @@ object Login {
   val CommonHeader = Environment.commonHeader
 
 
-  val ProbateLogin = group("Probate_Login") {
+  val ProbateLogin =
 
-    exec(http("Probate_020_005_Login")
+    exec(http("Probate_000_005_Login")
       .post(IdamURL + "/login?ui_locales=en&response_type=code&state=${state}&client_id=probate&redirect_uri=" + BaseURL + "/oauth2/callback")
       .disableFollowRedirect
       .headers(CommonHeader)
@@ -35,7 +34,7 @@ object Login {
       .check(headerRegex("Location", "(?<=code=)(.*)&state").saveAs("authCode"))
       .check(status.in(200, 302)))
 
-    .exec(http("Probate_020_010_Login")
+    .exec(http("Probate_000_010_Login")
       .get(BaseURL + "/oauth2/callback?code=${authCode}&state=${state}&client_id=probate&iss=" + IdamURL + "/o")
       .headers(CommonHeader)
       .headers(Map("accept-language" -> "en-GB,en;q=0.9",
@@ -43,7 +42,5 @@ object Login {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-
-  }
 
 }

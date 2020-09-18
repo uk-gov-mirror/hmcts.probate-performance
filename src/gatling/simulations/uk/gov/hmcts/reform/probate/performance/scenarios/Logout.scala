@@ -4,8 +4,6 @@ import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import uk.gov.hmcts.reform.probate.performance.scenarios.utils.Environment
 
-import scala.concurrent.duration._
-
 object Logout {
 
   val BaseURL = Environment.baseURL
@@ -16,14 +14,12 @@ object Logout {
   val CommonHeader = Environment.commonHeader
   val GetHeader = Environment.getHeader
 
-  val ProbateLogout = group("Probate_Logout") {
+  val ProbateLogout =
 
-    exec(http("Probate_060_005_Logout")
+    exec(http("Probate_999_Logout")
       .get(BaseURL + "/sign-out")
       .headers(CommonHeader)
       .headers(GetHeader)
       .check(regex("signed out")))
-
-  }
 
 }

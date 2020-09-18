@@ -2,7 +2,7 @@ package uk.gov.hmcts.reform.probate.performance.scenarios
 
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
-import uk.gov.hmcts.reform.probate.performance.scenarios.checks.{CsrfCheck, CurrentPageUrl}
+import uk.gov.hmcts.reform.probate.performance.scenarios.checks.CsrfCheck
 import uk.gov.hmcts.reform.probate.performance.scenarios.utils.{Environment, Common}
 import java.io.{BufferedWriter, FileWriter}
 
@@ -23,9 +23,9 @@ object ProbateCaveat {
 
   val rnd = new Random()
 
-  val ProbateCaveat = group("Probate_Caveat") {
+  val ProbateCaveat =
 
-    exec(http("ProbateCaveat_010_005_Homepage")
+    exec(http("ProbateCaveat_010_Homepage")
       .get(BaseURL + "/caveats/start-apply")
       .headers(CommonHeader)
       .header("sec-fetch-site", "none")
@@ -34,7 +34,7 @@ object ProbateCaveat {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("ProbateCaveat_010_010_ApplicantName")
+    .exec(http("ProbateCaveat_020_ApplicantName")
       .get(BaseURL + "/caveats/applicant-name")
       .headers(CommonHeader)
       .headers(GetHeader)
@@ -43,7 +43,7 @@ object ProbateCaveat {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("ProbateCaveat_010_015_ApplicantNameSubmit")
+    .exec(http("ProbateCaveat_030_ApplicantNameSubmit")
       .post(BaseURL + "/caveats/applicant-name")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -55,7 +55,7 @@ object ProbateCaveat {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("ProbateCaveat_010_020_EmailAddressSubmit")
+    .exec(http("ProbateCaveat_040_EmailAddressSubmit")
       .post(BaseURL + "/caveats/applicant-email")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -66,7 +66,7 @@ object ProbateCaveat {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("ProbateCaveat_010_025_AddressSubmit")
+    .exec(http("ProbateCaveat_050_AddressSubmit")
       .post(BaseURL + "/caveats/applicant-address")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -82,7 +82,7 @@ object ProbateCaveat {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("ProbateCaveat_010_030_DeceasedNameSubmit")
+    .exec(http("ProbateCaveat_060_DeceasedNameSubmit")
       .post(BaseURL + "/caveats/deceased-name")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -94,7 +94,7 @@ object ProbateCaveat {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("ProbateCaveat_010_035_DeceasedDodSubmit")
+    .exec(http("ProbateCaveat_070_DeceasedDodSubmit")
       .post(BaseURL + "/caveats/deceased-dod")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -107,7 +107,7 @@ object ProbateCaveat {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("ProbateCaveat_010_040_DeceasedDobKnownSubmit")
+    .exec(http("ProbateCaveat_080_DeceasedDobKnownSubmit")
       .post(BaseURL + "/caveats/deceased-dob-known")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -118,7 +118,7 @@ object ProbateCaveat {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("ProbateCaveat_010_045_DeceasedDobSubmit")
+    .exec(http("ProbateCaveat_090_DeceasedDobSubmit")
       .post(BaseURL + "/caveats/deceased-dob")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -131,7 +131,7 @@ object ProbateCaveat {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("ProbateCaveat_010_050_DeceasedAliasSubmit")
+    .exec(http("ProbateCaveat_100_DeceasedAliasSubmit")
       .post(BaseURL + "/caveats/deceased-alias")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -142,7 +142,7 @@ object ProbateCaveat {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("ProbateCaveat_010_055_DeceasedAddressSubmit")
+    .exec(http("ProbateCaveat_110_DeceasedAddressSubmit")
       .post(BaseURL + "/caveats/deceased-address")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -158,7 +158,7 @@ object ProbateCaveat {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("ProbateCaveat_010_060_BilingualSubmit")
+    .exec(http("ProbateCaveat_120_BilingualSubmit")
       .post(BaseURL + "/caveats/bilingual-gop")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -168,7 +168,7 @@ object ProbateCaveat {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("ProbateCaveat_010_065_PaymentBreakdown")
+    .exec(http("ProbateCaveat_130_PaymentBreakdown")
       .get(BaseURL + "/caveats/payment-breakdown")
       .headers(CommonHeader)
       .headers(GetHeader)
@@ -177,7 +177,7 @@ object ProbateCaveat {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("ProbateCaveat_010_070_PaymentBreakdownSubmit")
+    .exec(http("ProbateCaveat_140_PaymentBreakdownSubmit")
       .post(BaseURL + "/caveats/payment-breakdown")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -188,7 +188,7 @@ object ProbateCaveat {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("ProbateCaveat_010_075_CheckCard")
+    .exec(http("ProbateCaveat_150_CheckCard")
       .post(PaymentURL + "/check_card/${ChargeId}")
       .headers(PostHeader)
       .formParam("cardNo", "4444333322221111")
@@ -199,7 +199,7 @@ object ProbateCaveat {
     // Gov Pay does strict postcode validation, so won't accept all postcodes in the format XXN NXX
     // Therefore, not using the postcode random function as payments with an invalid postcode fail
 
-    .exec(http("ProbateCaveat_010_080_CardDetailsSubmit")
+    .exec(http("ProbateCaveat_160_CardDetailsSubmit")
       .post(PaymentURL + "/card_details/${ChargeId}")
       .headers(PostHeader)
       .formParam("chargeId", "${ChargeId}")
@@ -220,7 +220,7 @@ object ProbateCaveat {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("ProbateCaveat_010_085_CardDetailsConfirmSubmit")
+    .exec(http("ProbateCaveat_170_CardDetailsConfirmSubmit")
       .post(PaymentURL + "/card_details/${ChargeId}/confirm")
       .headers(PostHeader)
       .formParam("chargeId", "${ChargeId}")
@@ -250,7 +250,5 @@ object ProbateCaveat {
     }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
-
-  }
 
 }

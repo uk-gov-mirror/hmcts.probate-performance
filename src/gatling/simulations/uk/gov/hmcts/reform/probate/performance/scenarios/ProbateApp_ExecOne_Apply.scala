@@ -2,7 +2,7 @@ package uk.gov.hmcts.reform.probate.performance.scenarios
 
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
-import uk.gov.hmcts.reform.probate.performance.scenarios.checks.{CsrfCheck, CurrentPageUrl}
+import uk.gov.hmcts.reform.probate.performance.scenarios.checks.CsrfCheck
 import uk.gov.hmcts.reform.probate.performance.scenarios.utils.{Environment, Common}
 import java.io.{BufferedWriter, FileWriter}
 
@@ -22,9 +22,9 @@ object ProbateApp_ExecOne_Apply {
 
   val rnd = new Random()
 
-  val ProbateEligibility = group("Probate_Eligibility") {
+  val ProbateEligibility =
 
-    exec(http("Probate_030_005_DeathCertificate")
+    exec(http("Probate_010_StartEligibility")
       .get(BaseURL + "/death-certificate")
       .headers(CommonHeader)
       .headers(GetHeader)
@@ -33,7 +33,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_030_010_DeathCertificateSubmit")
+    .exec(http("Probate_020_DeathCertificateSubmit")
       .post(BaseURL + "/death-certificate")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -44,7 +44,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_030_015_DomicileSubmit")
+    .exec(http("Probate_030_DomicileSubmit")
       .post(BaseURL + "/deceased-domicile")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -55,7 +55,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_030_020_IHTSubmit")
+    .exec(http("Probate_040_IHTSubmit")
       .post(BaseURL + "/iht-completed")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -66,7 +66,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_030_025_WillLeftSubmit")
+    .exec(http("Probate_050_WillLeftSubmit")
       .post(BaseURL + "/will-left")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -77,7 +77,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_030_030_WillOriginalSubmit")
+    .exec(http("Probate_060_WillOriginalSubmit")
       .post(BaseURL + "/will-original")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -88,7 +88,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_030_035_NamedExecutorSubmit")
+    .exec(http("Probate_070_NamedExecutorSubmit")
       .post(BaseURL + "/applicant-executor")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -99,7 +99,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_030_040_MentalCapacitySubmit")
+    .exec(http("Probate_080_MentalCapacitySubmit")
       .post(BaseURL + "/mental-capacity")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -133,11 +133,9 @@ object ProbateApp_ExecOne_Apply {
 
     //At this point, the user will be redirected to their dashboard, listing the new application as 'In progress'
 
-  }
+  val ProbateApplication =
 
-  val ProbateApplication = group("Probate_Apply") {
-
-    exec(http("Probate_040_005_ContinueApplication")
+    exec(http("Probate_090_ContinueApplication")
       .get(BaseURL + "/get-case/${appId}?probateType=PA")
       .headers(CommonHeader)
       .headers(GetHeader)
@@ -145,7 +143,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_040_010_SectionOneStart")
+    .exec(http("Probate_100_SectionOneStart")
       .get(BaseURL + "/bilingual-gop")
       .headers(CommonHeader)
       .headers(GetHeader)
@@ -154,7 +152,7 @@ object ProbateApp_ExecOne_Apply {
 
       .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_040_015_BilingualGrantSubmit")
+    .exec(http("Probate_110_BilingualGrantSubmit")
       .post(BaseURL + "/bilingual-gop")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -165,7 +163,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_040_020_DeceasedNameSubmit")
+    .exec(http("Probate_120_DeceasedNameSubmit")
       .post(BaseURL + "/deceased-name")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -177,7 +175,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_040_025_DeceasedDOBSubmit")
+    .exec(http("Probate_130_DeceasedDOBSubmit")
       .post(BaseURL + "/deceased-dob")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -190,7 +188,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_040_030_DeceasedDODSubmit")
+    .exec(http("Probate_140_DeceasedDODSubmit")
       .post(BaseURL + "/deceased-dod")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -203,7 +201,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_040_035_DeceasedAddressSubmit")
+    .exec(http("Probate_150_DeceasedAddressSubmit")
       .post(BaseURL + "/deceased-address")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -219,7 +217,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_040_040_DocumentUpload")
+    .exec(http("Probate_160_DocumentUpload")
       .post(BaseURL + "/document-upload")
       .header("Accept", "application/json")
       .header("Accept-Encoding", "gzip, deflate, br")
@@ -241,7 +239,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_040_041_DocumentUploadSubmit")
+    .exec(http("Probate_170_DocumentUploadSubmit")
       .post(BaseURL + "/document-upload")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -251,7 +249,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_040_045_IHTMethodSubmit")
+    .exec(http("Probate_180_IHTMethodSubmit")
       .post(BaseURL + "/iht-method")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -262,7 +260,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_040_050_IHTPaperSubmit")
+    .exec(http("Probate_190_IHTPaperSubmit")
       .post(BaseURL + "/iht-paper")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -279,7 +277,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_040_055_DeceasedAliasSubmit")
+    .exec(http("Probate_200_DeceasedAliasSubmit")
       .post(BaseURL + "/deceased-alias")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -290,7 +288,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_040_060_DeceasedMarriedSubmit")
+    .exec(http("Probate_210_DeceasedMarriedSubmit")
       .post(BaseURL + "/deceased-married")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -301,7 +299,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_040_065_WillCodicilsSubmit")
+    .exec(http("Probate_220_WillCodicilsSubmit")
       .post(BaseURL + "/will-codicils")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -312,7 +310,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_040_070_WillNumberSubmit")
+    .exec(http("Probate_230_WillNumberSubmit")
       .post(BaseURL + "/codicils-number")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -323,7 +321,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_040_075_SectionTwoStart")
+    .exec(http("Probate_240_SectionTwoStart")
       .get(BaseURL + "/applicant-name")
       .headers(CommonHeader)
       .headers(GetHeader)
@@ -332,7 +330,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_040_080_ApplicantNameSubmit")
+    .exec(http("Probate_250_ApplicantNameSubmit")
       .post(BaseURL + "/applicant-name")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -344,7 +342,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_040_085_ApplicantNameAsOnWillSubmit")
+    .exec(http("Probate_260_ApplicantNameAsOnWillSubmit")
       .post(BaseURL + "/applicant-name-as-on-will")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -355,7 +353,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_040_090_ApplicantPhoneSubmit")
+    .exec(http("Probate_270_ApplicantPhoneSubmit")
       .post(BaseURL + "/applicant-phone")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -366,7 +364,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_040_095_ApplicantAddressSubmit")
+    .exec(http("Probate_280_ApplicantAddressSubmit")
       .post(BaseURL + "/applicant-address")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -382,7 +380,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_040_100_ExecutorsNumberSubmit")
+    .exec(http("Probate_290_ExecutorsNumberSubmit")
       .post(BaseURL + "/executors-number")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -393,7 +391,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_040_105_ExecutorsNamesSubmit")
+    .exec(http("Probate_300_ExecutorsNamesSubmit")
       .post(BaseURL + "/executors-names")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -404,7 +402,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_040_110_ExecutorsAllAliveSubmit")
+    .exec(http("Probate_310_ExecutorsAllAliveSubmit")
       .post(BaseURL + "/executors-all-alive")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -415,7 +413,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_040_115_OtherExecutorsApplyingSubmit")
+    .exec(http("Probate_320_OtherExecutorsApplyingSubmit")
       .post(BaseURL + "/other-executors-applying")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -426,7 +424,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_040_120_ExecutorsDealingWithEstateSubmit")
+    .exec(http("Probate_330_ExecutorsDealingWithEstateSubmit")
       .post(BaseURL + "/executors-dealing-with-estate")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -437,7 +435,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_040_125_ExecutorsAliasSubmit")
+    .exec(http("Probate_340_ExecutorsAliasSubmit")
       .post(BaseURL + "/executors-alias")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -448,7 +446,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_040_130_ExecutorTwoContactDetailsSubmit")
+    .exec(http("Probate_350_ExecutorTwoContactDetailsSubmit")
       .post(BaseURL + "/executor-contact-details/1")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -460,7 +458,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_040_135_ExecutorTwoAddressSubmit")
+    .exec(http("Probate_360_ExecutorTwoAddressSubmit")
       .post(BaseURL + "/executor-address/1")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -472,14 +470,11 @@ object ProbateApp_ExecOne_Apply {
       .formParam("newPostCode", Common.getPostcode())
       .formParam("country", "")
       //PCQ (Equality/diversity survey) might pop up at this point, so cater for either outcome in the text check
-      //.check(regex("""2.</span> Give details about the executors\n    </h2>\n    \n        <span class="govuk-tag task-completed">Completed</span>""")))
       .check(regex("2.</span> Give details about the executors(?s).*?<span class=.govuk-tag task-completed.>Completed</span>|Equality and diversity questions")))
-      //.check(status.not(500)))
-      //.exitHereIfFailed
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_040_140_SectionThreeStart")
+    .exec(http("Probate_370_SectionThreeStart")
       .get(BaseURL + "/summary/declaration")
       .headers(CommonHeader)
       .headers(GetHeader)
@@ -487,7 +482,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_040_145_Declaration")
+    .exec(http("Probate_380_Declaration")
       .get(BaseURL + "/declaration")
       .headers(CommonHeader)
       .headers(GetHeader)
@@ -496,7 +491,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_040_150_DeclarationSubmit")
+    .exec(http("Probate_390_DeclarationSubmit")
       .post(BaseURL + "/declaration")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -507,7 +502,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_040_155_ExecutorsInviteSubmit")
+    .exec(http("Probate_400_ExecutorsInviteSubmit")
       .post(BaseURL + "/executors-invite")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -515,20 +510,16 @@ object ProbateApp_ExecOne_Apply {
       .check(regex("Complete these steps"))
       .check(regex("Not declared")))
 
-      .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-      //Get the invite ID associated with the second executor
+    //Get the invite ID associated with the second executor
 
-      .exec(http("Probate_040_160_InviteIdList")
-        .get(BaseURL + "/inviteIdList")
-        .headers(CommonHeader)
-        .headers(GetHeader)
-        .check(regex("\\\"ids\\\":\\[\\\"(.+?)\\\"").saveAs("inviteId")))
+    .exec(http("Probate_Util_InviteIdList")
+      .get(BaseURL + "/inviteIdList")
+      .headers(CommonHeader)
+      .headers(GetHeader)
+      .check(regex("\\\"ids\\\":\\[\\\"(.+?)\\\"").saveAs("inviteId")))
 
-      .pause(MinThinkTime seconds, MaxThinkTime seconds)
-
-    .exec(flushHttpCache)
-
-  }
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
 }

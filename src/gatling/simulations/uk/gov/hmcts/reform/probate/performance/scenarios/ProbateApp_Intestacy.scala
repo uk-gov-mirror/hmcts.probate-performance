@@ -2,7 +2,7 @@ package uk.gov.hmcts.reform.probate.performance.scenarios
 
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
-import uk.gov.hmcts.reform.probate.performance.scenarios.checks.{CsrfCheck, CurrentPageUrl}
+import uk.gov.hmcts.reform.probate.performance.scenarios.checks.CsrfCheck
 import uk.gov.hmcts.reform.probate.performance.scenarios.utils.{Environment, Common}
 import java.io.{BufferedWriter, FileWriter}
 
@@ -23,9 +23,9 @@ object ProbateApp_Intestacy {
 
   val rnd = new Random()
 
-  val IntestacyEligibility = group("Intestacy_Eligibility") {
+  val IntestacyEligibility =
 
-    exec(http("Intestacy_030_005_DeathCertificate")
+    exec(http("Intestacy_010_DeathCertificate")
       .get(BaseURL + "/death-certificate")
       .headers(CommonHeader)
       .headers(GetHeader)
@@ -34,7 +34,7 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Intestacy_030_010_DeathCertificateSubmit")
+    .exec(http("Intestacy_020_DeathCertificateSubmit")
       .post(BaseURL + "/death-certificate")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -45,7 +45,7 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Intestacy_030_015_DomicileSubmit")
+    .exec(http("Intestacy_030_DomicileSubmit")
       .post(BaseURL + "/deceased-domicile")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -56,7 +56,7 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Intestacy_030_020_IHTSubmit")
+    .exec(http("Intestacy_040_IHTSubmit")
       .post(BaseURL + "/iht-completed")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -67,7 +67,7 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Intestacy_030_025_WillLeftSubmit")
+    .exec(http("Intestacy_050_WillLeftSubmit")
       .post(BaseURL + "/will-left")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -78,7 +78,7 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Intestacy_030_030_DiedAfterSubmit")
+    .exec(http("Intestacy_060_DiedAfterSubmit")
       .post(BaseURL + "/died-after-october-2014")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -89,7 +89,7 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Intestacy_030_035_RelatedSubmit")
+    .exec(http("Intestacy_070_RelatedSubmit")
       .post(BaseURL + "/related-to-deceased")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -100,7 +100,7 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Intestacy_030_040_OtherApplicantsSubmit")
+    .exec(http("Intestacy_080_OtherApplicantsSubmit")
       .post(BaseURL + "/other-applicants")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -134,11 +134,9 @@ object ProbateApp_Intestacy {
 
     //At this point, the user will be redirected to their dashboard, listing the new application as 'In progress'
 
-  }
+  val IntestacyApplication =
 
-  val IntestacyApplication = group("Intestacy_Apply") {
-
-    exec(http("Intestacy_040_005_ContinueApplication")
+    exec(http("Intestacy_090_ContinueApplication")
       .get(BaseURL + "/get-case/${appId}?probateType=INTESTACY")
       .headers(CommonHeader)
       .headers(GetHeader)
@@ -146,7 +144,7 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Intestacy_040_010_SectionOneStart")
+    .exec(http("Intestacy_100_SectionOneStart")
       .get(BaseURL + "/bilingual-gop")
       .headers(CommonHeader)
       .headers(GetHeader)
@@ -155,7 +153,7 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Intestacy_040_011_BilingualGrantSubmit")
+    .exec(http("Intestacy_110_BilingualGrantSubmit")
       .post(BaseURL + "/bilingual-gop")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -166,7 +164,7 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Intestacy_040_015_DeceasedDetailsSubmit")
+    .exec(http("Intestacy_120_DeceasedDetailsSubmit")
       .post(BaseURL + "/deceased-details")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -184,7 +182,7 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Intestacy_040_020_DeceasedAddressSubmit")
+    .exec(http("Intestacy_130_DeceasedAddressSubmit")
       .post(BaseURL + "/deceased-address")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -200,7 +198,7 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Intestacy_040_025_DocumentUpload")
+    .exec(http("Intestacy_140_DocumentUpload")
       .post(BaseURL + "/document-upload")
       .header("Accept", "application/json")
       .header("Accept-Encoding", "gzip, deflate, br")
@@ -222,7 +220,7 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Intestacy_040_030_DocumentUploadSubmit")
+    .exec(http("Intestacy_150_DocumentUploadSubmit")
       .post(BaseURL + "/document-upload")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -232,7 +230,7 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Intestacy_040_035_IHTMethodSubmit")
+    .exec(http("Intestacy_160_IHTMethodSubmit")
       .post(BaseURL + "/iht-method")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -243,7 +241,7 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Intestacy_040_040_IHTPaperSubmit")
+    .exec(http("Intestacy_170_IHTPaperSubmit")
       .post(BaseURL + "/iht-paper")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -260,7 +258,7 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Intestacy_040_045_AssetsOutsideEnglandWalesSubmit")
+    .exec(http("Intestacy_180_AssetsOutsideEnglandWalesSubmit")
       .post(BaseURL + "/assets-outside-england-wales")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -271,7 +269,7 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Intestacy_040_050_DeceasedAliasSubmit")
+    .exec(http("Intestacy_190_DeceasedAliasSubmit")
       .post(BaseURL + "/deceased-alias")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -282,7 +280,7 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Intestacy_040_055_MaritalStatusSubmit")
+    .exec(http("Intestacy_200_MaritalStatusSubmit")
       .post(BaseURL + "/deceased-marital-status")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -293,7 +291,7 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Intestacy_040_060_SectionTwoStart")
+    .exec(http("Intestacy_210_SectionTwoStart")
       .get(BaseURL + "/relationship-to-deceased")
       .headers(CommonHeader)
       .headers(GetHeader)
@@ -302,7 +300,7 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Intestacy_040_065_RelationshipSubmit")
+    .exec(http("Intestacy_220_RelationshipSubmit")
       .post(BaseURL + "/relationship-to-deceased")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -313,7 +311,7 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Intestacy_040_070_ApplicantNameSubmit")
+    .exec(http("Intestacy_230_ApplicantNameSubmit")
       .post(BaseURL + "/applicant-name")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -325,7 +323,7 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Intestacy_040_075_ApplicantPhoneSubmit")
+    .exec(http("Intestacy_240_ApplicantPhoneSubmit")
       .post(BaseURL + "/applicant-phone")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -336,7 +334,7 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Intestacy_040_080_ApplicantAddressSubmit")
+    .exec(http("Intestacy_250_ApplicantAddressSubmit")
       .post(BaseURL + "/applicant-address")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -351,7 +349,7 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Intestacy_040_085_SectionThreeStart")
+    .exec(http("Intestacy_260_SectionThreeStart")
       .get(BaseURL + "/summary/declaration")
       .headers(CommonHeader)
       .headers(GetHeader)
@@ -359,7 +357,7 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Intestacy_040_090_Declaration")
+    .exec(http("Intestacy_270_Declaration")
       .get(BaseURL + "/declaration")
       .headers(CommonHeader)
       .headers(GetHeader)
@@ -368,7 +366,7 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Intestacy_040_095_DeclarationSubmit")
+    .exec(http("Intestacy_280_DeclarationSubmit")
       .post(BaseURL + "/declaration")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -379,7 +377,7 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Intestacy_040_100_SectionFourStart")
+    .exec(http("Intestacy_290_SectionFourStart")
       .get(BaseURL + "/copies-uk")
       .headers(CommonHeader)
       .headers(GetHeader)
@@ -388,7 +386,7 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Intestacy_040_105_ExtraCopiesSubmit")
+    .exec(http("Intestacy_300_ExtraCopiesSubmit")
       .post(BaseURL + "/copies-uk")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -399,7 +397,7 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Intestacy_040_110_AssetsOverseasSubmit")
+    .exec(http("Intestacy_310_AssetsOverseasSubmit")
       .post(BaseURL + "/assets-overseas")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -409,7 +407,7 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Intestacy_040_115_TaskList")
+    .exec(http("Intestacy_320_TaskList")
       .get(BaseURL + "/task-list")
       .headers(CommonHeader)
       .headers(GetHeader)
@@ -418,7 +416,7 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Intestacy_040_120_SectionFiveStart")
+    .exec(http("Intestacy_330_SectionFiveStart")
       .get(BaseURL + "/payment-breakdown")
       .headers(CommonHeader)
       .headers(GetHeader)
@@ -427,7 +425,7 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Intestacy_040_125_PaymentBreakdownSubmit")
+    .exec(http("Intestacy_340_PaymentBreakdownSubmit")
       .post(BaseURL + "/payment-breakdown")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -438,7 +436,7 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Intestacy_040_130_CheckCard")
+    .exec(http("Intestacy_350_CheckCard")
       .post(PaymentURL + "/check_card/${ChargeId}")
       .headers(PostHeader)
       .formParam("cardNo", "4444333322221111")
@@ -449,7 +447,7 @@ object ProbateApp_Intestacy {
     // Gov Pay does strict postcode validation, so won't accept all postcodes in the format XXN NXX
     // Therefore, not using the postcode random function as payments with an invalid postcode fail
 
-    .exec(http("Intestacy_040_135_CardDetailsSubmit")
+    .exec(http("Intestacy_360_CardDetailsSubmit")
       .post(PaymentURL + "/card_details/${ChargeId}")
       .headers(PostHeader)
       .formParam("chargeId", "${ChargeId}")
@@ -470,7 +468,7 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Intestacy_040_140_CardDetailsConfirmSubmit")
+    .exec(http("Intestacy_370_CardDetailsConfirmSubmit")
       .post(PaymentURL + "/card_details/${ChargeId}/confirm")
       .headers(PostHeader)
       .formParam("chargeId", "${ChargeId}")
@@ -480,7 +478,7 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Intestacy_040_145_PaymentStatusSubmit")
+    .exec(http("Intestacy_380_PaymentStatusSubmit")
       .post(BaseURL + "/payment-status")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -490,7 +488,7 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Intestacy_040_150_DocumentsSubmit")
+    .exec(http("Intestacy_390_DocumentsSubmit")
       .post(BaseURL + "/documents")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -499,7 +497,5 @@ object ProbateApp_Intestacy {
       .check(regex("Application complete")))
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
-
-  }
 
 }

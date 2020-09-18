@@ -5,7 +5,7 @@ import io.gatling.http.Predef._
 
 import uk.gov.hmcts.reform.probate.performance.scenarios.utils.{Environment, Common}
 
-package object CreateUser {
+object CreateUser {
 
   val IdamAPIURL = Environment.idamAPIURL
 
@@ -19,7 +19,7 @@ package object CreateUser {
     feed(newUserFeeder)
       .exec(http("Probate_000_CreateCitizen")
       .post(IdamAPIURL + "/testing-support/accounts")
-      .body(ElFileBody("bodies/NewUserTemplate.json")).asJson
+      .body(ElFileBody("bodies/CreateUserTemplate.json")).asJson
       .check(status.is(201)))
 
       .exec {

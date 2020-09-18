@@ -2,7 +2,7 @@ package uk.gov.hmcts.reform.probate.performance.scenarios
 
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
-import uk.gov.hmcts.reform.probate.performance.scenarios.checks.{CsrfCheck, CurrentPageUrl}
+import uk.gov.hmcts.reform.probate.performance.scenarios.checks.CsrfCheck
 import uk.gov.hmcts.reform.probate.performance.scenarios.utils.{Environment, Common}
 
 import scala.concurrent.duration._
@@ -22,9 +22,9 @@ object ProbateApp_ExecOne_Submit {
 
   val rnd = new Random()
 
-  val ProbateSubmit = group("Probate_Submit") {
+  val ProbateSubmit =
 
-    exec(http("Probate_060_005_GetCase")
+    exec(http("Probate_450_GetCase")
       .get(BaseURL + "/get-case/${appId}?probateType=PA")
       .headers(CommonHeader)
       .headers(GetHeader)
@@ -33,7 +33,7 @@ object ProbateApp_ExecOne_Submit {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_060_010_SectionFourStart")
+    .exec(http("Probate_460_SectionFourStart")
       .get(BaseURL + "/copies-uk")
       .headers(CommonHeader)
       .headers(GetHeader)
@@ -42,7 +42,7 @@ object ProbateApp_ExecOne_Submit {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_060_015_ExtraCopiesSubmit")
+    .exec(http("Probate_470_ExtraCopiesSubmit")
       .post(BaseURL + "/copies-uk")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -53,7 +53,7 @@ object ProbateApp_ExecOne_Submit {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_060_020_AssetsOverseasSubmit")
+    .exec(http("Probate_480_AssetsOverseasSubmit")
       .post(BaseURL + "/assets-overseas")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -63,7 +63,7 @@ object ProbateApp_ExecOne_Submit {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_060_025_TaskList")
+    .exec(http("Probate_490_TaskList")
       .get(BaseURL + "/task-list")
       .headers(CommonHeader)
       .headers(GetHeader)
@@ -72,7 +72,7 @@ object ProbateApp_ExecOne_Submit {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_060_030_SectionFiveStart")
+    .exec(http("Probate_500_SectionFiveStart")
       .get(BaseURL + "/payment-breakdown")
       .headers(CommonHeader)
       .headers(GetHeader)
@@ -81,7 +81,7 @@ object ProbateApp_ExecOne_Submit {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_060_035_PaymentBreakdownSubmit")
+    .exec(http("Probate_510_PaymentBreakdownSubmit")
       .post(BaseURL + "/payment-breakdown")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -92,7 +92,7 @@ object ProbateApp_ExecOne_Submit {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_060_040_CheckCard")
+    .exec(http("Probate_520_CheckCard")
       .post(PaymentURL + "/check_card/${ChargeId}")
       .headers(PostHeader)
       .formParam("cardNo", "4444333322221111")
@@ -103,7 +103,7 @@ object ProbateApp_ExecOne_Submit {
     // Gov Pay does strict postcode validation, so won't accept all postcodes in the format XXN NXX
     // Therefore, not using the postcode random function as payments with an invalid postcode fail
 
-    .exec(http("Probate_060_045_CardDetailsSubmit")
+    .exec(http("Probate_530_CardDetailsSubmit")
       .post(PaymentURL + "/card_details/${ChargeId}")
       .headers(PostHeader)
       .formParam("chargeId", "${ChargeId}")
@@ -124,7 +124,7 @@ object ProbateApp_ExecOne_Submit {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_060_050_CardDetailsConfirmSubmit")
+    .exec(http("Probate_540_CardDetailsConfirmSubmit")
       .post(PaymentURL + "/card_details/${ChargeId}/confirm")
       .headers(PostHeader)
       .formParam("chargeId", "${ChargeId}")
@@ -134,7 +134,7 @@ object ProbateApp_ExecOne_Submit {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_060_055_PaymentStatusSubmit")
+    .exec(http("Probate_550_PaymentStatusSubmit")
       .post(BaseURL + "/payment-status")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -144,7 +144,7 @@ object ProbateApp_ExecOne_Submit {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_060_045_DocumentsSubmit")
+    .exec(http("Probate_560_DocumentsSubmit")
       .post(BaseURL + "/documents")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -153,7 +153,5 @@ object ProbateApp_ExecOne_Submit {
       .check(regex("Application complete")))
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
-
-  }
 
 }

@@ -2,7 +2,7 @@ package uk.gov.hmcts.reform.probate.performance.scenarios
 
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
-import uk.gov.hmcts.reform.probate.performance.scenarios.checks.{CsrfCheck, CurrentPageUrl}
+import uk.gov.hmcts.reform.probate.performance.scenarios.checks.CsrfCheck
 import uk.gov.hmcts.reform.probate.performance.scenarios.utils.Environment
 
 import scala.concurrent.duration._
@@ -18,7 +18,7 @@ object ProbateApp_ExecTwo_Declaration {
   val GetHeader = Environment.getHeader
   val PostHeader = Environment.postHeader
 
-  val ProbateDeclaration = group("Probate_Declaration") {
+  val ProbateDeclaration =
 
     //inviteIdList was invoked prior to the first executor logging out, to retrieve the invite id for the
     //second executor
@@ -35,7 +35,7 @@ object ProbateApp_ExecTwo_Declaration {
         session
     }
 
-    .exec(http("Probate_050_005_InviteId")
+    .exec(http("Probate_410_InviteId")
       .get(BaseURL + "/executors/invitation/${inviteId}")
       .headers(CommonHeader)
       .headers(GetHeader)
@@ -46,7 +46,7 @@ object ProbateApp_ExecTwo_Declaration {
 
     //Retrieve the PIN code that was sent to the mobile phone by text message
 
-    .exec(http("Probate_050_010_RetrievePinCode")
+    .exec(http("Probate_Util_RetrievePinCode")
       .get(BaseURL + "/pin")
       .headers(CommonHeader)
       .headers(GetHeader)
@@ -56,7 +56,7 @@ object ProbateApp_ExecTwo_Declaration {
 
     //Simulate clicking the email link to display the page with a pin input box
 
-    .exec(http("Probate_050_015_PinCodeSubmit")
+    .exec(http("Probate_420_PinCodeSubmit")
       .post(BaseURL + "/sign-in")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -66,7 +66,7 @@ object ProbateApp_ExecTwo_Declaration {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_050_020_CoApplicantDeclaration")
+    .exec(http("Probate_430_CoApplicantDeclaration")
       .get(BaseURL + "/co-applicant-declaration")
       .headers(CommonHeader)
       .headers(GetHeader)
@@ -75,7 +75,7 @@ object ProbateApp_ExecTwo_Declaration {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_050_025_CoApplicantDeclarationSubmit")
+    .exec(http("Probate_440_CoApplicantDeclarationSubmit")
       .post(BaseURL + "/co-applicant-declaration")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -86,7 +86,5 @@ object ProbateApp_ExecTwo_Declaration {
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
     .exec(flushHttpCache)
-
-  }
 
 }

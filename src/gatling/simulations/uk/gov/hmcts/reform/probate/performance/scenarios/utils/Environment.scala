@@ -13,17 +13,12 @@ object Environment {
   //val idamAPIURL = "https://idam-api.aat.platform.hmcts.net"
   val paymentURL = "https://www.payments.service.gov.uk"
 
-  val minThinkTime = 1
-  val maxThinkTime = 2
-  val constantThinkTime = 7
-  val minWaitForNextIteration = 120
-  val maxWaitForNextIteration = 240
-
-  val intestacyPercentage = 25
+  val minThinkTime = 5
+  val maxThinkTime = 7
 
   val HttpProtocol = http
-    .proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080))
-    .noProxyFor(baseURL, idamURL, paymentURL)
+    //.proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080))
+    //.noProxyFor(baseURL, idamURL, paymentURL)
 
   val commonHeader = Map(
     "accept" -> "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",

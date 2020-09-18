@@ -11,7 +11,7 @@ class ProbateApplication extends Simulation {
 
   val BaseURL = Environment.baseURL
 
-  val execOneLoginFeeder = csv("probate_execOne_logins.csv").queue
+  //val execOneLoginFeeder = csv("probate_execOne_logins.csv").queue
 
   val httpProtocol = Environment.HttpProtocol
     .baseUrl(BaseURL)
@@ -31,7 +31,8 @@ class ProbateApplication extends Simulation {
       Homepage.ProbateHomepage,
       Login.ProbateLogin,
       ProbateApp_ExecOne_Submit.ProbateSubmit,
-      Logout.ProbateLogout
+      Logout.ProbateLogout,
+      DeleteUser.DeleteCitizen
     )
   }
 
