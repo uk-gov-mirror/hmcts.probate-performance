@@ -25,7 +25,7 @@ object ProbateApp_Intestacy {
 
   val IntestacyEligibility =
 
-    exec(http("Intestacy_010_DeathCertificate")
+    exec(http("Intestacy_010_StartEligibility")
       .get(BaseURL + "/death-certificate")
       .headers(CommonHeader)
       .headers(GetHeader)
