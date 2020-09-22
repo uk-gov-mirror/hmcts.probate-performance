@@ -22,9 +22,9 @@ class Probate extends Simulation {
   val testDurationMins = 60
 
   //Must be doubles to ensure the calculations result in doubles not rounded integers
-  val probateHourlyTarget:Double = 88
-  val intestacyHourlyTarget:Double = 12
-  val caveatHourlyTarget:Double = 53
+  val probateHourlyTarget:Double = 95 //88
+  val intestacyHourlyTarget:Double = 18 //12
+  val caveatHourlyTarget:Double = 60 //53
 
   val continueAfterEligibilityPercentage = 58
 
