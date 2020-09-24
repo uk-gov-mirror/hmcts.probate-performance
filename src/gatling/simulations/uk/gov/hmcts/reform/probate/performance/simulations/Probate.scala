@@ -28,9 +28,9 @@ class Probate extends Simulation {
 
   val continueAfterEligibilityPercentage = 58
 
-  val probateRatePerSec = probateHourlyTarget / testDurationMins / 60
-  val intestacyRatePerSec = intestacyHourlyTarget / testDurationMins / 60
-  val caveatRatePerSec = caveatHourlyTarget / testDurationMins / 60
+  val probateRatePerSec = probateHourlyTarget / 3600
+  val intestacyRatePerSec = intestacyHourlyTarget / 3600
+  val caveatRatePerSec = caveatHourlyTarget / 3600
 
   val randomFeeder = Iterator.continually( Map( "perc" -> Random.nextInt(100)))
 
