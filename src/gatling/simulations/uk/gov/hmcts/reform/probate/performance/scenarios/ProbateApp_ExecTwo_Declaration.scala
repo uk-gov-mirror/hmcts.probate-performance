@@ -66,7 +66,7 @@ object ProbateApp_ExecTwo_Declaration {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_430_CoApplicantDeclaration")
+    .exec(http("Probate_430_ExecTwoDeclaration")
       .get(BaseURL + "/co-applicant-declaration")
       .headers(CommonHeader)
       .headers(GetHeader)
@@ -75,7 +75,7 @@ object ProbateApp_ExecTwo_Declaration {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_440_CoApplicantDeclarationSubmit")
+    .exec(http("Probate_440_ExecTwoDeclarationSubmit")
       .post(BaseURL + "/co-applicant-declaration")
       .headers(CommonHeader)
       .headers(PostHeader)

@@ -413,7 +413,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_320_OtherExecutorsApplyingSubmit")
+    .exec(http("Probate_320_OtherExecutorsSubmit")
       .post(BaseURL + "/other-executors-applying")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -424,7 +424,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_330_ExecutorsDealingWithEstateSubmit")
+    .exec(http("Probate_330_ExecutorsDealingSubmit")
       .post(BaseURL + "/executors-dealing-with-estate")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -446,7 +446,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_350_ExecutorTwoContactDetailsSubmit")
+    .exec(http("Probate_350_ExecTwoContactDetailsSubmit")
       .post(BaseURL + "/executor-contact-details/1")
       .headers(CommonHeader)
       .headers(PostHeader)
@@ -458,7 +458,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_360_ExecutorTwoAddressSubmit")
+    .exec(http("Probate_360_ExecTwoAddressSubmit")
       .post(BaseURL + "/executor-address/1")
       .headers(CommonHeader)
       .headers(PostHeader)

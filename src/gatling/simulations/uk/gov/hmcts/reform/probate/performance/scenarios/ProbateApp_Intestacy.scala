@@ -258,7 +258,7 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Intestacy_180_AssetsOutsideEnglandWalesSubmit")
+    .exec(http("Intestacy_180_AssetsOutsideEnglandSubmit")
       .post(BaseURL + "/assets-outside-england-wales")
       .headers(CommonHeader)
       .headers(PostHeader)
