@@ -22,9 +22,13 @@ object ProbateApp_ExecOne_Submit {
 
   val rnd = new Random()
 
+  val randomNumber = Iterator.continually( Map( "rand" -> Random.nextInt(100)))
+
   val ProbateSubmit =
 
-    exec(http("Probate_450_GetCase")
+    feed(randomNumber)
+
+    .exec(http("Probate_450_GetCase")
       .get(BaseURL + "/get-case/${appId}?probateType=PA")
       .headers(CommonHeader)
       .headers(GetHeader)
@@ -153,5 +157,34 @@ object ProbateApp_ExecOne_Submit {
       .check(regex("Application complete")))
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+    .exec(http("Probate_570_DownloadCoverSheetPDF")
+      .get(BaseURL + "/cover-sheet-pdf")
+      .headers(CommonHeader)
+      .headers(GetHeader)
+      .check(bodyString.transform(_.size > 10000).is(true)))
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+    // 50% of the time, download the additional two PDFs
+    .doIf(session => session("rand").as[Int] < 50) {
+
+      exec(http("Probate_580_DownloadCheckAnswersPDF")
+        .get(BaseURL + "/check-answers-pdf")
+        .headers(CommonHeader)
+        .headers(GetHeader)
+        .check(bodyString.transform(_.size > 3000).is(true)))
+
+      .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+      .exec(http("Probate_590_DownloadDeclarationPDF")
+        .get(BaseURL + "/declaration-pdf")
+        .headers(CommonHeader)
+        .headers(GetHeader)
+        .check(bodyString.transform(_.size > 15000).is(true)))
+
+      .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+    }
 
 }

@@ -23,6 +23,8 @@ object ProbateApp_Intestacy {
 
   val rnd = new Random()
 
+  val randomNumber = Iterator.continually( Map( "rand" -> Random.nextInt(100)))
+
   val IntestacyEligibility =
 
     exec(http("Intestacy_010_StartEligibility")
@@ -136,7 +138,9 @@ object ProbateApp_Intestacy {
 
   val IntestacyApplication =
 
-    exec(http("Intestacy_090_ContinueApplication")
+    feed(randomNumber)
+
+    .exec(http("Intestacy_090_ContinueApplication")
       .get(BaseURL + "/get-case/${appId}?probateType=INTESTACY")
       .headers(CommonHeader)
       .headers(GetHeader)
@@ -497,5 +501,34 @@ object ProbateApp_Intestacy {
       .check(regex("Application complete")))
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+    .exec(http("Intestacy_400_DownloadCoverSheetPDF")
+      .get(BaseURL + "/cover-sheet-pdf")
+      .headers(CommonHeader)
+      .headers(GetHeader)
+      .check(bodyString.transform(_.size > 10000).is(true)))
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+    // 50% of the time, download the additional two PDFs
+    .doIf(session => session("rand").as[Int] < 50) {
+
+      exec(http("Intestacy_410_DownloadCheckAnswersPDF")
+        .get(BaseURL + "/check-answers-pdf")
+        .headers(CommonHeader)
+        .headers(GetHeader)
+        .check(bodyString.transform(_.size > 3000).is(true)))
+
+      .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+      .exec(http("Intestacy_420_DownloadDeclarationPDF")
+        .get(BaseURL + "/declaration-pdf")
+        .headers(CommonHeader)
+        .headers(GetHeader)
+        .check(bodyString.transform(_.size > 15000).is(true)))
+
+      .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+    }
 
 }
