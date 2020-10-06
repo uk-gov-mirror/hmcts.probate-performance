@@ -35,7 +35,8 @@ class Probate_Jenkins extends Simulation {
     }
     //.exec(DeleteUser.DeleteCitizen)
     .exitBlockOnFail {
-      exec(
+      exec(flushHttpCache)
+      .exec(
         CreateUser.CreateCitizen,
         Homepage.ProbateHomepage,
         Login.ProbateLogin,
@@ -46,7 +47,8 @@ class Probate_Jenkins extends Simulation {
     }
     //.exec(DeleteUser.DeleteCitizen)
     .exitBlockOnFail {
-      exec(
+      exec(flushHttpCache)
+      .exec(
         ProbateCaveat.ProbateCaveat
       )
     }

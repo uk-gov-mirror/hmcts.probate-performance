@@ -13,13 +13,16 @@ apply plugin: 'scala'
 group 'uk.gov.hmcts.reform'
 version = '1.0'
 
+sourceCompatibility = "11"
+targetCompatibility = "11"
+
 tasks.withType(JavaExec) {
     jvmArgs = ['-Xms1024m', '-Xmx2048m', '-XX:+UseConcMarkSweepGC']
 }
 
 jar {
     manifest {
-        attributes 'Implementation-Title': 'Probate  Performance Tests',
+        attributes 'Implementation-Title': 'Probate Performance Tests',
                 'Implementation-Version': version
     }
 }
@@ -40,22 +43,21 @@ ScalaCompileOptions.metaClass.fork = true
 ScalaCompileOptions.metaClass.useAnt = false
 ScalaCompileOptions.metaClass.useCompileDaemon = false
 
+ext {
+    gatlingVersion = '3.3.1'
+    scalaVersion = '2.13.3'
+}
+
 dependencies {
-    compile 'org.scala-lang:scala-library:2.12.8'
-
-    gatlingCompile 'com.warrenstrange:googleauth:1.1.5'
-    //compile group: 'io.gatling', name: 'gatling-app', version: '3.2.0'
-    compile group: 'io.gatling', name: 'gatling-app', version: '3.3.1'
-
-    //compile group: 'io.gatling', name: 'gatling-recorder', version: '3.2.0'
-    compile group: 'io.gatling', name: 'gatling-recorder', version: '3.3.1'
-    //compile group: 'io.gatling.highcharts', name: 'gatling-charts-highcharts', version: '3.2.0'
-    compile group: 'io.gatling.highcharts', name: 'gatling-charts-highcharts', version: '3.3.1'
-
+    testCompile group: 'org.scala-lang', name: 'scala-library', version: scalaVersion
+    testCompile group: 'io.gatling.highcharts', name: 'gatling-charts-highcharts', version: gatlingVersion
+    testCompile group: 'io.gatling', name: 'gatling-app', version: gatlingVersion
+    gatlingCompile group: 'io.rest-assured', name: 'rest-assured', version: '4.3.1'
+    gatlingCompile 'com.warrenstrange:googleauth:1.5.0'
+    gatlingRuntime group: 'io.gatling.highcharts', name: 'gatling-charts-highcharts', version: gatlingVersion
 }
 
 gatling {
-    //toolVersion '3.2.0'
     toolVersion '3.3.1'
     scalaVersion '2.12.8'
     simulations = [
