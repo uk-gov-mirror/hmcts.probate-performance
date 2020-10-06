@@ -59,7 +59,7 @@ dependencies {
 
 gatling {
     toolVersion '3.3.1'
-    scalaVersion '2.13.3'
+    scalaVersion '2.12.8'
     simulations = [
             'uk.gov.hmcts.reform.probate.performance.simulations.Probate_Jenkins'
     ]
