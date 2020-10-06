@@ -4,21 +4,23 @@ properties([
         pipelineTriggers([cron('00 21 * * *')]),
         parameters([
                 string(name: 'ENVIRONMENT', defaultValue: 'aat', description: 'Environment to test'),
-                string(name: 'URL_TO_TEST', defaultValue: 'https://div-pfe-aat.service.core-compute-aat.internal', description: 'The URL you want to run these tests against'),
-                string(name: 'IDAM_URL', defaultValue: 'https://preprod-idamapi.reform.hmcts.net:3511', description: 'The IDAM API Url to create and delete users from'),
-                string(name: 'IDAM_WEB_URL', defaultValue: 'https://idam.preprod.ccidam.reform.hmcts.net', description: 'The IDAM Loging Url')
+                string(name: 'URL_TO_TEST', defaultValue: 'https://probate.aat.platform.hmcts.net', description: 'The Probate URL you want to run these tests against'),
+                string(name: 'IDAM_URL', defaultValue: 'https://idam-web-public.aat.platform.hmcts.net', description: 'The IDAM API URL used to login/logout'),
+                string(name: 'IDAM_API_URL', defaultValue: 'https://idam-api.aat.platform.hmcts.net', description: 'The IDAM API URL to create and delete users'),
+                string(name: 'PAYMENT_URL', defaultValue: 'https://www.payments.service.gov.uk', description: 'The URL for payments')
         ])
 ])
 
 @Library("Infrastructure") _
 
-def product = "cmc"
-def component = "cliamant"
+def product = "probate"
+def component = "citizen"
 
-withNightlyPipeline("java", product, component) {
-    env.TEST_URL = params.URL_TO_TEST
-    env.IDAM_URL = params.IDAM_URL
-    env.IDAM_WEB_URL = params.IDAM_WEB_URL
+withNightlyPipeline("nodejs", product, component) {
+    Environment.baseURL = params.URL_TO_TEST
+    Environment.idamURL = params.IDAM_URL
+    Environment.idamAPIURL = params.IDAM_API_URL
+    Environment.paymentURL = params.PAYMENT_URL
 
     enablePerformanceTest()
 
