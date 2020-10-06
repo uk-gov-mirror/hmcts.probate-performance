@@ -1,14 +1,7 @@
 #!groovy
 
 properties([
-        pipelineTriggers([cron('00 21 * * *')]),
-        parameters([
-                string(name: 'ENVIRONMENT', defaultValue: 'aat', description: 'Environment to test'),
-                string(name: 'URL_TO_TEST', defaultValue: 'https://probate.aat.platform.hmcts.net', description: 'The Probate URL you want to run these tests against'),
-                string(name: 'IDAM_URL', defaultValue: 'https://idam-web-public.aat.platform.hmcts.net', description: 'The IDAM API URL used to login/logout'),
-                string(name: 'IDAM_API_URL', defaultValue: 'https://idam-api.aat.platform.hmcts.net', description: 'The IDAM API URL to create and delete users'),
-                string(name: 'PAYMENT_URL', defaultValue: 'https://www.payments.service.gov.uk', description: 'The URL for payments')
-        ])
+        pipelineTriggers([cron('00 21 * * *')])
 ])
 
 @Library("Infrastructure") _
@@ -17,11 +10,7 @@ def product = "probate"
 def component = "citizen"
 
 withNightlyPipeline("nodejs", product, component) {
-    env.baseURL = params.URL_TO_TEST
-    env.idamURL = params.IDAM_URL
-    env.idamAPIURL = params.IDAM_API_URL
-    env.paymentURL = params.PAYMENT_URL
-
+    
     enablePerformanceTest()
 
     after('performanceTest') {
