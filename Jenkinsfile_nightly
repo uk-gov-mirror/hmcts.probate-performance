@@ -17,10 +17,10 @@ def product = "probate"
 def component = "citizen"
 
 withNightlyPipeline("nodejs", product, component) {
-    Environment.baseURL = params.URL_TO_TEST
-    Environment.idamURL = params.IDAM_URL
-    Environment.idamAPIURL = params.IDAM_API_URL
-    Environment.paymentURL = params.PAYMENT_URL
+    env.baseURL = params.URL_TO_TEST
+    env.idamURL = params.IDAM_URL
+    env.idamAPIURL = params.IDAM_API_URL
+    env.paymentURL = params.PAYMENT_URL
 
     enablePerformanceTest()
 
