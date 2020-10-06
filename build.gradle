@@ -1,10 +1,11 @@
 plugins {
-    id "org.owasp.dependencycheck" version "6.0.2"
-    id 'scala' version '2.13.3'
-    id 'com.github.lkishalmi.gatling' version '3.3.4'
-    id 'groovy' version '3.0.6'
-    id 'com.gradle.plugin-publish' version '0.12.0'
-    id 'maven-publish' version '6.6.1'
+    id 'org.owasp.dependencycheck' version '5.1.0'
+    id 'scala'
+    id 'com.github.lkishalmi.gatling' version '3.0.2'
+    //id 'java-gradle-plugin'
+    id 'groovy'
+    id 'com.gradle.plugin-publish' version '0.9.8'
+    id 'maven-publish'
 }
 
 //apply plugin: 'java'
@@ -15,21 +16,32 @@ version = '1.0'
 sourceCompatibility = "11"
 targetCompatibility = "11"
 
-repositories {
-    jcenter()
+tasks.withType(JavaExec) {
+    jvmArgs = ['-Xms1024m', '-Xmx2048m', '-XX:+UseConcMarkSweepGC']
 }
 
 jar {
     manifest {
-        attributes 'Main-Class': 'io.gatling.app.Gatling'
+        attributes 'Implementation-Title': 'Probate Performance Tests',
+                'Implementation-Version': version
     }
-    from {
-        configurations.testCompile.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-    from sourceSets.test.output
-    exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
 }
 
+/*dependencyCheck {
+    // Specifies if the build should be failed if a CVSS score above a specified level is identified.
+    // range of 0-10 fails the build, anything greater and it doesn't fail the build
+    failBuildOnCVSS = System.getProperty('dependencyCheck.failBuild') == 'true' ? 0 : 11
+    suppressionFile = 'dependency-check-suppressions.xml'
+}*/
+
+repositories {
+    jcenter()
+}
+
+ScalaCompileOptions.metaClass.daemonServer = true
+ScalaCompileOptions.metaClass.fork = true
+ScalaCompileOptions.metaClass.useAnt = false
+ScalaCompileOptions.metaClass.useCompileDaemon = false
 
 ext {
     gatlingVersion = '3.3.1'
@@ -46,9 +58,28 @@ dependencies {
 }
 
 gatling {
-    toolVersion = '3.3.1'
-    scalaVersion = '2.13.3'
+    toolVersion '3.3.1'
+    scalaVersion '2.13.3'
     simulations = [
             'uk.gov.hmcts.reform.probate.performance.simulations.Probate_Jenkins'
     ]
 }
+
+test {
+    testLogging {
+        showStandardStreams = true
+    }
+    dependsOn("publishToMavenLocal")
+    systemProperty "com.github.lkishalmi.gatling.version", project.version
+}
+
+pluginBundle {
+    website = 'https://github.com/lkishalmi/gradle-gatling-plugin'
+    vcsUrl = 'https://github.com/lkishalmi/gradle-gatling-plugin'
+    description = 'Gatling Simulation Execution'
+    tags = ['gatling', 'load test', 'stress test', 'performance test', 'scala']
+
+
+}
+
+ext ['netty.version'] = '4.0.51.Final'
