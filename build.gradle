@@ -1,7 +1,7 @@
 plugins {
-    id "org.owasp.dependencycheck" version "5.3.0"
+    id "org.owasp.dependencycheck" version "6.0.2"
     id 'scala'
-    id 'com.github.lkishalmi.gatling' version '3.0.2'
+    id 'com.github.lkishalmi.gatling' version '3.3.4'
     id 'groovy'
     id 'com.gradle.plugin-publish' version '0.12.0'
     id 'maven-publish'
@@ -47,7 +47,7 @@ dependencies {
 
 gatling {
     toolVersion = '3.3.1'
-    scalaVersion = '2.12.8'
+    scalaVersion = '2.13.3'
     simulations = [
             'uk.gov.hmcts.reform.probate.performance.simulations.Probate_Jenkins'
     ]
