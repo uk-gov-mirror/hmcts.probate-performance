@@ -5,20 +5,20 @@ import io.gatling.http.Predef._
 
 object Environment {
 
-  val baseURL = "https://probate.perftest.platform.hmcts.net"
-  val idamURL = "https://idam-web-public.perftest.platform.hmcts.net"
-  val idamAPIURL = "https://idam-api.perftest.platform.hmcts.net"
-  //val baseURL = "https://probate.aat.platform.hmcts.net"
-  //val idamURL = "https://idam-web-public.aat.platform.hmcts.net"
-  //val idamAPIURL = "https://idam-api.aat.platform.hmcts.net"
+  //val baseURL = "https://probate.perftest.platform.hmcts.net"
+  //val idamURL = "https://idam-web-public.perftest.platform.hmcts.net"
+  //val idamAPIURL = "https://idam-api.perftest.platform.hmcts.net"
+  val baseURL = "https://probate.aat.platform.hmcts.net"
+  val idamURL = "https://idam-web-public.aat.platform.hmcts.net"
+  val idamAPIURL = "https://idam-api.aat.platform.hmcts.net"
   val paymentURL = "https://www.payments.service.gov.uk"
 
-  val minThinkTime = 5
-  val maxThinkTime = 7
+  val minThinkTime = 1
+  val maxThinkTime = 1
 
   val HttpProtocol = http
-    //.proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080))
-    //.noProxyFor(baseURL, idamURL, paymentURL)
+    .proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080))
+    .noProxyFor(baseURL, idamURL, paymentURL)
 
   val commonHeader = Map(
     "accept" -> "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",

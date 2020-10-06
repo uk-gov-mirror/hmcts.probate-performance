@@ -11,15 +11,12 @@ class ProbateIntestacy extends Simulation {
 
   val BaseURL = Environment.baseURL
 
-  val execOneLoginFeeder = csv("probate_execOne_logins.csv").queue
-
   val httpProtocol = Environment.HttpProtocol
     .baseUrl(BaseURL)
     .doNotTrackHeader("1")
 
   val ProbateNewIntestacyApplication = scenario( "ProbateNewIntestacyApplication").repeat(1) {
 
-    //feed(execOneLoginFeeder)
     exec(
       CreateUser.CreateCitizen,
       Homepage.ProbateHomepage,

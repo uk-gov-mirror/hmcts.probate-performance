@@ -62,7 +62,8 @@ gatling {
         //'uk.gov.hmcts.reform.probate.performance.simulations.ProbateApplication'
         //'uk.gov.hmcts.reform.probate.performance.simulations.ProbateIntestacy'
         //'uk.gov.hmcts.reform.probate.performance.simulations.Caveat'
-        'uk.gov.hmcts.reform.probate.performance.simulations.Probate'
+        //'uk.gov.hmcts.reform.probate.performance.simulations.Probate'
+        'uk.gov.hmcts.reform.probate.performance.simulations.Probate_Jenkins'
         ]
 }
 
