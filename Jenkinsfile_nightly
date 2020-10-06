@@ -12,7 +12,7 @@ properties([
 def product = "probate"
 def component = "citizen"
 
-withNightlyPipeline("nodejs", product, component) {
+withNightlyPipeline("java", product, component) {
 
     enablePerformanceTest()
 
