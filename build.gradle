@@ -20,12 +20,12 @@ tasks.withType(JavaExec) {
     jvmArgs = ['-Xms1024m', '-Xmx2048m', '-XX:+UseConcMarkSweepGC']
 }
 
-jar {
+/*jar {
     manifest {
         attributes 'Implementation-Title': 'Probate Performance Tests',
                 'Implementation-Version': version
     }
-}
+}*/
 
 /*dependencyCheck {
     // Specifies if the build should be failed if a CVSS score above a specified level is identified.
@@ -45,21 +45,20 @@ ScalaCompileOptions.metaClass.useCompileDaemon = false
 
 ext {
     gatlingVersion = '3.3.1'
-    scalaVersion = '2.13.3'
+    scalaVersion = '2.12.12'
 }
 
 dependencies {
-    testCompile group: 'org.scala-lang', name: 'scala-library', version: scalaVersion
-    testCompile group: 'io.gatling.highcharts', name: 'gatling-charts-highcharts', version: gatlingVersion
-    testCompile group: 'io.gatling', name: 'gatling-app', version: gatlingVersion
-    gatlingCompile group: 'io.rest-assured', name: 'rest-assured', version: '4.3.1'
-    gatlingCompile 'com.warrenstrange:googleauth:1.5.0'
-    gatlingRuntime group: 'io.gatling.highcharts', name: 'gatling-charts-highcharts', version: gatlingVersion
+    gatling "org.scala-lang:scala-library:${scalaVersion}"
+    gatling "io.gatling:gatling-app:${gatlingVersion}"
+    gatling "io.gatling.highcharts:gatling-charts-highcharts:${gatlingVersion}"
+    //gatlingImplementation "groupio.rest-assured:rest-assured:4.3.1"
+    gatling "com.warrenstrange:googleauth:1.5.0"
 }
 
 gatling {
     toolVersion '3.3.1'
-    scalaVersion '2.12.8'
+    scalaVersion '2.12.12'
     simulations = [
             'uk.gov.hmcts.reform.probate.performance.simulations.Probate_Jenkins'
     ]
