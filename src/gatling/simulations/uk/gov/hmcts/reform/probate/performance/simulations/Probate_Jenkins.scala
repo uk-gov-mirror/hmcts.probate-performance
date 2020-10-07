@@ -24,18 +24,19 @@ class Probate_Jenkins extends Simulation {
         ProbateApp_ExecOne_Apply.ProbateApplication,
         Logout.ProbateLogout)
         .exec(flushHttpCache)
-        .exec(
-          ProbateApp_ExecTwo_Declaration.ProbateDeclaration)
-        .exec(flushHttpCache)
-        .exec(
-          Homepage.ProbateHomepage,
-          Login.ProbateLogin,
-          ProbateApp_ExecOne_Submit.ProbateSubmit,
-          Logout.ProbateLogout)
+      .exec(
+        ProbateApp_ExecTwo_Declaration.ProbateDeclaration)
+      .exec(flushHttpCache)
+      .exec(
+        Homepage.ProbateHomepage,
+        Login.ProbateLogin,
+        ProbateApp_ExecOne_Submit.ProbateSubmit,
+        Logout.ProbateLogout)
     }
-    //.exec(DeleteUser.DeleteCitizen)
+    .exec(DeleteUser.DeleteCitizen)
     .exitBlockOnFail {
       exec(flushHttpCache)
+      .exec(flushCookieJar)
       .exec(
         CreateUser.CreateCitizen,
         Homepage.ProbateHomepage,
@@ -45,9 +46,10 @@ class Probate_Jenkins extends Simulation {
         Logout.ProbateLogout
       )
     }
-    //.exec(DeleteUser.DeleteCitizen)
+    .exec(DeleteUser.DeleteCitizen)
     .exitBlockOnFail {
       exec(flushHttpCache)
+      .exec(flushCookieJar)
       .exec(
         ProbateCaveat.ProbateCaveat
       )
