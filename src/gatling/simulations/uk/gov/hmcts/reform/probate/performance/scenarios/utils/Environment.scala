@@ -14,7 +14,7 @@ object Environment {
   val paymentURL = "https://www.payments.service.gov.uk"
 
   val minThinkTime = 1
-  val maxThinkTime = 2
+  val maxThinkTime = 1
 
   val HttpProtocol = http
     //.proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080))
