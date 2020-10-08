@@ -33,7 +33,7 @@ class Probate_Jenkins extends Simulation {
         ProbateApp_ExecOne_Submit.ProbateSubmit,
         Logout.ProbateLogout)
     }
-    .exec(DeleteUser.DeleteCitizen)
+    //.exec(DeleteUser.DeleteCitizen)
     .exitBlockOnFail {
       exec(flushHttpCache)
       .exec(flushCookieJar)
@@ -46,7 +46,7 @@ class Probate_Jenkins extends Simulation {
         Logout.ProbateLogout
       )
     }
-    .exec(DeleteUser.DeleteCitizen)
+    //.exec(DeleteUser.DeleteCitizen)
     .exitBlockOnFail {
       exec(flushHttpCache)
       .exec(flushCookieJar)
