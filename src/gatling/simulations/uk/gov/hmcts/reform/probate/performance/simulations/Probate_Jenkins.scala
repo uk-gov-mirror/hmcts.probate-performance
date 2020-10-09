@@ -4,7 +4,7 @@ import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import io.gatling.core.scenario.Simulation
 import uk.gov.hmcts.reform.probate.performance.scenarios._
-import uk.gov.hmcts.reform.probate.performance.scenarios.utils.Environment
+import uk.gov.hmcts.reform.probate.performance.scenarios.utils.{Environment, Common}
 
 class Probate_Jenkins extends Simulation {
 
@@ -16,8 +16,7 @@ class Probate_Jenkins extends Simulation {
 
   val AllApplications = scenario( "AllApplications")
     .exitBlockOnFail {
-      exec(flushHttpCache)
-      .exec(flushCookieJar)
+      exec(Common.ClearSessionVariables)
       .exec(
         CreateUser.CreateCitizen,
         Homepage.ProbateHomepage,
@@ -35,29 +34,9 @@ class Probate_Jenkins extends Simulation {
         ProbateApp_ExecOne_Submit.ProbateSubmit,
         Logout.ProbateLogout)
     }
-    //.exec(DeleteUser.DeleteCitizen)
+    .exec(DeleteUser.DeleteCitizen)
     .exitBlockOnFail {
-      exec(flushHttpCache)
-      .exec(flushCookieJar)
-      .exec(_.remove("state"))
-      .exec(_.remove("emailAddress"))
-      .exec(_.remove("authCode"))
-      .exec(_.remove("ChargeId"))
-      .exec(_.remove("rand"))
-      .exec(_.remove("csrf"))
-      .exec(_.remove("inviteId"))
-      .exec(_.remove("currentPageUrl"))
-      .exec(_.remove("appId"))
-        .exec(_.remove("gatling.http.cache.baseUrl"))
-        .exec(_.remove("role"))
-        .exec(_.remove("gatling.http.referer"))
-        .exec(_.remove("statusValue"))
-        .exec(_.remove("pin"))
-        .exec(_.remove("password"))
-      .exec { session =>
-        println(session)
-        session
-      }
+      exec(Common.ClearSessionVariables)
       .exec(
         CreateUser.CreateCitizen,
         Homepage.ProbateHomepage,
@@ -67,10 +46,9 @@ class Probate_Jenkins extends Simulation {
         Logout.ProbateLogout
       )
     }
-    //.exec(DeleteUser.DeleteCitizen)
+    .exec(DeleteUser.DeleteCitizen)
     .exitBlockOnFail {
-      exec(flushHttpCache)
-      .exec(flushCookieJar)
+      exec(Common.ClearSessionVariables)
       .exec(
         ProbateCaveat.ProbateCaveat
       )

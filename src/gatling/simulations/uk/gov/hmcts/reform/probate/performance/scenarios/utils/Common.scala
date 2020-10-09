@@ -1,5 +1,7 @@
 package uk.gov.hmcts.reform.probate.performance.scenarios.utils
 
+import io.gatling.core.Predef._
+import io.gatling.http.Predef._
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -40,5 +42,24 @@ object Common {
   def getPostcode(): String = {
     randomString(2).toUpperCase() + rnd.nextInt(10).toString + " " + rnd.nextInt(10).toString + randomString(2).toUpperCase()
   }
+
+  val ClearSessionVariables =
+    exec(flushHttpCache)
+    .exec(flushCookieJar)
+    .exec(_.remove("state"))
+    .exec(_.remove("emailAddress"))
+    .exec(_.remove("authCode"))
+    .exec(_.remove("ChargeId"))
+    .exec(_.remove("rand"))
+    .exec(_.remove("csrf"))
+    .exec(_.remove("inviteId"))
+    .exec(_.remove("currentPageUrl"))
+    .exec(_.remove("appId"))
+    .exec(_.remove("gatling.http.cache.baseUrl"))
+    .exec(_.remove("role"))
+    .exec(_.remove("gatling.http.referer"))
+    .exec(_.remove("statusValue"))
+    .exec(_.remove("pin"))
+    .exec(_.remove("password"))
 
 }
