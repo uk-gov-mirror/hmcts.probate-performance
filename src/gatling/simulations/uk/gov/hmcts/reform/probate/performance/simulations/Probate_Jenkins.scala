@@ -48,6 +48,12 @@ class Probate_Jenkins extends Simulation {
       .exec(_.remove("inviteId"))
       .exec(_.remove("currentPageUrl"))
       .exec(_.remove("appId"))
+        .exec(_.remove("gatling.http.cache.baseUrl"))
+        .exec(_.remove("role"))
+        .exec(_.remove("gatling.http.referer"))
+        .exec(_.remove("statusValue"))
+        .exec(_.remove("pin"))
+        .exec(_.remove("password"))
       .exec { session =>
         println(session)
         session
