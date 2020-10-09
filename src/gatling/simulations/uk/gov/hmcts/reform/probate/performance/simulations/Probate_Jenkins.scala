@@ -16,7 +16,9 @@ class Probate_Jenkins extends Simulation {
 
   val AllApplications = scenario( "AllApplications")
     .exitBlockOnFail {
-      exec(
+      exec(flushHttpCache)
+      .exec(flushCookieJar)
+      .exec(
         CreateUser.CreateCitizen,
         Homepage.ProbateHomepage,
         Login.ProbateLogin,
@@ -37,6 +39,10 @@ class Probate_Jenkins extends Simulation {
     .exitBlockOnFail {
       exec(flushHttpCache)
       .exec(flushCookieJar)
+      .exec { session =>
+        println(session)
+        session
+      }
       .exec(
         CreateUser.CreateCitizen,
         Homepage.ProbateHomepage,
