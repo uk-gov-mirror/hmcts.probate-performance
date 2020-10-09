@@ -39,6 +39,15 @@ class Probate_Jenkins extends Simulation {
     .exitBlockOnFail {
       exec(flushHttpCache)
       .exec(flushCookieJar)
+      .exec(_.remove("state"))
+      .exec(_.remove("emailAddress"))
+      .exec(_.remove("authCode"))
+      .exec(_.remove("ChargeId"))
+      .exec(_.remove("rand"))
+      .exec(_.remove("csrf"))
+      .exec(_.remove("inviteId"))
+      .exec(_.remove("currentPageUrl"))
+      .exec(_.remove("appId"))
       .exec { session =>
         println(session)
         session
