@@ -61,5 +61,9 @@ object Common {
     .exec(_.remove("statusValue"))
     .exec(_.remove("pin"))
     .exec(_.remove("password"))
+    .exec(_.remove("gatling.http.cookies"))
+    .exec(_.remove("gatling.http.cache.contentCache"))
+    .exec(_.remove("gatling.http.cache.redirects"))
+    .exec(_.remove("gatling.http.ssl.sslContexts"))
 
 }
