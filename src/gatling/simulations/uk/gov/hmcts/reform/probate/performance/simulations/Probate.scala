@@ -16,6 +16,7 @@ class Probate extends Simulation {
   val httpProtocol = Environment.HttpProtocol
     .baseUrl(BaseURL)
     .doNotTrackHeader("1")
+    .inferHtmlResources()
 
   val rampUpDurationMins = 2
   val rampDownDurationMins = 2
