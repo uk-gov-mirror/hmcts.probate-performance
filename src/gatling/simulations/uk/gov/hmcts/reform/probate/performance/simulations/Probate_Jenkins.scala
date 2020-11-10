@@ -13,6 +13,7 @@ class Probate_Jenkins extends Simulation {
   val httpProtocol = Environment.HttpProtocol
     .baseUrl(BaseURL)
     .doNotTrackHeader("1")
+    .inferHtmlResources()
 
   val AllApplications = scenario( "AllApplications")
     .exitBlockOnFail {
