@@ -42,7 +42,7 @@ object ProbateApp_ExecOne_Submit {
       .headers(CommonHeader)
       .headers(GetHeader)
       .check(CsrfCheck.save)
-      .check(regex("How many extra copies")))
+      .check(regex("How many extra official copies")))
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
