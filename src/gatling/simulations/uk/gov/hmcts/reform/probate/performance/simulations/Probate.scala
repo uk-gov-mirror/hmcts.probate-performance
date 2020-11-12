@@ -16,16 +16,17 @@ class Probate extends Simulation {
   val httpProtocol = Environment.HttpProtocol
     .baseUrl(BaseURL)
     .doNotTrackHeader("1")
-    .inferHtmlResources()
+    .inferHtmlResources(BlackList("https://www.payments.service.gov.uk/.*"), WhiteList())
+    .silentResources
 
   val rampUpDurationMins = 2
   val rampDownDurationMins = 2
   val testDurationMins = 60
 
   //Must be doubles to ensure the calculations result in doubles not rounded integers
-  val probateHourlyTarget:Double = 88
-  val intestacyHourlyTarget:Double = 12
-  val caveatHourlyTarget:Double = 53
+  val probateHourlyTarget:Double = 90
+  val intestacyHourlyTarget:Double = 20
+  val caveatHourlyTarget:Double = 60
 
   val continueAfterEligibilityPercentage = 58
 

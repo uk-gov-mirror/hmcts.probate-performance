@@ -16,10 +16,14 @@ object Logout {
 
   val ProbateLogout =
 
-    exec(http("Probate_999_Logout")
-      .get(BaseURL + "/sign-out")
-      .headers(CommonHeader)
-      .headers(GetHeader)
-      .check(regex("signed out")))
+    group("Probate_999_Logout") {
+
+      exec(http("Logout")
+        .get(BaseURL + "/sign-out")
+        .headers(CommonHeader)
+        .headers(GetHeader)
+        .check(regex("signed out")))
+
+    }
 
 }

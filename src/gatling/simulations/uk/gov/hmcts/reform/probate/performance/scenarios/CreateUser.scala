@@ -17,11 +17,13 @@ object CreateUser {
 
   val CreateCitizen =
     feed(newUserFeeder)
-      .exec(http("Probate_000_CreateCitizen")
-      .post(IdamAPIURL + "/testing-support/accounts")
-      .body(ElFileBody("bodies/CreateUserTemplate.json")).asJson
-      .check(status.is(201)))
-/*
+      .group("Probate_000_CreateCitizen") {
+        exec(http("CreateCitizen")
+          .post(IdamAPIURL + "/testing-support/accounts")
+          .body(ElFileBody("bodies/CreateUserTemplate.json")).asJson
+          .check(status.is(201)))
+      }
+
       .exec {
         session =>
           println("EMAIL: " + session("emailAddress").as[String])
@@ -29,5 +31,5 @@ object CreateUser {
           println("ROLE: " + session("role").as[String])
           session
       }
-*/
+
 }
