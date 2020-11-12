@@ -14,6 +14,8 @@ class Caveat extends Simulation {
   val httpProtocol = Environment.HttpProtocol
     .baseUrl(BaseURL)
     .doNotTrackHeader("1")
+    .inferHtmlResources(BlackList("https://www.payments.service.gov.uk/.*"), WhiteList())
+    .silentResources
 
   val ProbateNewCaveat = scenario( "ProbateNewCaveat").repeat(2) {
 

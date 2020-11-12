@@ -16,6 +16,8 @@ class ProbateIntestacy extends Simulation {
   val httpProtocol = Environment.HttpProtocol
     .baseUrl(BaseURL)
     .doNotTrackHeader("1")
+    .inferHtmlResources(BlackList("https://www.payments.service.gov.uk/.*"), WhiteList())
+    .silentResources
 
   val ProbateNewIntestacyApplication = scenario( "ProbateNewIntestacyApplication").repeat(1) {
 

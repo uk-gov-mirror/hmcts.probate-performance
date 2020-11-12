@@ -19,20 +19,24 @@ object Homepage {
 
   val ProbateHomepage =
 
-    exec(http("Probate_001_005_HomePage")
-      .get(BaseURL + "/")
-      .disableFollowRedirect
-      .headers(CommonHeader)
-      .header("sec-fetch-site", "none")
-      .check(headerRegex("Location", "(?<=state=)(.*)&client").saveAs("state"))
-      .check(status.in(200, 302)))
+    group("Probate_001_HomePage") {
 
-    .exec(http("Probate_001_010_HomePage")
-      .get(IdamURL + "/login?ui_locales=en&response_type=code&state=${state}&client_id=probate&redirect_uri=" + BaseURL + "/oauth2/callback")
-      .headers(CommonHeader)
-      .header("sec-fetch-site", "none")
-      .check(CurrentPageUrl.save)
-      .check(CsrfCheck.save))
+      exec(http("Probate_001_005_HomePage")
+        .get(BaseURL + "/")
+        .disableFollowRedirect
+        .headers(CommonHeader)
+        .header("sec-fetch-site", "none")
+        .check(headerRegex("Location", "(?<=state=)(.*)&client").saveAs("state"))
+        .check(status.in(200, 302)))
+
+      .exec(http("Probate_001_010_HomePage")
+        .get(IdamURL + "/login?ui_locales=en&response_type=code&state=${state}&client_id=probate&redirect_uri=" + BaseURL + "/oauth2/callback")
+        .headers(CommonHeader)
+        .header("sec-fetch-site", "none")
+        .check(CurrentPageUrl.save)
+        .check(CsrfCheck.save))
+
+    }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 

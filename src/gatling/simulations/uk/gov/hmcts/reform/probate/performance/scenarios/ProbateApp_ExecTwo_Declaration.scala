@@ -18,7 +18,7 @@ object ProbateApp_ExecTwo_Declaration {
   val GetHeader = Environment.getHeader
   val PostHeader = Environment.postHeader
 
-  val ProbateDeclaration =
+  val ProbateDeclaration = {
 
     //inviteIdList was invoked prior to the first executor logging out, to retrieve the invite id for the
     //second executor
@@ -29,62 +29,85 @@ object ProbateApp_ExecTwo_Declaration {
 
     //Simulate clicking the email link to display the page with a pin input box
 
+    /*
     exec {
       session =>
         println("INVITE ID: " + session("inviteId").as[String])
         session
     }
+     */
 
-    .exec(http("Probate_410_InviteId")
-      .get(BaseURL + "/executors/invitation/${inviteId}")
-      .headers(CommonHeader)
-      .headers(GetHeader)
-      .check(CsrfCheck.save)
-      .check(regex("Before making an application for probate")))
+    group("Probate_410_InviteId") {
+
+      exec(http("InviteId")
+        .get(BaseURL + "/executors/invitation/${inviteId}")
+        .headers(CommonHeader)
+        .headers(GetHeader)
+        .check(CsrfCheck.save)
+        .check(regex("Before making an application for probate")))
+
+    }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
     //Retrieve the PIN code that was sent to the mobile phone by text message
 
-    .exec(http("Probate_Util_RetrievePinCode")
-      .get(BaseURL + "/pin")
-      .headers(CommonHeader)
-      .headers(GetHeader)
-      .check(jsonPath("$.pin").saveAs("pin")))
+    .group("Probate_Util_RetrievePinCode") {
+
+      exec(http("RetrievePinCode")
+        .get(BaseURL + "/pin")
+        .headers(CommonHeader)
+        .headers(GetHeader)
+        .check(jsonPath("$.pin").saveAs("pin")))
+
+    }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
     //Simulate clicking the email link to display the page with a pin input box
 
-    .exec(http("Probate_420_PinCodeSubmit")
-      .post(BaseURL + "/sign-in")
-      .headers(CommonHeader)
-      .headers(PostHeader)
-      .formParam("_csrf", "${csrf}")
-      .formParam("pin", "${pin}")
-      .check(regex("been named as an executor")))
+    .group("Probate_420_PinCodeSubmit") {
+
+      exec(http("PinCodeSubmit")
+        .post(BaseURL + "/sign-in")
+        .headers(CommonHeader)
+        .headers(PostHeader)
+        .formParam("_csrf", "${csrf}")
+        .formParam("pin", "${pin}")
+        .check(regex("been named as an executor")))
+
+    }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_430_ExecTwoDeclaration")
-      .get(BaseURL + "/co-applicant-declaration")
-      .headers(CommonHeader)
-      .headers(GetHeader)
-      .check(CsrfCheck.save)
-      .check(regex("Check legal statement and make declaration")))
+    .group("Probate_430_ExecTwoDeclaration") {
+
+      exec(http("ExecTwoDeclaration")
+        .get(BaseURL + "/co-applicant-declaration")
+        .headers(CommonHeader)
+        .headers(GetHeader)
+        .check(CsrfCheck.save)
+        .check(regex("Check legal statement and make declaration")))
+
+    }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .exec(http("Probate_440_ExecTwoDeclarationSubmit")
-      .post(BaseURL + "/co-applicant-declaration")
-      .headers(CommonHeader)
-      .headers(PostHeader)
-      .formParam("_csrf", "${csrf}")
-      .formParam("agreement", "optionYes")
-      .check(regex("made your legal declaration")))
+    .group("Probate_440_ExecTwoDeclarationSubmit") {
+
+      exec(http("ExecTwoDeclarationSubmit")
+        .post(BaseURL + "/co-applicant-declaration")
+        .headers(CommonHeader)
+        .headers(PostHeader)
+        .formParam("_csrf", "${csrf}")
+        .formParam("agreement", "optionYes")
+        .check(regex("made your legal declaration")))
+
+    }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
     .exec(flushHttpCache)
+  }
 
 }
