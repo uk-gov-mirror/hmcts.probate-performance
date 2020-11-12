@@ -13,7 +13,8 @@ class Probate_Jenkins extends Simulation {
   val httpProtocol = Environment.HttpProtocol
     .baseUrl(BaseURL)
     .doNotTrackHeader("1")
-    .inferHtmlResources()
+    .inferHtmlResources(BlackList("https://www.payments.service.gov.uk/.*"), WhiteList())
+    .silentResources
 
   val AllApplications = scenario( "AllApplications")
     .exitBlockOnFail {
