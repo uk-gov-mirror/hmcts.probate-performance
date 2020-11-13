@@ -607,7 +607,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Probate_360_ExecTwoAddressSubmit") {
+    .group("Probate_370_SectionThreeStart") {
 
       exec(http("SectionThreeStart")
         .get(BaseURL + "/summary/declaration")
