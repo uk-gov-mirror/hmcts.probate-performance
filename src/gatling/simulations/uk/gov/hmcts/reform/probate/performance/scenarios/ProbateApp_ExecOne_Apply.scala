@@ -45,6 +45,21 @@ object ProbateApp_ExecOne_Apply {
         .formParam("_csrf", "${csrf}")
         .formParam("deathCertificate", "optionYes")
         .check(CsrfCheck.save)
+        .check(regex("Is the original death certificate in English")))
+
+    }
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+    .group("Probate_025_DeathCertEnglishSubmit") {
+
+      exec(http("DeathCertEnglishSubmit")
+        .post(BaseURL + "/death-certificate-english")
+        .headers(CommonHeader)
+        .headers(PostHeader)
+        .formParam("_csrf", "${csrf}")
+        .formParam("deathCertificateInEnglish", "optionYes")
+        .check(CsrfCheck.save)
         .check(regex("Did the person who died live permanently")))
 
     }
@@ -260,45 +275,35 @@ object ProbateApp_ExecOne_Apply {
         .formParam("newPostCode", Common.getPostcode())
         .formParam("country", "")
         .check(CsrfCheck.save)
-        .check(regex("Upload the death certificate")))
+        .check(regex("die in England or Wales")))
 
     }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Probate_160_DocumentUpload") {
+    .group("Probate_155_DiedEngOrWalesSubmit") {
 
-      exec(http("DocumentUpload")
-        .post(BaseURL + "/document-upload")
-        .header("Accept", "application/json")
-        .header("Accept-Encoding", "gzip, deflate, br")
-        .header("Accept-Language", "en-GB,en;q=0.5")
-        .header("Content-Type", "multipart/form-data")
-        .header("TE", "Trailers")
-        .header("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36")
-        .header("x-csrf-token", "${csrf}")
-        .header("X-Requested-With", "XMLHttpRequest")
-        .formParam("isUploadingDocument", "true")
-        .bodyPart(RawFileBodyPart("file", "2MB.pdf")
-          .fileName("2MB.pdf")
-          .transferEncoding("binary"))
-        .asMultipartForm
-        .check(status.is(200))
-        .check(currentLocation.is(BaseURL + "/document-upload"))
-        .check(regex("/document-upload/remove/0.>Remove</a>"))
-        .check(regex("Upload the death certificate")))
-
-    }
-
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
-
-    .group("Probate_170_DocumentUploadSubmit") {
-
-      exec(http("DocumentUploadSubmit")
-        .post(BaseURL + "/document-upload")
+      exec(http("DiedEngOrWalesSubmit")
+        .post(BaseURL + "/died-eng-or-wales")
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "${csrf}")
+        .formParam("diedEngOrWales", "optionYes")
+        .check(CsrfCheck.save)
+        .check(regex("Do you have a death certificate")))
+
+    }
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+    .group("Probate_160_CertificateInterimSubmit") {
+
+      exec(http("CertificateInterimSubmit")
+        .post(BaseURL + "/certificate-interim")
+        .headers(CommonHeader)
+        .headers(PostHeader)
+        .formParam("_csrf", "${csrf}")
+        .formParam("deathCertificate", "optionDeathCertificate")
         .check(CsrfCheck.save)
         .check(regex("How was the Inheritance Tax")))
 
