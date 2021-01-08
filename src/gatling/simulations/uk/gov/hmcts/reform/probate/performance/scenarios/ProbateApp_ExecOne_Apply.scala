@@ -281,7 +281,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Probate_155_DiedEngOrWalesSubmit") {
+    .group("Probate_160_DiedEngOrWalesSubmit") {
 
       exec(http("DiedEngOrWalesSubmit")
         .post(BaseURL + "/died-eng-or-wales")
@@ -296,7 +296,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Probate_160_CertificateInterimSubmit") {
+    .group("Probate_170_CertificateInterimSubmit") {
 
       exec(http("CertificateInterimSubmit")
         .post(BaseURL + "/certificate-interim")
