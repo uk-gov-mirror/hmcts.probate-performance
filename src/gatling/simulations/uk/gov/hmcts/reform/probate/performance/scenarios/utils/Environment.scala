@@ -13,8 +13,8 @@ object Environment {
   val idamAPIURL = "https://idam-api.aat.platform.hmcts.net"
   val paymentURL = "https://www.payments.service.gov.uk"
 
-  val minThinkTime = 1
-  val maxThinkTime = 1
+  val minThinkTime = 5
+  val maxThinkTime = 7
 
   val HttpProtocol = http
     //.proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080))
