@@ -59,5 +59,6 @@ class Probate_Jenkins extends Simulation {
   setUp(
     AllApplications.inject(atOnceUsers(1))
   ).protocols(httpProtocol)
+    .assertions(global.successfulRequests.percent.is(100))
 
 }
