@@ -5,6 +5,7 @@ import io.gatling.http.Predef._
 import io.gatling.core.scenario.Simulation
 import uk.gov.hmcts.reform.probate.performance.scenarios._
 import uk.gov.hmcts.reform.probate.performance.scenarios.utils.{Environment, Common}
+import scala.concurrent.duration._
 
 class Probate_Jenkins extends Simulation {
 
@@ -57,7 +58,8 @@ class Probate_Jenkins extends Simulation {
     }
 
   setUp(
-    AllApplications.inject(atOnceUsers(1))
+    //.inject(rampUsers(10).over(10 seconds))
+    AllApplications.inject(rampUsers(3) during (60 seconds))
   ).protocols(httpProtocol)
     .assertions(global.successfulRequests.percent.is(100))
 
