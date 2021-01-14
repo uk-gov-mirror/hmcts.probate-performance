@@ -594,7 +594,7 @@ object ProbateApp_ExecOne_Apply {
 
     .group("Probate_360_ExecTwoAddressSubmit") {
 
-      exec(http("Probate_360_ExecTwoAddressSubmit")
+      exec(http("ExecTwoAddressSubmit")
         .post(BaseURL + "/executor-address/1")
         .headers(CommonHeader)
         .headers(PostHeader)
@@ -626,7 +626,7 @@ object ProbateApp_ExecOne_Apply {
 
     .group("Probate_380_Declaration") {
 
-      exec(http("380_Declaration")
+      exec(http("Declaration")
         .get(BaseURL + "/declaration")
         .headers(CommonHeader)
         .headers(GetHeader)
