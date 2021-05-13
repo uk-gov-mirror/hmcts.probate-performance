@@ -37,7 +37,7 @@ class Probate_Jenkins extends Simulation {
         ProbateApp_ExecOne_Submit.ProbateSubmit,
         Logout.ProbateLogout)
     }
-    //.exec(DeleteUser.DeleteCitizen)
+    .exec(DeleteUser.DeleteCitizen)
     .exitBlockOnFail {
       exec(Common.ClearSessionVariables)
       .exec(

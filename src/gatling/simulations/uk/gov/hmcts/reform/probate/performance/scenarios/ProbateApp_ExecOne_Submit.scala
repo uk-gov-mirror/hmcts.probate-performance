@@ -221,33 +221,28 @@ object ProbateApp_ExecOne_Submit {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    // 50% of the time, download the additional two PDFs
-    .doIf(session => session("rand").as[Int] < 50) {
+    .group("Probate_580_DownloadCheckAnswersPDF") {
 
-      group("Probate_580_DownloadCheckAnswersPDF") {
-
-        exec(http("DownloadCheckAnswersPDF")
-          .get(BaseURL + "/check-answers-pdf")
-          .headers(CommonHeader)
-          .headers(GetHeader)
-          .check(bodyString.transform(_.size > 3000).is(true)))
-
-      }
-
-      .pause(MinThinkTime seconds, MaxThinkTime seconds)
-
-      .group("Probate_590_DownloadDeclarationPDF") {
-
-        exec(http("DownloadDeclarationPDF")
-          .get(BaseURL + "/declaration-pdf")
-          .headers(CommonHeader)
-          .headers(GetHeader)
-          .check(bodyString.transform(_.size > 15000).is(true)))
-
-      }
-
-      .pause(MinThinkTime seconds, MaxThinkTime seconds)
+      exec(http("DownloadCheckAnswersPDF")
+        .get(BaseURL + "/check-answers-pdf")
+        .headers(CommonHeader)
+        .headers(GetHeader)
+        .check(bodyString.transform(_.size > 3000).is(true)))
 
     }
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+    .group("Probate_590_DownloadDeclarationPDF") {
+
+      exec(http("DownloadDeclarationPDF")
+        .get(BaseURL + "/declaration-pdf")
+        .headers(CommonHeader)
+        .headers(GetHeader)
+        .check(bodyString.transform(_.size > 15000).is(true)))
+
+    }
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
 }
