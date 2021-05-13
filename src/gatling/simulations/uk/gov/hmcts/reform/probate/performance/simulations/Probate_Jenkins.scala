@@ -58,8 +58,7 @@ class Probate_Jenkins extends Simulation {
     }
 
   setUp(
-    //.inject(rampUsers(10).over(10 seconds))
-    AllApplications.inject(rampUsers(1) during (2 minutes))
+    AllApplications.inject(rampUsers(10) during (2 minutes))
   ).protocols(httpProtocol)
     .assertions(global.successfulRequests.percent.gte(95))
 
