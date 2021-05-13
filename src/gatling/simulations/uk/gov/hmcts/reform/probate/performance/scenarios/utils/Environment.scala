@@ -13,16 +13,17 @@ object Environment {
   val idamAPIURL = "https://idam-api.aat.platform.hmcts.net"
   val paymentURL = "https://www.payments.service.gov.uk"
 
-  val minThinkTime = 3
-  val maxThinkTime = 5
+  val minThinkTime = 5
+  val maxThinkTime = 7
 
   val HttpProtocol = http
     //.proxy(Proxy("proxyout.reform.hmcts.net", 8080).httpsPort(8080))
     //.noProxyFor(baseURL, idamURL, paymentURL)
 
   val commonHeader = Map(
-    "accept" -> "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+    "accept" -> "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
     "accept-encoding" -> "gzip, deflate, br",
+    "accept-language" -> "en-GB,en;q=0.9",
     "sec-fetch-dest" -> "document",
     "sec-fetch-mode" -> "navigate",
     "sec-fetch-user" -> "?1",
@@ -31,7 +32,6 @@ object Environment {
   )
 
   val getHeader = Map(
-    "accept-language" -> "en-GB,en;q=0.9",
     "sec-fetch-site" -> "same-origin"
     )
   val postHeader = Map(

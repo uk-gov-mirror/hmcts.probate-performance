@@ -155,7 +155,6 @@ object ProbateApp_ExecOne_Apply {
 
     }
 
-    /*
     .exec {
       session =>
         println("EXEC1 EMAIL: " + session("emailAddress").as[String])
@@ -163,7 +162,6 @@ object ProbateApp_ExecOne_Apply {
         println("APPLICATION TYPE: PA")
         session
     }
-     */
 
   .pause(MinThinkTime seconds, MaxThinkTime seconds)
 

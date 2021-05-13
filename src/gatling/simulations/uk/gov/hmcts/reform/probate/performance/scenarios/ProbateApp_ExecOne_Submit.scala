@@ -128,6 +128,7 @@ object ProbateApp_ExecOne_Submit {
 
       exec(http("CheckCard")
         .post(PaymentURL + "/check_card/${ChargeId}")
+        .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("cardNo", "4444333322221111")
         .check(jsonPath("$.accepted").is("true")))
@@ -143,6 +144,7 @@ object ProbateApp_ExecOne_Submit {
 
       exec(http("CardDetailsSubmit")
         .post(PaymentURL + "/card_details/${ChargeId}")
+        .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("chargeId", "${ChargeId}")
         .formParam("csrfToken", "${csrf}")
@@ -155,7 +157,7 @@ object ProbateApp_ExecOne_Submit {
         .formParam("addressLine1", rnd.nextInt(1000).toString + " Perf" + Common.randomString(5) + " Road")
         .formParam("addressLine2", "")
         .formParam("addressCity", "Perf " + Common.randomString(5) + " Town")
-        .formParam("addressPostcode", "PR1 1RF") //Common.getPostcode()
+        .formParam("addressPostcode", "TS1 1ST") //Common.getPostcode()
         .formParam("email", "probate@perftest" + Common.randomString(8) + ".com")
         .check(regex("Confirm your payment"))
         .check(css("input[name='csrfToken']", "value").saveAs("csrf")))
@@ -168,6 +170,7 @@ object ProbateApp_ExecOne_Submit {
 
       exec(http("CardDetailsConfirmSubmit")
         .post(PaymentURL + "/card_details/${ChargeId}/confirm")
+        .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("chargeId", "${ChargeId}")
         .formParam("csrfToken", "${csrf}")
