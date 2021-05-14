@@ -17,6 +17,8 @@ class Probate_Jenkins extends Simulation {
     .inferHtmlResources(BlackList("https://www.payments.service.gov.uk/.*"), WhiteList())
     .silentResources
 
+  val numberOfPipelineUsers:Double = 10
+
   val AllApplications = scenario( "AllApplications")
     .exitBlockOnFail {
       exec(Common.ClearSessionVariables)
@@ -58,8 +60,15 @@ class Probate_Jenkins extends Simulation {
     }
 
   setUp(
-    AllApplications.inject(rampUsers(10) during (2 minutes))
+    AllApplications.inject(rampUsers(numberOfPipelineUsers.toInt) during (2 minutes))
   ).protocols(httpProtocol)
-    .assertions(global.successfulRequests.percent.gte(95))
+    .assertions(
+      //ensure at least 95% of attempted transactions have passed
+      global.successfulRequests.percent.gte(95),
+      //ensure that at least 80% of the users complete each journey end to end
+      details("Probate_590_DownloadDeclarationPDF").successfulRequests.count.gte((numberOfPipelineUsers * 0.8).ceil.toInt),
+      details("Intestacy_420_DownloadDeclarationPDF").successfulRequests.count.gte((numberOfPipelineUsers * 0.8).ceil.toInt),
+      details("Caveat_170_CardDetailsConfirmSubmit").successfulRequests.count.gte((numberOfPipelineUsers * 0.8).ceil.toInt)
+    )
 
 }
