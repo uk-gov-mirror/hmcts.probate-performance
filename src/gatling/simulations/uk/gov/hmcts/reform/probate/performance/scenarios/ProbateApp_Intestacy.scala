@@ -664,33 +664,28 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    // 50% of the time, download the additional two PDFs
-    .doIf(session => session("rand").as[Int] < 50) {
+    .group("Intestacy_410_DownloadCheckAnswersPDF") {
 
-      group("Intestacy_410_DownloadCheckAnswersPDF") {
-
-        exec(http("DownloadCheckAnswersPDF")
-          .get(BaseURL + "/check-answers-pdf")
-          .headers(CommonHeader)
-          .headers(GetHeader)
-          .check(bodyString.transform(_.size > 3000).is(true)))
-
-      }
-
-      .pause(MinThinkTime seconds, MaxThinkTime seconds)
-
-      .group("Intestacy_420_DownloadDeclarationPDF") {
-
-        exec(http("DownloadDeclarationPDF")
-          .get(BaseURL + "/declaration-pdf")
-          .headers(CommonHeader)
-          .headers(GetHeader)
-          .check(bodyString.transform(_.size > 15000).is(true)))
-
-      }
-
-      .pause(MinThinkTime seconds, MaxThinkTime seconds)
+      exec(http("DownloadCheckAnswersPDF")
+        .get(BaseURL + "/check-answers-pdf")
+        .headers(CommonHeader)
+        .headers(GetHeader)
+        .check(bodyString.transform(_.size > 3000).is(true)))
 
     }
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+    .group("Intestacy_420_DownloadDeclarationPDF") {
+
+      exec(http("DownloadDeclarationPDF")
+        .get(BaseURL + "/declaration-pdf")
+        .headers(CommonHeader)
+        .headers(GetHeader)
+        .check(bodyString.transform(_.size > 15000).is(true)))
+
+    }
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
 }

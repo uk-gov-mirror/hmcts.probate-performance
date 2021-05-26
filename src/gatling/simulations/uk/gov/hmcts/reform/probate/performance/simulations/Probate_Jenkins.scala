@@ -63,8 +63,8 @@ class Probate_Jenkins extends Simulation {
     AllApplications.inject(rampUsers(numberOfPipelineUsers.toInt) during (2 minutes))
   ).protocols(httpProtocol)
     .assertions(
-      //ensure at least 95% of attempted transactions have passed
       global.successfulRequests.percent.gte(95),
+      //ensure at least 95% of attempted transactions have passed
       //ensure that at least 80% of the users complete each journey end to end
       details("Probate_590_DownloadDeclarationPDF").successfulRequests.count.gte((numberOfPipelineUsers * 0.8).ceil.toInt),
       details("Intestacy_420_DownloadDeclarationPDF").successfulRequests.count.gte((numberOfPipelineUsers * 0.8).ceil.toInt),
