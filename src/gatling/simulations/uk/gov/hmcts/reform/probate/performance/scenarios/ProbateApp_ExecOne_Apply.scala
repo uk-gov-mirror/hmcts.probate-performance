@@ -167,7 +167,7 @@ object ProbateApp_ExecOne_Apply {
 
     //At this point, the user will be redirected to their dashboard, listing the new application as 'In progress'
 
-  val ProbateApplication =
+  val ProbateApplicationSection1 =
 
     group("Probate_090_ContinueApplication") {
 
@@ -369,6 +369,22 @@ object ProbateApp_ExecOne_Apply {
         .formParam("_csrf", "${csrf}")
         .formParam("married", "optionNo")
         .check(CsrfCheck.save)
+        .check(regex("Does the will have any visible damages")))
+
+    }
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+    .group("Probate_215_WillDamagesSubmit") {
+
+      exec(http("WillDamagesSubmit")
+        .post(BaseURL + "/will-has-damage")
+        .headers(CommonHeader)
+        .headers(PostHeader)
+        .formParam("_csrf", "${csrf}")
+        .formParam("otherDamageDescription", "")
+        .formParam("willHasVisibleDamage", "optionNo")
+        .check(CsrfCheck.save)
         .check(regex("Were any updates")))
 
     }
@@ -398,6 +414,35 @@ object ProbateApp_ExecOne_Apply {
         .headers(PostHeader)
         .formParam("_csrf", "${csrf}")
         .formParam("codicilsNumber", "1")
+        .check(regex("Do the codicils have any visible damages")))
+
+    }
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+    .group("Probate_235_CodicilsDamageSubmit") {
+
+      exec(http("CodicilsDamageSubmit")
+        .post(BaseURL + "/codicils-have-damage")
+        .headers(CommonHeader)
+        .headers(PostHeader)
+        .formParam("_csrf", "${csrf}")
+        .formParam("otherDamageDescription", "")
+        .formParam("codicilsHasVisibleDamage", "optionNo")
+        .check(regex("Did the person who died leave any other written wishes")))
+
+    }
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+    .group("Probate_238_WrittenWishesSubmit") {
+
+      exec(http("WrittenWishesSubmit")
+        .post(BaseURL + "/deceased-written-wishes")
+        .headers(CommonHeader)
+        .headers(PostHeader)
+        .formParam("_csrf", "${csrf}")
+        .formParam("deceasedWrittenWishes", "optionNo")
         .check(regex("Complete these steps"))
         .check(regex("""1.</span> Tell us about the person who has died\n    </h2>\n    \n        <span class="govuk-tag task-completed">Completed</span>""")))
 
@@ -405,7 +450,9 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Probate_240_SectionTwoStart") {
+  val ProbateApplicationSection2 =
+
+    group("Probate_240_SectionTwoStart") {
 
       exec(http("SectionTwoStart")
         .get(BaseURL + "/applicant-name")
@@ -610,7 +657,9 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Probate_370_SectionThreeStart") {
+  val ProbateApplicationSection3 =
+
+    group("Probate_370_SectionThreeStart") {
 
       exec(http("SectionThreeStart")
         .get(BaseURL + "/summary/declaration")

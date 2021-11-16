@@ -128,10 +128,10 @@ object ProbateCaveat {
         .formParam("dod-month", Common.getMonth())
         .formParam("dod-year", Common.getDodYear())
         .check(CsrfCheck.save)
-        .check(regex("date of birth")))
+        .check(regex("known by any other names")))
 
     }
-
+/*
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
     .group("Caveat_080_DeceasedDobKnownSubmit") {
@@ -163,7 +163,7 @@ object ProbateCaveat {
         .check(regex("known by any other names")))
 
     }
-
+*/
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
     .group("Caveat_100_DeceasedAliasSubmit") {

@@ -27,7 +27,9 @@ class Probate_Jenkins extends Simulation {
         Homepage.ProbateHomepage,
         Login.ProbateLogin,
         ProbateApp_ExecOne_Apply.ProbateEligibility,
-        ProbateApp_ExecOne_Apply.ProbateApplication,
+        ProbateApp_ExecOne_Apply.ProbateApplicationSection1,
+        ProbateApp_ExecOne_Apply.ProbateApplicationSection2,
+        ProbateApp_ExecOne_Apply.ProbateApplicationSection3,
         Logout.ProbateLogout)
         .exec(flushHttpCache)
       .exec(
