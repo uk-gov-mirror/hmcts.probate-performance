@@ -49,7 +49,11 @@ class Probate_Jenkins extends Simulation {
         Homepage.ProbateHomepage,
         Login.ProbateLogin,
         ProbateApp_Intestacy.IntestacyEligibility,
-        ProbateApp_Intestacy.IntestacyApplication,
+        ProbateApp_Intestacy.IntestacyApplicationSection1,
+        ProbateApp_Intestacy.IntestacyApplicationSection2,
+        ProbateApp_Intestacy.IntestacyApplicationSection3,
+        ProbateApp_Intestacy.IntestacyApplicationSection4,
+        ProbateApp_Intestacy.IntestacyApplicationSection5,
         Logout.ProbateLogout
       )
     }

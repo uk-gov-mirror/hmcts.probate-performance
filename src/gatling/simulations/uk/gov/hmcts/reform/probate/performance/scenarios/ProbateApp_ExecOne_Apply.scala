@@ -75,20 +75,35 @@ object ProbateApp_ExecOne_Apply {
         .formParam("_csrf", "${csrf}")
         .formParam("domicile", "optionYes")
         .check(CsrfCheck.save)
-        .check(regex("Has an Inheritance Tax")))
+        .check(regex("1 January 2022")))
 
     }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Probate_040_IHTSubmit") {
+    .group("Probate_035_ExceptedEstatesDodSubmit") {
 
-      exec(http("IHTSubmit")
-        .post(BaseURL + "/iht-completed")
+      exec(http("EEDodSubmit")
+        .post(BaseURL + "/ee-deceased-dod")
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "${csrf}")
-        .formParam("completed", "optionYes")
+        .formParam("eeDeceasedDod", "optionYes")
+        .check(CsrfCheck.save)
+        .check(regex("Have you worked out")))
+
+    }
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+    .group("Probate_040_ExceptedEstatesValuedSubmit") {
+
+      exec(http("ExceptedEstatesValuedSubmit")
+        .post(BaseURL + "/ee-estate-valued")
+        .headers(CommonHeader)
+        .headers(PostHeader)
+        .formParam("_csrf", "${csrf}")
+        .formParam("eeEstateValued", "optionYes")
         .check(CsrfCheck.save)
         .check(regex("Did the person who died leave a will")))
 
@@ -249,9 +264,10 @@ object ProbateApp_ExecOne_Apply {
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "${csrf}")
-        .formParam("dod-day", Common.getDay())
-        .formParam("dod-month", Common.getMonth())
-        .formParam("dod-year", Common.getDodYear())
+        //Removing random DOD to test Excepted Estates (requires DOD after 01/01/2022)
+        .formParam("dod-day", "02") //Common.getDay()
+        .formParam("dod-month", "01") //Common.getMonth()
+        .formParam("dod-year", "2022") //Common.getDodYear()
         .check(CsrfCheck.save)
         .check(regex("What was the permanent address")))
 
@@ -303,41 +319,51 @@ object ProbateApp_ExecOne_Apply {
         .formParam("_csrf", "${csrf}")
         .formParam("deathCertificate", "optionDeathCertificate")
         .check(CsrfCheck.save)
-        .check(regex("How was the Inheritance Tax")))
+        .check(regex("Did you complete IHT forms")))
 
     }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Probate_180_IHTMethodSubmit") {
+    .group("Probate_175_EstateValuedSubmit") {
 
-      exec(http("IHTMethodSubmit")
-        .post(BaseURL + "/iht-method")
+      exec(http("EstateValuedSubmit")
+        .post(BaseURL + "/estate-valued")
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "${csrf}")
-        .formParam("method", "optionPaper")
+        .formParam("estateValueCompleted", "optionYes")
         .check(CsrfCheck.save)
-        .check(regex("Which paper form was filled in")))
+        .check(regex("Which IHT forms")))
 
     }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Probate_190_IHTPaperSubmit") {
+    .group("Probate_180_EstateFormSubmit") {
 
-      exec(http("IHTPaperSubmit")
-        .post(BaseURL + "/iht-paper")
+      exec(http("EstateFormSubmit")
+        .post(BaseURL + "/estate-form")
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "${csrf}")
-        .formParam("form", "optionIHT205")
-        .formParam("grossValueFieldIHT205", "8000")
-        .formParam("netValueFieldIHT205", "8000")
-        .formParam("grossValueFieldIHT207", "")
-        .formParam("netValueFieldIHT207", "")
-        .formParam("grossValueFieldIHT400421", "")
-        .formParam("netValueFieldIHT400421", "")
+        .formParam("ihtFormEstateId", "optionIHT400421")
+        .check(CsrfCheck.save)
+        .check(regex("What are the values of the estate")))
+
+    }
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+    .group("Probate_190_EstateValuesSubmit") {
+
+      exec(http("EstateValuesSubmit")
+        .post(BaseURL + "/probate-estate-values")
+        .headers(CommonHeader)
+        .headers(PostHeader)
+        .formParam("_csrf", "${csrf}")
+        .formParam("grossValueField", "900000")
+        .formParam("netValueField", "800000")
         .check(CsrfCheck.save)
         .check(regex("have assets in another name")))
 

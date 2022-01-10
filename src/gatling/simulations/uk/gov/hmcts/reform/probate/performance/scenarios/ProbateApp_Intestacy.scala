@@ -78,20 +78,35 @@ object ProbateApp_Intestacy {
         .formParam("_csrf", "${csrf}")
         .formParam("domicile", "optionYes")
         .check(CsrfCheck.save)
-        .check(regex("Has an Inheritance Tax")))
+        .check(regex("1 January 2022")))
 
     }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Intestacy_040_IHTSubmit") {
+    .group("Intestacy_035_ExceptedEstatesDodSubmit") {
 
-      exec(http("IHTSubmit")
-        .post(BaseURL + "/iht-completed")
+      exec(http("EEDodSubmit")
+        .post(BaseURL + "/ee-deceased-dod")
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "${csrf}")
-        .formParam("completed", "optionYes")
+        .formParam("eeDeceasedDod", "optionYes")
+        .check(CsrfCheck.save)
+        .check(regex("Have you worked out")))
+
+    }
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+    .group("Intestacy_040_ExceptedEstatesValuedSubmit") {
+
+      exec(http("ExceptedEstatesValuedSubmit")
+        .post(BaseURL + "/ee-estate-valued")
+        .headers(CommonHeader)
+        .headers(PostHeader)
+        .formParam("_csrf", "${csrf}")
+        .formParam("eeEstateValued", "optionYes")
         .check(CsrfCheck.save)
         .check(regex("Did the person who died leave a will")))
 
@@ -172,7 +187,7 @@ object ProbateApp_Intestacy {
 
     //At this point, the user will be redirected to their dashboard, listing the new application as 'In progress'
 
-  val IntestacyApplication =
+  val IntestacyApplicationSection1 =
 
     feed(randomNumber)
 
@@ -228,9 +243,10 @@ object ProbateApp_Intestacy {
         .formParam("dob-day", Common.getDay())
         .formParam("dob-month", Common.getMonth())
         .formParam("dob-year", Common.getDobYear())
-        .formParam("dod-day", Common.getDay())
-        .formParam("dod-month", Common.getMonth())
-        .formParam("dod-year", "2019") //MUST BE > 2014
+        //Removing random DOD to test Excepted Estates (requires DOD after 01/01/2022)
+        .formParam("dod-day", "02") //Common.getDay()
+        .formParam("dod-month", "01") //Common.getMonth()
+        .formParam("dod-year", "2022") //Common.getDodYear() // Must be > 2014
         .check(CsrfCheck.save)
         .check(regex("What was the permanent address")))
 
@@ -282,41 +298,51 @@ object ProbateApp_Intestacy {
         .formParam("_csrf", "${csrf}")
         .formParam("deathCertificate", "optionDeathCertificate")
         .check(CsrfCheck.save)
-        .check(regex("How was the Inheritance Tax")))
+        .check(regex("Did you complete IHT forms")))
 
     }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Intestacy_160_IHTMethodSubmit") {
+    .group("Intestacy_160_EstateValuedSubmit") {
 
-      exec(http("IHTMethodSubmit")
-        .post(BaseURL + "/iht-method")
+      exec(http("EstateValuedSubmit")
+        .post(BaseURL + "/estate-valued")
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "${csrf}")
-        .formParam("method", "optionPaper")
+        .formParam("estateValueCompleted", "optionYes")
         .check(CsrfCheck.save)
-        .check(regex("Which paper form was filled in")))
+        .check(regex("Which IHT forms")))
 
     }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Intestacy_170_IHTPaperSubmit") {
+    .group("Intestacy_170_EstateFormSubmit") {
 
-      exec(http("IHTPaperSubmit")
-        .post(BaseURL + "/iht-paper")
+      exec(http("EstateFormSubmit")
+        .post(BaseURL + "/estate-form")
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "${csrf}")
-        .formParam("form", "optionIHT205")
-        .formParam("grossValueFieldIHT205", "8000")
-        .formParam("netValueFieldIHT205", "8000")
-        .formParam("grossValueFieldIHT207", "")
-        .formParam("netValueFieldIHT207", "")
-        .formParam("grossValueFieldIHT400421", "")
-        .formParam("netValueFieldIHT400421", "")
+        .formParam("ihtFormEstateId", "optionIHT400421")
+        .check(CsrfCheck.save)
+        .check(regex("What are the values of the estate")))
+
+    }
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+    .group("Intestacy_180_EstateValuesSubmit") {
+
+      exec(http("EstateValuesSubmit")
+        .post(BaseURL + "/probate-estate-values")
+        .headers(CommonHeader)
+        .headers(PostHeader)
+        .formParam("_csrf", "${csrf}")
+        .formParam("grossValueField", "900000")
+        .formParam("netValueField", "800000")
         .check(CsrfCheck.save)
         .check(regex("any assets outside of England")))
 
@@ -324,16 +350,16 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Intestacy_180_AssetsOutsideEngSubmit") {
+    .group("Intestacy_185_AssetsOutsideUKSubmit") {
 
-      exec(http("AssetsOutsideEngSubmit")
+      exec(http("AssetsOutsideUKSubmit")
         .post(BaseURL + "/assets-outside-england-wales")
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "${csrf}")
         .formParam("assetsOutside", "optionNo")
         .check(CsrfCheck.save)
-        .check(regex("have assets in another name")))
+        .check(regex("assets in another name")))
 
     }
 
@@ -369,7 +395,9 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Intestacy_210_SectionTwoStart") {
+  val IntestacyApplicationSection2 =
+
+    group("Intestacy_210_SectionTwoStart") {
 
       exec(http("SectionTwoStart")
         .get(BaseURL + "/relationship-to-deceased")
@@ -390,6 +418,21 @@ object ProbateApp_Intestacy {
         .headers(PostHeader)
         .formParam("_csrf", "${csrf}")
         .formParam("relationshipToDeceased", "optionSpousePartner")
+        .check(CsrfCheck.save)
+        .check(regex("have any children")))
+
+    }
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+    .group("Intestacy_225_AnyChildrenSubmit") {
+
+      exec(http("AnyChildrenSubmit")
+        .post(BaseURL + "/any-children")
+        .headers(CommonHeader)
+        .headers(PostHeader)
+        .formParam("_csrf", "${csrf}")
+        .formParam("anyChildren", "optionNo")
         .check(CsrfCheck.save)
         .check(regex("What is your full name")))
 
@@ -447,7 +490,9 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Intestacy_260_SectionThreeStart") {
+  val IntestacyApplicationSection3 =
+
+    group("Intestacy_260_SectionThreeStart") {
 
       exec(http("SectionThreeStart")
         .get(BaseURL + "/summary/declaration")
@@ -487,7 +532,9 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Intestacy_290_SectionFourStart") {
+  val IntestacyApplicationSection4 =
+
+    group("Intestacy_290_SectionFourStart") {
 
       exec(http("SectionFourStart")
         .get(BaseURL + "/copies-uk")
@@ -542,7 +589,9 @@ object ProbateApp_Intestacy {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Intestacy_330_SectionFiveStart") {
+  val IntestacyApplicationSection5 =
+
+    group("Intestacy_330_SectionFiveStart") {
 
       exec(http("SectionFiveStart")
         .get(BaseURL + "/payment-breakdown")
@@ -618,7 +667,7 @@ object ProbateApp_Intestacy {
         .formParam("chargeId", "${ChargeId}")
         .formParam("csrfToken", "${csrf}")
         .check(CsrfCheck.save)
-        .check(regex("Before your application can be processed")))
+        .check(regex("received your payment")))
 
     }
 
@@ -631,21 +680,6 @@ object ProbateApp_Intestacy {
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "${csrf}")
-        .check(CsrfCheck.save)
-        .check(regex("Prepare to send your documents")))
-
-    }
-
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
-
-    .group("Intestacy_390_DocumentsSubmit") {
-
-      exec(http("DocumentsSubmit")
-        .post(BaseURL + "/documents")
-        .headers(CommonHeader)
-        .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
-        .formParam("sentDocuments", "true")
         .check(regex("Application complete")))
 
     }
