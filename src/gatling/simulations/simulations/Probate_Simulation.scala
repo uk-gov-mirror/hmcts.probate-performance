@@ -76,6 +76,7 @@ class Probate_Simulation extends Simulation {
   }
 
   val ProbateGoR = scenario( "ProbateGoR")
+    .feed(randomFeeder)
     .exitBlockOnFail {
       exec(_.set("env", s"${env}"))
       .exec(
@@ -83,7 +84,7 @@ class Probate_Simulation extends Simulation {
         Homepage.ProbateHomepage,
         Login.ProbateLogin,
         ProbateApp_ExecOne_Apply.ProbateEligibility)
-      .doIf(session => session("perc").as[Int] < continueAfterEligibilityPercentage) {
+      .doIf(session => session("perc").as[Int] < continueAfterEligibilityPercentage || debugMode != "off") {
         exec(
           ProbateApp_ExecOne_Apply.ProbateApplicationSection1,
           ProbateApp_ExecOne_Apply.ProbateApplicationSection2,
@@ -112,6 +113,7 @@ class Probate_Simulation extends Simulation {
     }
 
   val ProbateIntestacy = scenario( "ProbateIntestacy")
+    .feed(randomFeeder)
     .exitBlockOnFail {
       exec(_.set("env", s"${env}"))
         .exec(
@@ -119,7 +121,7 @@ class Probate_Simulation extends Simulation {
           Homepage.ProbateHomepage,
           Login.ProbateLogin,
           ProbateApp_Intestacy.IntestacyEligibility)
-        .doIf(session => session("perc").as[Int] < continueAfterEligibilityPercentage) {
+        .doIf(session => session("perc").as[Int] < continueAfterEligibilityPercentage || debugMode != "off") {
           exec(
             ProbateApp_Intestacy.IntestacyApplicationSection1,
             ProbateApp_Intestacy.IntestacyApplicationSection2,
@@ -178,14 +180,16 @@ class Probate_Simulation extends Simulation {
   //defines the test assertions, based on the test type
   def assertions(simulationType: String): Seq[Assertion] = {
     simulationType match {
-      case "perftest" =>
-        Seq(global.successfulRequests.percent.gte(95))
-      case "pipeline" =>
-        Seq(global.successfulRequests.percent.gte(95),
-          details("Probate_590_DownloadDeclarationPDF").successfulRequests.count.gte((numberOfPipelineUsers * 0.8).ceil.toInt),
-          details("Intestacy_420_DownloadDeclarationPDF").successfulRequests.count.gte((numberOfPipelineUsers * 0.8).ceil.toInt),
-          details("Caveat_170_CardDetailsConfirmSubmit").successfulRequests.count.gte((numberOfPipelineUsers * 0.8).ceil.toInt)
-        )
+      case "perftest" | "pipeline" => //currently using the same assertions for a performance test and the pipeline
+        if (debugMode == "off") {
+          Seq(global.successfulRequests.percent.gte(95),
+            details("Probate_590_DownloadDeclarationPDF").successfulRequests.percent.gte(80),
+            details("Intestacy_420_DownloadDeclarationPDF").successfulRequests.percent.gte(80),
+            details("Caveat_170_CardDetailsConfirmSubmit").successfulRequests.percent.gte(80))
+        }
+        else {
+          Seq(global.successfulRequests.percent.is(100))
+        }
       case _ =>
         Seq()
     }

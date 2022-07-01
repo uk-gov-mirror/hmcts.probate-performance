@@ -29,7 +29,6 @@ object Login {
         .formParam("save", "Sign in")
         .formParam("selfRegistrationEnabled", "true")
         .formParam("_csrf", "${csrf}")
-        .check(CsrfCheck.save)
         .check(substring("Apply for probate")))
     }
 
