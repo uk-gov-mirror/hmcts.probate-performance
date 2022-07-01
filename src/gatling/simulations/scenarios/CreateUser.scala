@@ -1,9 +1,9 @@
-package uk.gov.hmcts.reform.probate.performance.scenarios
+package scenarios
 
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 
-import uk.gov.hmcts.reform.probate.performance.scenarios.utils.{Environment, Common}
+import utils.{Environment, Common}
 
 object CreateUser {
 

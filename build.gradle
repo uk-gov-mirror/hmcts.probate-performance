@@ -18,21 +18,13 @@ targetCompatibility = "11"
 
 tasks.withType(JavaExec) {
     jvmArgs = ['-Xms1024m', '-Xmx2048m']
+    /* Use the following args to build a report when a test was terminated
+    args = [
+        "--reports-only", "fact-20201109092032896",
+        '--results-folder', file('build/reports/gatling').absolutePath,
+        ]
+    */
 }
-
-/*jar {
-    manifest {
-        attributes 'Implementation-Title': 'Probate Performance Tests',
-                'Implementation-Version': version
-    }
-}*/
-
-/*dependencyCheck {
-    // Specifies if the build should be failed if a CVSS score above a specified level is identified.
-    // range of 0-10 fails the build, anything greater and it doesn't fail the build
-    failBuildOnCVSS = System.getProperty('dependencyCheck.failBuild') == 'true' ? 0 : 11
-    suppressionFile = 'dependency-check-suppressions.xml'
-}*/
 
 repositories {
     jcenter()
@@ -60,7 +52,7 @@ gatling {
     toolVersion '3.3.1'
     scalaVersion '2.12.12'
     simulations = [
-            'uk.gov.hmcts.reform.probate.performance.simulations.Probate_Jenkins'
+            'simulations.Probate_Simulation'
     ]
 }
 

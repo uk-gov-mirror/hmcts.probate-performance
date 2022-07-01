@@ -1,14 +1,12 @@
-package uk.gov.hmcts.reform.probate.performance.scenarios
+package scenarios
 
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
-import uk.gov.hmcts.reform.probate.performance.scenarios.checks.CsrfCheck
-import uk.gov.hmcts.reform.probate.performance.scenarios.utils.{Environment, Common}
+import utils.{Common, CsrfCheck, Environment}
 
 import scala.concurrent.duration._
-import scala.util.Random
 
-object ProbateCaveat {
+object ProbateApp_Caveat {
 
   val BaseURL = Environment.baseURL
   val PaymentURL = Environment.paymentURL
@@ -17,10 +15,7 @@ object ProbateCaveat {
   val MaxThinkTime = Environment.maxThinkTime
 
   val CommonHeader = Environment.commonHeader
-  val GetHeader = Environment.getHeader
   val PostHeader = Environment.postHeader
-
-  val rnd = new Random()
 
   val ProbateCaveat =
 
@@ -42,7 +37,6 @@ object ProbateCaveat {
       exec(http("ApplicantName")
         .get(BaseURL + "/caveats/applicant-name")
         .headers(CommonHeader)
-        .headers(GetHeader)
         .check(CsrfCheck.save)
         .check(regex("What is your full name")))
 
@@ -88,7 +82,7 @@ object ProbateCaveat {
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "${csrf}")
-        .formParam("addressLine1", rnd.nextInt(1000).toString + " Perf" + Common.randomString(5) + " Road")
+        .formParam("addressLine1", "1 Perf" + Common.randomString(5) + " Road")
         .formParam("addressLine2", "")
         .formParam("addressLine3", "")
         .formParam("postTown", "Perf " + Common.randomString(5) + " Town")
@@ -188,7 +182,7 @@ object ProbateCaveat {
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "${csrf}")
-        .formParam("addressLine1", rnd.nextInt(1000).toString + " Perf" + Common.randomString(5) + " Road")
+        .formParam("addressLine1", "1 Perf" + Common.randomString(5) + " Road")
         .formParam("addressLine2", "")
         .formParam("addressLine3", "")
         .formParam("postTown", "Perf " + Common.randomString(5) + " Town")
@@ -220,7 +214,6 @@ object ProbateCaveat {
       exec(http("PaymentBreakdown")
         .get(BaseURL + "/caveats/payment-breakdown")
         .headers(CommonHeader)
-        .headers(GetHeader)
         .check(CsrfCheck.save)
         .check(regex("Application fee")))
 
@@ -269,9 +262,9 @@ object ProbateCaveat {
         .formParam("expiryMonth", Common.getMonth())
         .formParam("expiryYear", "23")
         .formParam("cardholderName", "Perf Tester" + Common.randomString(5))
-        .formParam("cvc", (100 + rnd.nextInt(900)).toString())
+        .formParam("cvc", "123")
         .formParam("addressCountry", "GB")
-        .formParam("addressLine1", rnd.nextInt(1000).toString + " Perf" + Common.randomString(5) + " Road")
+        .formParam("addressLine1", "1 Perf" + Common.randomString(5) + " Road")
         .formParam("addressLine2", "")
         .formParam("addressCity", "Perf " + Common.randomString(5) + " Town")
         .formParam("addressPostcode", "PR1 1RF") //Common.getPostcode()

@@ -1,9 +1,8 @@
-package uk.gov.hmcts.reform.probate.performance.scenarios
+package scenarios
 
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
-import uk.gov.hmcts.reform.probate.performance.scenarios.checks.CsrfCheck
-import uk.gov.hmcts.reform.probate.performance.scenarios.utils.{Environment, Common}
+import utils.{Common, CsrfCheck, Environment}
 
 import scala.concurrent.duration._
 import scala.util.Random
@@ -17,7 +16,6 @@ object ProbateApp_ExecOne_Submit {
   val MaxThinkTime = Environment.maxThinkTime
 
   val CommonHeader = Environment.commonHeader
-  val GetHeader = Environment.getHeader
   val PostHeader = Environment.postHeader
 
   val rnd = new Random()
@@ -31,9 +29,8 @@ object ProbateApp_ExecOne_Submit {
     .group("Probate_450_GetCase") {
 
       exec(http("GetCase")
-        .get(BaseURL + "/get-case/${appId}?probateType=PA")
+        .get(BaseURL + "/get-case/${caseId}?probateType=PA")
         .headers(CommonHeader)
-        .headers(GetHeader)
         .check(regex("Complete these steps"))
         .check(regex("""3.</span> Check your answers and make your legal declaration\n    </h2>\n    \n        <span class="govuk-tag task-completed">Completed</span>""")))
 
@@ -46,7 +43,6 @@ object ProbateApp_ExecOne_Submit {
       exec(http("SectionFourStart")
         .get(BaseURL + "/copies-uk")
         .headers(CommonHeader)
-        .headers(GetHeader)
         .check(CsrfCheck.save)
         .check(regex("How many extra official copies")))
 
@@ -88,7 +84,6 @@ object ProbateApp_ExecOne_Submit {
       exec(http("TaskList")
         .get(BaseURL + "/task-list")
         .headers(CommonHeader)
-        .headers(GetHeader)
         .check(regex("Complete these steps"))
         .check(regex("""4.</span> Order extra copies of the grant of probate\n    </h2>\n    \n        <span class="govuk-tag task-completed">Completed</span>""")))
 
@@ -101,7 +96,6 @@ object ProbateApp_ExecOne_Submit {
       exec(http("SectionFiveStart")
         .get(BaseURL + "/payment-breakdown")
         .headers(CommonHeader)
-        .headers(GetHeader)
         .check(CsrfCheck.save)
         .check(regex("Application fee")))
 
@@ -214,7 +208,6 @@ object ProbateApp_ExecOne_Submit {
       exec(http("DownloadCoverSheetPDF")
         .get(BaseURL + "/cover-sheet-pdf")
         .headers(CommonHeader)
-        .headers(GetHeader)
         .check(bodyString.transform(_.size > 10000).is(true)))
 
     }
@@ -226,7 +219,6 @@ object ProbateApp_ExecOne_Submit {
       exec(http("DownloadCheckAnswersPDF")
         .get(BaseURL + "/check-answers-pdf")
         .headers(CommonHeader)
-        .headers(GetHeader)
         .check(bodyString.transform(_.size > 3000).is(true)))
 
     }
@@ -238,7 +230,6 @@ object ProbateApp_ExecOne_Submit {
       exec(http("DownloadDeclarationPDF")
         .get(BaseURL + "/declaration-pdf")
         .headers(CommonHeader)
-        .headers(GetHeader)
         .check(bodyString.transform(_.size > 15000).is(true)))
 
     }

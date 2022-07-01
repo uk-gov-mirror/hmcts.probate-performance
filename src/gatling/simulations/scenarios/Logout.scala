@@ -1,18 +1,14 @@
-package uk.gov.hmcts.reform.probate.performance.scenarios
+package scenarios
 
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
-import uk.gov.hmcts.reform.probate.performance.scenarios.utils.Environment
+import utils.Environment
 
 object Logout {
 
   val BaseURL = Environment.baseURL
 
-  val MinThinkTime = Environment.minThinkTime
-  val MaxThinkTime = Environment.maxThinkTime
-
   val CommonHeader = Environment.commonHeader
-  val GetHeader = Environment.getHeader
 
   val ProbateLogout =
 
@@ -21,7 +17,6 @@ object Logout {
       exec(http("Logout")
         .get(BaseURL + "/sign-out")
         .headers(CommonHeader)
-        .headers(GetHeader)
         .check(regex("signed out")))
 
     }

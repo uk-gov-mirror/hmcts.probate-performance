@@ -1,9 +1,8 @@
-package uk.gov.hmcts.reform.probate.performance.scenarios
+package scenarios
 
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
-import uk.gov.hmcts.reform.probate.performance.scenarios.checks.CsrfCheck
-import uk.gov.hmcts.reform.probate.performance.scenarios.utils.Environment
+import utils.{CsrfCheck, Environment}
 
 import scala.concurrent.duration._
 
@@ -15,7 +14,6 @@ object ProbateApp_ExecTwo_Declaration {
   val MaxThinkTime = Environment.maxThinkTime
 
   val CommonHeader = Environment.commonHeader
-  val GetHeader = Environment.getHeader
   val PostHeader = Environment.postHeader
 
   val ProbateDeclaration = {
@@ -42,7 +40,6 @@ object ProbateApp_ExecTwo_Declaration {
       exec(http("InviteId")
         .get(BaseURL + "/executors/invitation/${inviteId}")
         .headers(CommonHeader)
-        .headers(GetHeader)
         .check(CsrfCheck.save)
         .check(regex("Before making an application for probate")))
 
@@ -57,7 +54,6 @@ object ProbateApp_ExecTwo_Declaration {
       exec(http("RetrievePinCode")
         .get(BaseURL + "/pin")
         .headers(CommonHeader)
-        .headers(GetHeader)
         .check(jsonPath("$.pin").saveAs("pin")))
 
     }
@@ -85,7 +81,6 @@ object ProbateApp_ExecTwo_Declaration {
       exec(http("ExecTwoDeclaration")
         .get(BaseURL + "/co-applicant-declaration")
         .headers(CommonHeader)
-        .headers(GetHeader)
         .check(CsrfCheck.save)
         .check(regex("Check legal statement and make declaration")))
 
