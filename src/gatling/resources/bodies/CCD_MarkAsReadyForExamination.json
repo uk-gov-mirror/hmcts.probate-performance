@@ -1,0 +1,12 @@
+{
+  "data": {
+    "boEmailDocsReceivedNotification": "No"
+  },
+  "event": {
+    "id": "boMarkAsReadyForExamination",
+    "summary": "",
+    "description": ""
+  },
+  "event_token": "${eventToken}",
+  "ignore_warning": false
+}

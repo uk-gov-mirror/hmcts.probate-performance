@@ -1,0 +1,12 @@
+{
+  "data": {
+    "caseMatches": []
+  },
+  "event": {
+    "id": "boFindMatchesForReadyForExamining",
+    "summary": "",
+    "description": ""
+  },
+  "event_token": "${eventToken}",
+  "ignore_warning": false
+}
