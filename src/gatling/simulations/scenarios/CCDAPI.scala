@@ -21,6 +21,7 @@ object CCDAPI {
 
     exec(session => userType match {
       case "Caseworker" => session.set("emailAddressCCD", "ccdloadtest-cw@gmail.com").set("passwordCCD", "Password12").set("microservice", "ccd_data")
+      case "CaseworkerDocUpload" => session.set("emailAddressCCD", "ccdloadtest-cw@gmail.com").set("passwordCCD", "Password12").set("microservice", "probate_backend")
     })
 
     .exec(http("CCD_000_Auth")

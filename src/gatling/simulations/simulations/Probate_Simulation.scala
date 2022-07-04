@@ -196,9 +196,9 @@ class Probate_Simulation extends Simulation {
   }
 
   setUp(
-    ProbateGoR.inject(simulationProfile(testType, probateRatePerSec, numberOfPipelineUsers)).pauses(pauseOption)
-    //ProbateIntestacy.inject(simulationProfile(testType, intestacyRatePerSec, numberOfPipelineUsers)).pauses(pauseOption),
-    //ProbateCaveat.inject(simulationProfile(testType, caveatRatePerSec, numberOfPipelineUsers)).pauses(pauseOption)
+    ProbateGoR.inject(simulationProfile(testType, probateRatePerSec, numberOfPipelineUsers)).pauses(pauseOption),
+    ProbateIntestacy.inject(simulationProfile(testType, intestacyRatePerSec, numberOfPipelineUsers)).pauses(pauseOption),
+    ProbateCaveat.inject(simulationProfile(testType, caveatRatePerSec, numberOfPipelineUsers)).pauses(pauseOption)
   ).protocols(httpProtocol)
     .assertions(assertions(testType))
 

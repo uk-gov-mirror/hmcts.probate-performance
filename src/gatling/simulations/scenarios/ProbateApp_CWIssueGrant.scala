@@ -17,7 +17,7 @@ object ProbateApp_CWIssueGrant {
 
     //Upload Document (Will)
 
-    exec(CCDAPI.Auth("Caseworker"))
+    exec(CCDAPI.Auth("CaseworkerDocUpload"))
 
     .exec(http("Probate_000_DocumentUpload")
       .post(CaseDocUrl + "/cases/documents")
@@ -31,6 +31,7 @@ object ProbateApp_CWIssueGrant {
       .bodyPart(RawFileBodyPart("files", "2MB.pdf")
         .fileName("2MB.pdf")
         .transferEncoding("binary"))
+      .asMultipartForm
       .check(jsonPath("$.documents[0]._links.self.href").saveAs("DocumentURL"))
       .check(jsonPath("$.documents[0].hashToken").saveAs("hashToken")))
 
