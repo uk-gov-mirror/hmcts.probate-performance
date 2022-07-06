@@ -19,7 +19,16 @@ object ProbateApp_Caveat {
 
   val ProbateCaveat =
 
-    group("Caveat_010_Homepage") {
+    exec(_.setAll("randomString" -> Common.randomString(5),
+      "dobDay" -> Common.getDay(),
+      "dobMonth" -> Common.getMonth(),
+      "dobYear" -> Common.getDobYear(),
+      "dodDay" -> Common.getDay(),
+      "dodMonth" -> "03", //Removing random DOD to test Excepted Estates (requires DOD after 01/01/2022)
+      "dodYear" -> "2022",
+      "randomPostcode" -> Common.getPostcode()))
+
+    .group("Caveat_010_Homepage") {
 
       exec(http("Homepage")
         .get(BaseURL + "/caveats/start-apply")
@@ -51,8 +60,8 @@ object ProbateApp_Caveat {
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "${csrf}")
-        .formParam("firstName", "Perf" + Common.randomString(5))
-        .formParam("lastName", "Test" + Common.randomString(5))
+        .formParam("firstName", "Perf${randomString}")
+        .formParam("lastName", "Test${randomString}")
         .check(CsrfCheck.save)
         .check(regex("What is your email address")))
 
@@ -67,7 +76,7 @@ object ProbateApp_Caveat {
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "${csrf}")
-        .formParam("email", "caveat@perftest" + Common.randomString(8) + ".com")
+        .formParam("email", "caveat@perftest${randomString}.com")
         .check(CsrfCheck.save)
         .check(regex("What is your address")))
 
@@ -82,11 +91,11 @@ object ProbateApp_Caveat {
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "${csrf}")
-        .formParam("addressLine1", "1 Perf" + Common.randomString(5) + " Road")
+        .formParam("addressLine1", "1 Perf${randomString} Road")
         .formParam("addressLine2", "")
         .formParam("addressLine3", "")
-        .formParam("postTown", "Perf " + Common.randomString(5) + " Town")
-        .formParam("newPostCode", Common.getPostcode())
+        .formParam("postTown", "Perf ${randomString} Town")
+        .formParam("newPostCode", "${randomPostcode}")
         .formParam("country", "")
         .check(CsrfCheck.save)
         .check(regex("full name of the person")))
@@ -102,8 +111,8 @@ object ProbateApp_Caveat {
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "${csrf}")
-        .formParam("firstName", "Perf" + Common.randomString(5))
-        .formParam("lastName", "Tester" + Common.randomString(5))
+        .formParam("firstName", "Perf${randomString}")
+        .formParam("lastName", "Tester${randomString}")
         .check(CsrfCheck.save)
         .check(regex("What was the date that they died")))
 
@@ -118,9 +127,9 @@ object ProbateApp_Caveat {
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "${csrf}")
-        .formParam("dod-day", Common.getDay())
-        .formParam("dod-month", Common.getMonth())
-        .formParam("dod-year", Common.getDodYear())
+        .formParam("dod-day", "${dodDay}")
+        .formParam("dod-month", "${dodMonth}")
+        .formParam("dod-year", "${dodYear}")
         .check(CsrfCheck.save)
         .check(regex("known by any other names")))
 
@@ -182,11 +191,11 @@ object ProbateApp_Caveat {
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "${csrf}")
-        .formParam("addressLine1", "1 Perf" + Common.randomString(5) + " Road")
+        .formParam("addressLine1", "2 Perf${randomString} Road")
         .formParam("addressLine2", "")
         .formParam("addressLine3", "")
-        .formParam("postTown", "Perf " + Common.randomString(5) + " Town")
-        .formParam("newPostCode", Common.getPostcode())
+        .formParam("postTown", "Perf ${randomString} Town")
+        .formParam("newPostCode", "${randomPostcode}")
         .formParam("country", "")
         .check(CsrfCheck.save)
         .check(regex("English and Welsh")))
@@ -259,16 +268,16 @@ object ProbateApp_Caveat {
         .formParam("chargeId", "${ChargeId}")
         .formParam("csrfToken", "${csrf}")
         .formParam("cardNo", "4444333322221111")
-        .formParam("expiryMonth", Common.getMonth())
-        .formParam("expiryYear", "23")
-        .formParam("cardholderName", "Perf Tester" + Common.randomString(5))
+        .formParam("expiryMonth", "01")
+        .formParam("expiryYear", "25")
+        .formParam("cardholderName", "Perf Tester ${randomString}")
         .formParam("cvc", "123")
         .formParam("addressCountry", "GB")
-        .formParam("addressLine1", "1 Perf" + Common.randomString(5) + " Road")
+        .formParam("addressLine1", "1 Perf${randomString} Road")
         .formParam("addressLine2", "")
-        .formParam("addressCity", "Perf " + Common.randomString(5) + " Town")
-        .formParam("addressPostcode", "PR1 1RF") //Common.getPostcode()
-        .formParam("email", "caveat@perftest" + Common.randomString(8) + ".com")
+        .formParam("addressCity", "Perf ${randomString} Town")
+        .formParam("addressPostcode", "TS1 1ST") //Common.getPostcode()
+        .formParam("email", "caveat@perftest${randomString}.com")
         .check(regex("Confirm your payment"))
         .check(css("input[name='csrfToken']", "value").saveAs("csrf")))
 

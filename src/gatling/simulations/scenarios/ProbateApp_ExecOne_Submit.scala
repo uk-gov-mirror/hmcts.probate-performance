@@ -18,15 +18,9 @@ object ProbateApp_ExecOne_Submit {
   val CommonHeader = Environment.commonHeader
   val PostHeader = Environment.postHeader
 
-  val rnd = new Random()
-
-  val randomNumber = Iterator.continually( Map( "rand" -> Random.nextInt(100)))
-
   val ProbateSubmit =
 
-    feed(randomNumber)
-
-    .group("Probate_450_GetCase") {
+    group("Probate_450_GetCase") {
 
       exec(http("GetCase")
         .get(BaseURL + "/get-case/${caseId}?probateType=PA")
@@ -143,16 +137,16 @@ object ProbateApp_ExecOne_Submit {
         .formParam("chargeId", "${ChargeId}")
         .formParam("csrfToken", "${csrf}")
         .formParam("cardNo", "4444333322221111")
-        .formParam("expiryMonth", Common.getMonth())
-        .formParam("expiryYear", "23")
-        .formParam("cardholderName", "Perf Tester" + Common.randomString(5))
-        .formParam("cvc", (100 + rnd.nextInt(900)).toString())
+        .formParam("expiryMonth", "01")
+        .formParam("expiryYear", "25")
+        .formParam("cardholderName", "Perf Tester ${randomString}")
+        .formParam("cvc", "123")
         .formParam("addressCountry", "GB")
-        .formParam("addressLine1", rnd.nextInt(1000).toString + " Perf" + Common.randomString(5) + " Road")
+        .formParam("addressLine1", "1 Perf${randomString} Road")
         .formParam("addressLine2", "")
-        .formParam("addressCity", "Perf " + Common.randomString(5) + " Town")
+        .formParam("addressCity", "Perf ${randomString} Town")
         .formParam("addressPostcode", "TS1 1ST") //Common.getPostcode()
-        .formParam("email", "probate@perftest" + Common.randomString(8) + ".com")
+        .formParam("email", "probate@perftest${randomString}.com")
         .check(regex("Confirm your payment"))
         .check(css("input[name='csrfToken']", "value").saveAs("csrf")))
 

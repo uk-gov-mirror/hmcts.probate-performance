@@ -19,7 +19,16 @@ object ProbateApp_Intestacy {
 
   val IntestacyEligibility =
 
-    group("Intestacy_010_StartEligibility") {
+    exec(_.setAll("randomString" -> Common.randomString(5),
+      "dobDay" -> Common.getDay(),
+      "dobMonth" -> Common.getMonth(),
+      "dobYear" -> Common.getDobYear(),
+      "dodDay" -> Common.getDay(),
+      "dodMonth" -> "03", //Removing random DOD to test Excepted Estates (requires DOD after 01/01/2022)
+      "dodYear" -> "2022",
+      "randomPostcode" -> Common.getPostcode()))
+
+    .group("Intestacy_010_StartEligibility") {
 
       exec(http("StartEligibility")
         .get(BaseURL + "/death-certificate")
@@ -226,15 +235,14 @@ object ProbateApp_Intestacy {
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "${csrf}")
-        .formParam("firstName", "Perf" + Common.randomString(5))
-        .formParam("lastName", "Test" + Common.randomString(5))
-        .formParam("dob-day", Common.getDay())
-        .formParam("dob-month", Common.getMonth())
-        .formParam("dob-year", Common.getDobYear())
-        //Removing random DOD to test Excepted Estates (requires DOD after 01/01/2022)
-        .formParam("dod-day", "02") //Common.getDay()
-        .formParam("dod-month", "01") //Common.getMonth()
-        .formParam("dod-year", "2022") //Common.getDodYear() // Must be > 2014
+        .formParam("firstName", "Perf${randomString}")
+        .formParam("lastName", "Test${randomString}")
+        .formParam("dob-day", "${dobDay}")
+        .formParam("dob-month", "${dobMonth}")
+        .formParam("dob-year", "${dobYear}")
+        .formParam("dod-day", "${dodDay}")
+        .formParam("dod-month", "${dodMonth}")
+        .formParam("dod-year", "${dodYear}")
         .check(CsrfCheck.save)
         .check(regex("What was the permanent address")))
 
@@ -249,11 +257,11 @@ object ProbateApp_Intestacy {
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "${csrf}")
-        .formParam("addressLine1", "1 Perf" + Common.randomString(5) + " Road")
+        .formParam("addressLine1", "1 Perf${randomString} Road")
         .formParam("addressLine2", "")
         .formParam("addressLine3", "")
-        .formParam("postTown", "Perf " + Common.randomString(5) + " Town")
-        .formParam("newPostCode", Common.getPostcode())
+        .formParam("postTown", "Perf ${randomString} Town")
+        .formParam("newPostCode", "${randomPostcode}")
         .formParam("country", "")
         .check(CsrfCheck.save)
         .check(regex("die in England or Wales")))
@@ -434,8 +442,8 @@ object ProbateApp_Intestacy {
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "${csrf}")
-        .formParam("firstName", "Perf" + Common.randomString(5))
-        .formParam("lastName", "ExecOne" + Common.randomString(5))
+        .formParam("firstName", "Perf${randomString}")
+        .formParam("lastName", "ExecOne${randomString}")
         .check(CsrfCheck.save)
         .check(regex("What is your phone number")))
 
@@ -465,11 +473,11 @@ object ProbateApp_Intestacy {
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "${csrf}")
-        .formParam("addressLine1", "1 Perf" + Common.randomString(5) + " Road")
+        .formParam("addressLine1", "2 Perf${randomString} Road")
         .formParam("addressLine2", "")
         .formParam("addressLine3", "")
-        .formParam("postTown", "Perf " + Common.randomString(5) + " Town")
-        .formParam("newPostCode", Common.getPostcode())
+        .formParam("postTown", "Perf ${randomString} Town")
+        .formParam("newPostCode", "${randomPostcode}")
         .formParam("country", "")
         .check(regex("2.</span> Give details about the people applying(?s).*?<span class=.govuk-tag task-completed.>Completed</span>|Equality and diversity questions")))
 
@@ -624,16 +632,16 @@ object ProbateApp_Intestacy {
         .formParam("chargeId", "${ChargeId}")
         .formParam("csrfToken", "${csrf}")
         .formParam("cardNo", "4444333322221111")
-        .formParam("expiryMonth", Common.getMonth())
-        .formParam("expiryYear", "23")
-        .formParam("cardholderName", "Perf Tester" + Common.randomString(5))
+        .formParam("expiryMonth", "01")
+        .formParam("expiryYear", "25")
+        .formParam("cardholderName", "Perf Tester ${randomString}")
         .formParam("cvc", "123")
         .formParam("addressCountry", "GB")
-        .formParam("addressLine1", "1 Perf" + Common.randomString(5) + " Road")
+        .formParam("addressLine1", "1 Perf${randomString} Road")
         .formParam("addressLine2", "")
-        .formParam("addressCity", "Perf " + Common.randomString(5) + " Town")
-        .formParam("addressPostcode", "PR1 1RF") //Common.getPostcode()
-        .formParam("email", "intestacy@perftest" + Common.randomString(8) + ".com")
+        .formParam("addressCity", "Perf ${randomString} Town")
+        .formParam("addressPostcode", "TS1 1ST") //Common.getPostcode()
+        .formParam("email", "intestacy@perftest${randomString}.com")
         .check(regex("Confirm your payment"))
         .check(css("input[name='csrfToken']", "value").saveAs("csrf")))
 
