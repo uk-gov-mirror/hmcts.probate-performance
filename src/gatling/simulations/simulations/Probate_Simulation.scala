@@ -183,7 +183,7 @@ class Probate_Simulation extends Simulation {
       case "perftest" | "pipeline" => //currently using the same assertions for a performance test and the pipeline
         if (debugMode == "off") {
           Seq(global.successfulRequests.percent.gte(95),
-            details("Probate_590_DownloadDeclarationPDF").successfulRequests.percent.gte(80),
+            details("CCD_000_CCDEvent-boIssueGrantForCaseMatching").successfulRequests.percent.gte(80),
             details("Intestacy_420_DownloadDeclarationPDF").successfulRequests.percent.gte(80),
             details("Caveat_170_CardDetailsConfirmSubmit").successfulRequests.percent.gte(80))
         }

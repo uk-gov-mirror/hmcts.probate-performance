@@ -1,0 +1,12 @@
+{
+  "data": {
+    "casePrinted": "Yes"
+  },
+  "event": {
+    "id": "boPrintCase",
+    "summary": "",
+    "description": ""
+  },
+  "event_token": "${eventToken}",
+  "ignore_warning": false
+}

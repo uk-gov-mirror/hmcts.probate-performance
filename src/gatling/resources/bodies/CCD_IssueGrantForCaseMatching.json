@@ -1,0 +1,13 @@
+{
+  "data": {
+    "boSendToBulkPrint": "No",
+    "boEmailGrantIssuedNotification": "No"
+  },
+  "event": {
+    "id": "boIssueGrantForCaseMatching",
+    "summary": "",
+    "description": ""
+  },
+  "event_token": "${eventToken}",
+  "ignore_warning": false
+}
