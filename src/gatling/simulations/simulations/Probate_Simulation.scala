@@ -84,7 +84,7 @@ class Probate_Simulation extends Simulation {
         Homepage.ProbateHomepage,
         Login.ProbateLogin,
         ProbateApp_ExecOne_Apply.ProbateEligibility)
-      .doIf(session => session("perc").as[Int] < continueAfterEligibilityPercentage || debugMode != "off") {
+      .doIf(session => session("perc").as[Int] < continueAfterEligibilityPercentage || debugMode != "off" || testType == "pipeline") {
         exec(
           ProbateApp_ExecOne_Apply.ProbateApplicationSection1,
           ProbateApp_ExecOne_Apply.ProbateApplicationSection2,
@@ -121,7 +121,7 @@ class Probate_Simulation extends Simulation {
           Homepage.ProbateHomepage,
           Login.ProbateLogin,
           ProbateApp_Intestacy.IntestacyEligibility)
-        .doIf(session => session("perc").as[Int] < continueAfterEligibilityPercentage || debugMode != "off") {
+        .doIf(session => session("perc").as[Int] < continueAfterEligibilityPercentage || debugMode != "off" || testType == "pipeline") {
           exec(
             ProbateApp_Intestacy.IntestacyApplicationSection1,
             ProbateApp_Intestacy.IntestacyApplicationSection2,
