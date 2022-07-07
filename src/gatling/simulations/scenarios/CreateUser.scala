@@ -24,12 +24,4 @@ object CreateUser {
           .check(status.is(201)))
       }
 
-      .exec {
-        session =>
-          println("EMAIL: " + session("emailAddress").as[String])
-          println("PASSWORD: " + session("password").as[String])
-          println("ROLE: " + session("role").as[String])
-          session
-      }
-
 }
