@@ -28,8 +28,8 @@ object ProbateApp_CWIssueGrant {
       .formParam("classification", "PUBLIC")
       .formParam("caseTypeId", "GrantOfRepresentation")
       .formParam("jurisdictionId", "PROBATE")
-      .bodyPart(RawFileBodyPart("files", "2MB.pdf")
-        .fileName("2MB.pdf")
+      .bodyPart(RawFileBodyPart("files", "5MB.pdf")
+        .fileName("5MB.pdf")
         .transferEncoding("binary"))
       .asMultipartForm
       .check(jsonPath("$.documents[0]._links.self.href").saveAs("DocumentURL"))

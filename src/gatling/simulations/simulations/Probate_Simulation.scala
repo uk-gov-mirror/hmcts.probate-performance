@@ -35,12 +35,12 @@ class Probate_Simulation extends Simulation {
   /* ******************************** */
 
   /* PERFORMANCE TEST CONFIGURATION */
-  val rampUpDurationMins = 5
-  val rampDownDurationMins = 5
-  val testDurationMins = 60
+  val rampUpDurationMins = 1
+  val rampDownDurationMins = 1
+  val testDurationMins = 30
 
   //Must be doubles to ensure the calculations result in doubles not rounded integers
-  val probateHourlyTarget:Double = 100
+  val probateHourlyTarget:Double = 800
   val intestacyHourlyTarget:Double = 16
   val caveatHourlyTarget:Double = 60
 
@@ -54,7 +54,7 @@ class Probate_Simulation extends Simulation {
 
   //If running in debug mode, disable pauses between steps
   val pauseOption:PauseType = debugMode match{
-    case "off" => constantPauses
+    case "off" => disabledPauses
     case _ => disabledPauses
   }
   /* ******************************** */
@@ -196,9 +196,9 @@ class Probate_Simulation extends Simulation {
   }
 
   setUp(
-    ProbateGoR.inject(simulationProfile(testType, probateRatePerSec, numberOfPipelineUsers)).pauses(pauseOption),
-    ProbateIntestacy.inject(simulationProfile(testType, intestacyRatePerSec, numberOfPipelineUsers)).pauses(pauseOption),
-    ProbateCaveat.inject(simulationProfile(testType, caveatRatePerSec, numberOfPipelineUsers)).pauses(pauseOption)
+    ProbateGoR.inject(simulationProfile(testType, probateRatePerSec, numberOfPipelineUsers)).pauses(pauseOption)
+    //ProbateIntestacy.inject(simulationProfile(testType, intestacyRatePerSec, numberOfPipelineUsers)).pauses(pauseOption),
+    //ProbateCaveat.inject(simulationProfile(testType, caveatRatePerSec, numberOfPipelineUsers)).pauses(pauseOption)
   ).protocols(httpProtocol)
     .assertions(assertions(testType))
 
