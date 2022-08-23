@@ -168,9 +168,27 @@ object ProbateApp_ExecOne_Apply {
         .headers(PostHeader)
         .formParam("_csrf", "${csrf}")
         .formParam("mentalCapacity", "optionYes")
-        .check(regex("a href=./get-case/([0-9]+).probateType=PA").find.saveAs("caseId"))
-        .check(regex("In progress"))
+        .check(regex("a href=./get-case/([0-9]+).probateType=PA").find.optional.saveAs("caseId"))
         .check(status.saveAs("statusValue")))
+
+    }
+
+    //WORKAROUND: Sometimes ElasticSearch isn't indexed quick enough with the new case, so the case will not be listed
+    //on the dashboard. If this is the case, wait 5 seconds and refresh the dashboard
+    .doIf("${caseId.isUndefined()}") {
+
+      pause(5)
+
+      .group("Probate_085_RefreshDashboard") {
+
+        exec(http("RefreshDashboard")
+          .get(BaseURL + "/dashboard")
+          .headers(CommonHeader)
+          .header("sec-fetch-site", "none")
+          .check(regex("a href=./get-case/([0-9]+).probateType=PA").find.saveAs("caseId"))
+          .check(regex("In progress")))
+
+      }
 
     }
 
