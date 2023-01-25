@@ -13,8 +13,8 @@ object Environment {
   val caseDocUrl = "http://ccd-case-document-am-api-${env}.service.core-compute-${env}.internal"
   val paymentURL = "https://www.payments.service.gov.uk"
 
-  val minThinkTime = 5
-  val maxThinkTime = 7
+  val minThinkTime = 2 
+  val maxThinkTime = 3 
 
   val HttpProtocol = http
 

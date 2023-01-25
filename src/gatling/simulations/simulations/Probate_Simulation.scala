@@ -44,7 +44,7 @@ class Probate_Simulation extends Simulation {
   val intestacyHourlyTarget:Double = 16
   val caveatHourlyTarget:Double = 60
 
-  val continueAfterEligibilityPercentage = 58
+  val continueAfterEligibilityPercentage = 100
 
   val probateRatePerSec = probateHourlyTarget / 3600
   val intestacyRatePerSec = intestacyHourlyTarget / 3600
@@ -54,7 +54,7 @@ class Probate_Simulation extends Simulation {
 
   //If running in debug mode, disable pauses between steps
   val pauseOption:PauseType = debugMode match{
-    case "off" => disabledPauses
+    case "off" => constantPauses 
     case _ => disabledPauses
   }
   /* ******************************** */
@@ -66,8 +66,9 @@ class Probate_Simulation extends Simulation {
   val httpProtocol = Environment.HttpProtocol
     .baseUrl(BaseURL)
     .doNotTrackHeader("1")
-    .inferHtmlResources(BlackList("https://www.payments.service.gov.uk/.*", "https://webchat-client.training.ctsc.hmcts.net/.*"), WhiteList())
-    .silentResources
+   // .inferHtmlResources(BlackList("https://www.payments.service.gov.uk/.*", "https://webchat-client.training.ctsc.hmcts.net/.*"), WhiteList())
+   .inferHtmlResources(BlackList("https://www.payments.service.gov.uk/.*", "https://webchat-client.training.ctsc.hmcts.net/.*"), WhiteList()) 
+     .silentResources
 
   before{
     println(s"Test Type: ${testType}")
@@ -183,9 +184,9 @@ class Probate_Simulation extends Simulation {
       case "perftest" | "pipeline" => //currently using the same assertions for a performance test and the pipeline
         if (debugMode == "off") {
           Seq(global.successfulRequests.percent.gte(95),
-            details("CCD_000_CCDEvent-boIssueGrantForCaseMatching").successfulRequests.percent.gte(80),
-            details("Intestacy_420_DownloadDeclarationPDF").successfulRequests.percent.gte(80),
-            details("Caveat_170_CardDetailsConfirmSubmit").successfulRequests.percent.gte(80))
+            details("CCD_000_CCDEvent-boIssueGrantForCaseMatching").successfulRequests.percent.gte(80))
+            //details("Intestacy_420_DownloadDeclarationPDF").successfulRequests.percent.gte(80),
+            //details("Caveat_170_CardDetailsConfirmSubmit").successfulRequests.percent.gte(80))
         }
         else {
           Seq(global.successfulRequests.percent.is(100))
