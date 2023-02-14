@@ -168,13 +168,18 @@ object ProbateApp_ExecOne_Apply {
         .headers(PostHeader)
         .formParam("_csrf", "${csrf}")
         .formParam("mentalCapacity", "optionYes")
-        .check(regex("a href=./get-case/([0-9]+).probateType=PA").find.optional.saveAs("caseId"))
-        .check(status.saveAs("statusValue")))
+        .check(regex("a href=./get-case/([0-9]+).probateType=PA").find.saveAs("caseId"))
+        .check(substring("In progress")))
 
     }
 
     //WORKAROUND: Sometimes ElasticSearch isn't indexed quick enough with the new case, so the case will not be listed
     //on the dashboard. If this is the case, wait 5 seconds and refresh the dashboard
+
+    //UPDATE FEB 2023: this should no longer be required due to the implementation of https://tools.hmcts.net/jira/browse/DTSPB-3060
+    //which has switched the call from ES to the CCD Data Store DB
+    /*
+
     .doIf("${caseId.isUndefined()}") {
 
       pause(5)
@@ -191,6 +196,7 @@ object ProbateApp_ExecOne_Apply {
       }
 
     }
+     */
 
     .exec {
       session =>
