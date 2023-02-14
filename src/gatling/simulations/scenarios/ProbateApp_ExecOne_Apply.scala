@@ -168,13 +168,18 @@ object ProbateApp_ExecOne_Apply {
         .headers(PostHeader)
         .formParam("_csrf", "${csrf}")
         .formParam("mentalCapacity", "optionYes")
-        .check(regex("a href=./get-case/([0-9]+).probateType=PA").find.optional.saveAs("caseId"))
-        .check(status.saveAs("statusValue")))
+        .check(regex("a href=./get-case/([0-9]+).probateType=PA").find.saveAs("caseId"))
+        .check(substring("In progress")))
 
     }
 
     //WORKAROUND: Sometimes ElasticSearch isn't indexed quick enough with the new case, so the case will not be listed
     //on the dashboard. If this is the case, wait 5 seconds and refresh the dashboard
+
+    //UPDATE FEB 2023: this should no longer be required due to the implementation of https://tools.hmcts.net/jira/browse/DTSPB-3060
+    //which has switched the call from ES to the CCD Data Store DB
+    /*
+
     .doIf("${caseId.isUndefined()}") {
 
       pause(5)
@@ -191,6 +196,7 @@ object ProbateApp_ExecOne_Apply {
       }
 
     }
+     */
 
     .exec {
       session =>
@@ -414,7 +420,7 @@ object ProbateApp_ExecOne_Apply {
         .formParam("_csrf", "${csrf}")
         .formParam("married", "optionNo")
         .check(CsrfCheck.save)
-        .check(regex("Does the will have any visible damages")))
+        .check(regex("Does the will have any damage or marks")))
 
     }
 
@@ -430,7 +436,7 @@ object ProbateApp_ExecOne_Apply {
         .formParam("otherDamageDescription", "")
         .formParam("willHasVisibleDamage", "optionNo")
         .check(CsrfCheck.save)
-        .check(regex("Were any updates")))
+        .check(regex("Were any codicils made to the will")))
 
     }
 
@@ -445,7 +451,7 @@ object ProbateApp_ExecOne_Apply {
         .formParam("_csrf", "${csrf}")
         .formParam("codicils", "optionYes")
         .check(CsrfCheck.save)
-        .check(regex("How many updates")))
+        .check(regex("How many codicils were made to the will")))
 
     }
 
@@ -459,7 +465,7 @@ object ProbateApp_ExecOne_Apply {
         .headers(PostHeader)
         .formParam("_csrf", "${csrf}")
         .formParam("codicilsNumber", "1")
-        .check(regex("Do the codicils have any visible damages")))
+        .check(regex("Do the codicils have any damage or marks")))
 
     }
 
