@@ -420,7 +420,7 @@ object ProbateApp_ExecOne_Apply {
         .formParam("_csrf", "${csrf}")
         .formParam("married", "optionNo")
         .check(CsrfCheck.save)
-        .check(regex("Does the will have any visible damages")))
+        .check(regex("Does the will have any damage or marks")))
 
     }
 
