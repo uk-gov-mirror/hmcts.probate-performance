@@ -436,7 +436,7 @@ object ProbateApp_ExecOne_Apply {
         .formParam("otherDamageDescription", "")
         .formParam("willHasVisibleDamage", "optionNo")
         .check(CsrfCheck.save)
-        .check(regex("Were any updates")))
+        .check(regex("Were any codicils made to the will")))
 
     }
 
@@ -451,7 +451,7 @@ object ProbateApp_ExecOne_Apply {
         .formParam("_csrf", "${csrf}")
         .formParam("codicils", "optionYes")
         .check(CsrfCheck.save)
-        .check(regex("How many updates")))
+        .check(regex("How many codicils were made to the will")))
 
     }
 
@@ -465,7 +465,7 @@ object ProbateApp_ExecOne_Apply {
         .headers(PostHeader)
         .formParam("_csrf", "${csrf}")
         .formParam("codicilsNumber", "1")
-        .check(regex("Do the codicils have any visible damages")))
+        .check(regex("Do the codicils have any damage or marks")))
 
     }
 
