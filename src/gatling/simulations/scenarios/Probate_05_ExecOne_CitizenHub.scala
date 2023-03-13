@@ -21,7 +21,7 @@ object Probate_05_ExecOne_CitizenHub {
     group("Probate_600_LoadCitizenHub") {
 
       exec(http("LoadCitizenHub")
-        .get(BaseURL + "/get-case/${caseId}?probateType=PA")
+        .get(BaseURL + "/get-case/${caseId}?probateType=PA") //TODO: check this url once the code is deployed into perftest
         .headers(CommonHeader)
         .check(regex("Submitted|Issued"))) //TODO: update this with text checks for the citizen hub (should be either submitted or issued)
 
