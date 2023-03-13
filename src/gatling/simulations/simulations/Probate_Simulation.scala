@@ -104,7 +104,7 @@ class Probate_Simulation extends Simulation {
         .exec(
           Homepage.ProbateHomepage,
           Login.ProbateLogin,
-          //TODO: Dashboard loads - click on a case number to load the citizen hub (status page)
+          ProbateApp_ExecOne_CitizenHub.ProbateCitizenHub,
           Logout.ProbateLogout)
         //Caseworker issues the Probate grant
         .exec(

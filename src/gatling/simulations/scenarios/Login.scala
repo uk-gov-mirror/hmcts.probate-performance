@@ -29,7 +29,7 @@ object Login {
         .formParam("save", "Sign in")
         .formParam("selfRegistrationEnabled", "true")
         .formParam("_csrf", "${csrf}")
-        .check(substring("Apply for probate")))
+        .check(regex("Apply for probate|Probate applications")))
     }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
