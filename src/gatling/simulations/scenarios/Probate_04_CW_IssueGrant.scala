@@ -4,7 +4,7 @@ import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import utils.Environment
 
-object ProbateApp_CWIssueGrant {
+object Probate_04_CW_IssueGrant {
 
   val BaseURL = Environment.baseURL
 

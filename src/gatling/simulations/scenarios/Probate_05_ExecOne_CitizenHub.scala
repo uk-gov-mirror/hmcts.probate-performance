@@ -6,7 +6,7 @@ import utils.Environment
 
 import scala.concurrent.duration._
 
-object ProbateApp_ExecOne_CitizenHub {
+object Probate_05_ExecOne_CitizenHub {
 
   val BaseURL = Environment.baseURL
 
@@ -23,7 +23,7 @@ object ProbateApp_ExecOne_CitizenHub {
       exec(http("LoadCitizenHub")
         .get(BaseURL + "/get-case/${caseId}?probateType=PA")
         .headers(CommonHeader)
-        .check(substring("Progress"))) //TODO: update this with a text check for the citizen hub
+        .check(regex("Submitted|Issued"))) //TODO: update this with text checks for the citizen hub (should be either submitted or issued)
 
     }
 

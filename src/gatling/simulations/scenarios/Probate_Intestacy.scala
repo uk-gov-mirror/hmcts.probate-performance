@@ -6,7 +6,7 @@ import utils.{Common, CsrfCheck, Environment}
 
 import scala.concurrent.duration._
 
-object ProbateApp_Intestacy {
+object Probate_Intestacy {
 
   val BaseURL = Environment.baseURL
   val PaymentURL = Environment.paymentURL

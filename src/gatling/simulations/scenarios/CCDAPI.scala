@@ -16,7 +16,7 @@ object CCDAPI {
 
   val clientSecret = ConfigFactory.load.getString("auth.clientSecret")
 
-  //userType must be "Caseworker"
+  //userType must be "Caseworker" or "CaseworkerDocUpload"
   def Auth(userType: String) =
 
     exec(session => userType match {

@@ -7,7 +7,7 @@ import utils.{Common, Environment}
 
 import scala.concurrent.duration._
 
-object ProbateApp_ExecOne_Apply {
+object Probate_01_ExecOne_Apply {
 
   val BaseURL = Environment.baseURL
 

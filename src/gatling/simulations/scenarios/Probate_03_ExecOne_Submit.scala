@@ -7,7 +7,7 @@ import utils.{Common, CsrfCheck, Environment}
 import scala.concurrent.duration._
 import scala.util.Random
 
-object ProbateApp_ExecOne_Submit {
+object Probate_03_ExecOne_Submit {
 
   val BaseURL = Environment.baseURL
   val PaymentURL = Environment.paymentURL
