@@ -34,7 +34,7 @@ object ProbateApp_Intestacy {
         .get(BaseURL + "/death-certificate")
         .headers(CommonHeader)
         .check(CsrfCheck.save)
-        .check(regex("Do you have a death certificate")))
+        .check(regex("Do you have the death certificate")))
 
     }
 
