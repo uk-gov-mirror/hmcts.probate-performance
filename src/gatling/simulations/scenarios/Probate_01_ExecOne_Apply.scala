@@ -34,7 +34,7 @@ object Probate_01_ExecOne_Apply {
         .get(BaseURL + "/death-certificate")
         .headers(CommonHeader)
         .check(CsrfCheck.save)
-        .check(regex("Do you have a death certificate")))
+        .check(regex("Do you have the death certificate")))
 
     }
 
@@ -169,7 +169,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("_csrf", "${csrf}")
         .formParam("mentalCapacity", "optionYes")
         .check(regex("a href=./get-case/([0-9]+).probateType=PA").find.saveAs("caseId"))
-        .check(substring("In progress")))
+        .check(substring("IN PROGRESS")))
 
     }
 
@@ -575,7 +575,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("newPostCode", "${randomPostcode}")
         .formParam("country", "")
         .check(CsrfCheck.save)
-        .check(regex("How many past and present executors")))
+        .check(regex("How many executors are named")))
 
     }
 

@@ -34,7 +34,7 @@ object Probate_Intestacy {
         .get(BaseURL + "/death-certificate")
         .headers(CommonHeader)
         .check(CsrfCheck.save)
-        .check(regex("Do you have a death certificate")))
+        .check(regex("Do you have the death certificate")))
 
     }
 
@@ -168,27 +168,8 @@ object Probate_Intestacy {
         .headers(PostHeader)
         .formParam("_csrf", "${csrf}")
         .formParam("otherApplicants", "optionNo")
-        .check(regex("a href=./get-case/([0-9]+).probateType=INTESTACY").find.optional.saveAs("caseId"))
-        .check(status.saveAs("statusValue")))
-
-    }
-
-    //WORKAROUND: Sometimes ElasticSearch isn't indexed quick enough with the new case, so the case will not be listed
-    //on the dashboard. If this is the case, wait 5 seconds and refresh the dashboard
-    .doIf("${caseId.isUndefined()}") {
-
-      pause(5)
-
-      .group("Intestacy_085_RefreshDashboard") {
-
-        exec(http("RefreshDashboard")
-          .get(BaseURL + "/dashboard")
-          .headers(CommonHeader)
-          .header("sec-fetch-site", "none")
-          .check(regex("a href=./get-case/([0-9]+).probateType=INTESTACY").find.saveAs("caseId"))
-          .check(regex("In progress")))
-
-        }
+        .check(regex("a href=./get-case/([0-9]+).probateType=INTESTACY").find.saveAs("caseId"))
+        .check(substring("IN PROGRESS")))
 
     }
 

@@ -21,9 +21,9 @@ object Probate_05_ExecOne_CitizenHub {
     group("Probate_600_LoadCitizenHub") {
 
       exec(http("LoadCitizenHub")
-        .get(BaseURL + "/get-case/${caseId}?probateType=PA") //TODO: check this url once the code is deployed into perftest
+        .get(BaseURL + "/get-case/${caseId}?probateType=PA")
         .headers(CommonHeader)
-        .check(regex("Submitted|Issued"))) //TODO: update this with text checks for the citizen hub (should be either submitted or issued)
+        .check(substring("hmcts-progress-bar__icon--complete").count.in(1, 4))) //Application received or Grant Issued
 
     }
 
