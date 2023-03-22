@@ -66,7 +66,7 @@ class Probate_Simulation extends Simulation {
   val httpProtocol = Environment.HttpProtocol
     .baseUrl(BaseURL)
     .doNotTrackHeader("1")
-    .inferHtmlResources(BlackList("https://www.payments.service.gov.uk/.*", "https://webchat-client.training.ctsc.hmcts.net/.*"), WhiteList())
+    .inferHtmlResources(BlackList("https://card.payments.service.gov.uk/.*", "https://webchat-client.training.ctsc.hmcts.net/.*"), WhiteList())
     .silentResources
 
   before{
