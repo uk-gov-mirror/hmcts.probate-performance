@@ -17,7 +17,7 @@
     ]
   },
   "event": {
-    "id": "boUploadDocumentsForCaseCreated",
+    "id": "boUploadDocumentsAwaitingDoc",
     "summary": "",
     "description": ""
   },
