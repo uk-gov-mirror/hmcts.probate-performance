@@ -656,7 +656,7 @@ object Probate_Intestacy {
         .formParam("chargeId", "${ChargeId}")
         .formParam("csrfToken", "${csrf}")
         .check(CsrfCheck.save)
-        .check(regex("received your payment")))
+        .check(substring("Payment received")))
 
     }
 
@@ -669,7 +669,7 @@ object Probate_Intestacy {
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "${csrf}")
-        .check(regex("Application complete")))
+        .check(substring("Application submitted")))
 
     }
 

@@ -163,7 +163,7 @@ object Probate_03_ExecOne_Submit {
         .formParam("chargeId", "${ChargeId}")
         .formParam("csrfToken", "${csrf}")
         .check(CsrfCheck.save)
-        .check(regex("Before your application can be processed")))
+        .check(substring("Payment received")))
 
     }
 
@@ -176,22 +176,7 @@ object Probate_03_ExecOne_Submit {
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "${csrf}")
-        .check(CsrfCheck.save)
-        .check(regex("Prepare to send your documents")))
-
-    }
-
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
-
-    .group("Probate_560_DocumentsSubmit") {
-
-      exec(http("DocumentsSubmit")
-        .post(BaseURL + "/documents")
-        .headers(CommonHeader)
-        .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
-        .formParam("sentDocuments", "true")
-        .check(regex("Application complete")))
+        .check(substring("Application submitted")))
 
     }
 
