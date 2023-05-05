@@ -79,7 +79,7 @@ object Probate_03_ExecOne_Submit {
         .get(BaseURL + "/task-list")
         .headers(CommonHeader)
         .check(regex("Complete these steps"))
-        .check(regex("""4.</span> Order extra copies of the grant of probate\n    </h2>\n    \n        <span class="govuk-tag task-completed">Completed</span>""")))
+        .check(regex("""4.</span> Order extra copies of the grant\n    </h2>\n    \n        <span class="govuk-tag task-completed">Completed</span>""")))
 
     }
 
