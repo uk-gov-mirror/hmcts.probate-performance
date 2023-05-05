@@ -6,7 +6,7 @@ import utils.{CsrfCheck, Environment}
 
 import scala.concurrent.duration._
 
-object ProbateApp_ExecTwo_Declaration {
+object Probate_02_ExecTwo_Declaration {
 
   val BaseURL = Environment.baseURL
 

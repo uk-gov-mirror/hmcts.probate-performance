@@ -2,14 +2,14 @@ package scenarios
 
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
-import utils.CsrfCheck
-import utils.{Common, Environment}
+import utils.{Common, CsrfCheck, Environment}
 
 import scala.concurrent.duration._
 
-object ProbateApp_ExecOne_Apply {
+object Probate_Intestacy {
 
   val BaseURL = Environment.baseURL
+  val PaymentURL = Environment.paymentURL
 
   val MinThinkTime = Environment.minThinkTime
   val MaxThinkTime = Environment.maxThinkTime
@@ -17,7 +17,7 @@ object ProbateApp_ExecOne_Apply {
   val CommonHeader = Environment.commonHeader
   val PostHeader = Environment.postHeader
 
-  val ProbateEligibility =
+  val IntestacyEligibility =
 
     exec(_.setAll("randomString" -> Common.randomString(5),
       "dobDay" -> Common.getDay(),
@@ -28,7 +28,7 @@ object ProbateApp_ExecOne_Apply {
       "dodYear" -> "2022",
       "randomPostcode" -> Common.getPostcode()))
 
-    .group("Probate_010_StartEligibility") {
+    .group("Intestacy_010_StartEligibility") {
 
       exec(http("StartEligibility")
         .get(BaseURL + "/death-certificate")
@@ -40,7 +40,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Probate_020_DeathCertificateSubmit") {
+    .group("Intestacy_020_DeathCertificateSubmit") {
 
       exec(http("DeathCertificateSubmit")
         .post(BaseURL + "/death-certificate")
@@ -55,7 +55,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Probate_025_DeathCertEnglishSubmit") {
+    .group("Intestacy_025_DeathCertEnglishSubmit") {
 
       exec(http("DeathCertEnglishSubmit")
         .post(BaseURL + "/death-certificate-english")
@@ -70,7 +70,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Probate_030_DomicileSubmit") {
+    .group("Intestacy_030_DomicileSubmit") {
 
       exec(http("DomicileSubmit")
         .post(BaseURL + "/deceased-domicile")
@@ -85,7 +85,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Probate_035_ExceptedEstatesDodSubmit") {
+    .group("Intestacy_035_ExceptedEstatesDodSubmit") {
 
       exec(http("EEDodSubmit")
         .post(BaseURL + "/ee-deceased-dod")
@@ -100,7 +100,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Probate_040_ExceptedEstatesValuedSubmit") {
+    .group("Intestacy_040_ExceptedEstatesValuedSubmit") {
 
       exec(http("ExceptedEstatesValuedSubmit")
         .post(BaseURL + "/ee-estate-valued")
@@ -115,107 +115,84 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Probate_050_WillLeftSubmit") {
+    .group("Intestacy_050_WillLeftSubmit") {
 
       exec(http("WillLeftSubmit")
         .post(BaseURL + "/will-left")
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "${csrf}")
-        .formParam("left", "optionYes")
+        .formParam("left", "optionNo")
         .check(CsrfCheck.save)
-        .check(regex("Do you have the original will")))
+        .check(regex("Did the person die on or after 1 October 2014")))
 
     }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Probate_060_WillOriginalSubmit") {
+    .group("Intestacy_060_DiedAfterSubmit") {
 
-      exec(http("WillOriginalSubmit")
-        .post(BaseURL + "/will-original")
+      exec(http("DiedAfterSubmit")
+        .post(BaseURL + "/died-after-october-2014")
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "${csrf}")
-        .formParam("original", "optionYes")
+        .formParam("diedAfter", "optionYes")
         .check(CsrfCheck.save)
-        .check(regex("Are you named as an executor")))
+        .check(regex("Are you the spouse")))
 
     }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Probate_070_NamedExecutorSubmit") {
+    .group("Intestacy_070_RelatedSubmit") {
 
-      exec(http("NamedExecutorSubmit")
-        .post(BaseURL + "/applicant-executor")
+      exec(http("RelatedSubmit")
+        .post(BaseURL + "/related-to-deceased")
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "${csrf}")
-        .formParam("executor", "optionYes")
+        .formParam("related", "optionYes")
         .check(CsrfCheck.save)
-        .check(regex("Are all the executors able to make their own decisions")))
+        .check(regex("Are you planning to make a joint application")))
 
     }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Probate_080_MentalCapacitySubmit") {
+    .group("Intestacy_080_OtherApplicantsSubmit") {
 
-      exec(http("MentalCapacitySubmit")
-        .post(BaseURL + "/mental-capacity")
+      exec(http("OtherApplicantsSubmit")
+        .post(BaseURL + "/other-applicants")
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "${csrf}")
-        .formParam("mentalCapacity", "optionYes")
-        .check(regex("a href=./get-case/([0-9]+).probateType=PA").find.saveAs("caseId"))
-        .check(substring("In progress")))
+        .formParam("otherApplicants", "optionNo")
+        .check(regex("a href=./get-case/([0-9]+).probateType=INTESTACY").find.saveAs("caseId"))
+        .check(substring("IN PROGRESS")))
 
     }
 
-    //WORKAROUND: Sometimes ElasticSearch isn't indexed quick enough with the new case, so the case will not be listed
-    //on the dashboard. If this is the case, wait 5 seconds and refresh the dashboard
-
-    //UPDATE FEB 2023: this should no longer be required due to the implementation of https://tools.hmcts.net/jira/browse/DTSPB-3060
-    //which has switched the call from ES to the CCD Data Store DB
-    /*
-
-    .doIf("${caseId.isUndefined()}") {
-
-      pause(5)
-
-      .group("Probate_085_RefreshDashboard") {
-
-        exec(http("RefreshDashboard")
-          .get(BaseURL + "/dashboard")
-          .headers(CommonHeader)
-          .header("sec-fetch-site", "none")
-          .check(regex("a href=./get-case/([0-9]+).probateType=PA").find.saveAs("caseId"))
-          .check(regex("In progress")))
-
-      }
-
-    }
-     */
-
+      /*
     .exec {
       session =>
-        println("EXEC1 EMAIL: " + session("emailAddress").as[String])
+        println("APPLICANT EMAIL: " + session("emailAddress").as[String])
         println("CASE ID: " + session("caseId").as[String])
-        println("APPLICATION TYPE: PA")
+        println("APPLICATION TYPE: INTESTACY")
         session
     }
+       */
 
-  .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
     //At this point, the user will be redirected to their dashboard, listing the new application as 'In progress'
 
-  val ProbateApplicationSection1 =
+  val IntestacyApplicationSection1 =
 
-    group("Probate_090_ContinueApplication") {
+    group("Intestacy_090_ContinueApplication") {
 
       exec(http("ContinueApplication")
-        .get(BaseURL + "/get-case/${caseId}?probateType=PA")
+        .get(BaseURL + "/get-case/${caseId}?probateType=INTESTACY")
         .headers(CommonHeader)
         .check(regex("Complete these steps")))
 
@@ -223,7 +200,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Probate_100_SectionOneStart") {
+    .group("Intestacy_100_SectionOneStart") {
 
       exec(http("SectionOneStart")
         .get(BaseURL + "/bilingual-gop")
@@ -235,7 +212,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Probate_110_BilingualGrantSubmit") {
+    .group("Intestacy_110_BilingualGrantSubmit") {
 
       exec(http("BilingualGrantSubmit")
         .post(BaseURL + "/bilingual-gop")
@@ -244,52 +221,24 @@ object ProbateApp_ExecOne_Apply {
         .formParam("_csrf", "${csrf}")
         .formParam("bilingual", "optionNo")
         .check(CsrfCheck.save)
-        .check(regex("full name of the person who died")))
+        .check(regex("What are the details of the person")))
 
     }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Probate_120_DeceasedNameSubmit") {
+    .group("Intestacy_120_DeceasedDetailsSubmit") {
 
-      exec(http("DeceasedNameSubmit")
-        .post(BaseURL + "/deceased-name")
+      exec(http("DeceasedDetailsSubmit")
+        .post(BaseURL + "/deceased-details")
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "${csrf}")
         .formParam("firstName", "Perf${randomString}")
         .formParam("lastName", "Test${randomString}")
-        .check(CsrfCheck.save)
-        .check(regex("What was their date of birth")))
-
-    }
-
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
-
-    .group("Probate_130_DeceasedDOBSubmit") {
-
-      exec(http("DeceasedDOBSubmit")
-        .post(BaseURL + "/deceased-dob")
-        .headers(CommonHeader)
-        .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
         .formParam("dob-day", "${dobDay}")
         .formParam("dob-month", "${dobMonth}")
         .formParam("dob-year", "${dobYear}")
-        .check(CsrfCheck.save)
-        .check(regex("What was the date that they died")))
-
-    }
-
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
-
-    .group("Probate_140_DeceasedDODSubmit") {
-
-      exec(http("DeceasedDODSubmit")
-        .post(BaseURL + "/deceased-dod")
-        .headers(CommonHeader)
-        .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
         .formParam("dod-day", "${dodDay}")
         .formParam("dod-month", "${dodMonth}")
         .formParam("dod-year", "${dodYear}")
@@ -300,7 +249,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Probate_150_DeceasedAddressSubmit") {
+    .group("Intestacy_130_DeceasedAddressSubmit") {
 
       exec(http("DeceasedAddressSubmit")
         .post(BaseURL + "/deceased-address")
@@ -320,7 +269,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Probate_160_DiedEngOrWalesSubmit") {
+    .group("Intestacy_140_DiedEngOrWalesSubmit") {
 
       exec(http("DiedEngOrWalesSubmit")
         .post(BaseURL + "/died-eng-or-wales")
@@ -335,7 +284,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Probate_170_CertificateInterimSubmit") {
+    .group("Intestacy_150_CertificateInterimSubmit") {
 
       exec(http("CertificateInterimSubmit")
         .post(BaseURL + "/certificate-interim")
@@ -350,7 +299,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Probate_175_EstateValuedSubmit") {
+    .group("Intestacy_160_EstateValuedSubmit") {
 
       exec(http("EstateValuedSubmit")
         .post(BaseURL + "/estate-valued")
@@ -365,7 +314,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Probate_180_EstateFormSubmit") {
+    .group("Intestacy_170_EstateFormSubmit") {
 
       exec(http("EstateFormSubmit")
         .post(BaseURL + "/estate-form")
@@ -380,7 +329,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Probate_190_EstateValuesSubmit") {
+    .group("Intestacy_180_EstateValuesSubmit") {
 
       exec(http("EstateValuesSubmit")
         .post(BaseURL + "/probate-estate-values")
@@ -390,13 +339,28 @@ object ProbateApp_ExecOne_Apply {
         .formParam("grossValueField", "900000")
         .formParam("netValueField", "800000")
         .check(CsrfCheck.save)
-        .check(regex("have assets in another name")))
+        .check(regex("any assets outside of England")))
 
     }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Probate_200_DeceasedAliasSubmit") {
+    .group("Intestacy_185_AssetsOutsideUKSubmit") {
+
+      exec(http("AssetsOutsideUKSubmit")
+        .post(BaseURL + "/assets-outside-england-wales")
+        .headers(CommonHeader)
+        .headers(PostHeader)
+        .formParam("_csrf", "${csrf}")
+        .formParam("assetsOutside", "optionNo")
+        .check(CsrfCheck.save)
+        .check(regex("assets in another name")))
+
+    }
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+    .group("Intestacy_190_DeceasedAliasSubmit") {
 
       exec(http("DeceasedAliasSubmit")
         .post(BaseURL + "/deceased-alias")
@@ -405,95 +369,20 @@ object ProbateApp_ExecOne_Apply {
         .formParam("_csrf", "${csrf}")
         .formParam("alias", "optionNo")
         .check(CsrfCheck.save)
-        .check(regex("get married or enter into a civil partnership")))
+        .check(regex("marital status")))
 
     }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Probate_210_DeceasedMarriedSubmit") {
+    .group("Intestacy_200_MaritalStatusSubmit") {
 
-      exec(http("DeceasedMarriedSubmit")
-        .post(BaseURL + "/deceased-married")
+      exec(http("MaritalStatusSubmit")
+        .post(BaseURL + "/deceased-marital-status")
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "${csrf}")
-        .formParam("married", "optionNo")
-        .check(CsrfCheck.save)
-        .check(regex("Does the will have any damage or marks")))
-
-    }
-
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
-
-    .group("Probate_215_WillDamagesSubmit") {
-
-      exec(http("WillDamagesSubmit")
-        .post(BaseURL + "/will-has-damage")
-        .headers(CommonHeader)
-        .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
-        .formParam("otherDamageDescription", "")
-        .formParam("willHasVisibleDamage", "optionNo")
-        .check(CsrfCheck.save)
-        .check(regex("Were any codicils made to the will")))
-
-    }
-
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
-
-    .group("Probate_220_WillCodicilsSubmit") {
-
-      exec(http("WillCodicilsSubmit")
-        .post(BaseURL + "/will-codicils")
-        .headers(CommonHeader)
-        .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
-        .formParam("codicils", "optionYes")
-        .check(CsrfCheck.save)
-        .check(regex("How many codicils were made to the will")))
-
-    }
-
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
-
-    .group("Probate_230_WillNumberSubmit") {
-
-      exec(http("WillNumberSubmit")
-        .post(BaseURL + "/codicils-number")
-        .headers(CommonHeader)
-        .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
-        .formParam("codicilsNumber", "1")
-        .check(regex("Do the codicils have any damage or marks")))
-
-    }
-
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
-
-    .group("Probate_235_CodicilsDamageSubmit") {
-
-      exec(http("CodicilsDamageSubmit")
-        .post(BaseURL + "/codicils-have-damage")
-        .headers(CommonHeader)
-        .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
-        .formParam("otherDamageDescription", "")
-        .formParam("codicilsHasVisibleDamage", "optionNo")
-        .check(regex("Did the person who died leave any other written wishes")))
-
-    }
-
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
-
-    .group("Probate_238_WrittenWishesSubmit") {
-
-      exec(http("WrittenWishesSubmit")
-        .post(BaseURL + "/deceased-written-wishes")
-        .headers(CommonHeader)
-        .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
-        .formParam("deceasedWrittenWishes", "optionNo")
+        .formParam("maritalStatus", "optionMarried")
         .check(regex("Complete these steps"))
         .check(regex("""1.</span> Tell us about the person who has died\n    </h2>\n    \n        <span class="govuk-tag task-completed">Completed</span>""")))
 
@@ -501,13 +390,43 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-  val ProbateApplicationSection2 =
+  val IntestacyApplicationSection2 =
 
-    group("Probate_240_SectionTwoStart") {
+    group("Intestacy_210_SectionTwoStart") {
 
       exec(http("SectionTwoStart")
-        .get(BaseURL + "/applicant-name")
+        .get(BaseURL + "/relationship-to-deceased")
         .headers(CommonHeader)
+        .check(CsrfCheck.save)
+        .check(regex("What was your relationship")))
+
+    }
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+    .group("Intestacy_220_RelationshipSubmit") {
+
+      exec(http("RelationshipSubmit")
+        .post(BaseURL + "/relationship-to-deceased")
+        .headers(CommonHeader)
+        .headers(PostHeader)
+        .formParam("_csrf", "${csrf}")
+        .formParam("relationshipToDeceased", "optionSpousePartner")
+        .check(CsrfCheck.save)
+        .check(regex("have any children")))
+
+    }
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+    .group("Intestacy_225_AnyChildrenSubmit") {
+
+      exec(http("AnyChildrenSubmit")
+        .post(BaseURL + "/any-children")
+        .headers(CommonHeader)
+        .headers(PostHeader)
+        .formParam("_csrf", "${csrf}")
+        .formParam("anyChildren", "optionNo")
         .check(CsrfCheck.save)
         .check(regex("What is your full name")))
 
@@ -515,7 +434,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Probate_250_ApplicantNameSubmit") {
+    .group("Intestacy_230_ApplicantNameSubmit") {
 
       exec(http("ApplicantNameSubmit")
         .post(BaseURL + "/applicant-name")
@@ -525,28 +444,13 @@ object ProbateApp_ExecOne_Apply {
         .formParam("firstName", "Perf${randomString}")
         .formParam("lastName", "ExecOne${randomString}")
         .check(CsrfCheck.save)
-        .check(regex("exactly what appears on the will")))
-
-    }
-
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
-
-    .group("Probate_260_ApplicantNameAsOnWillSubmit") {
-
-      exec(http("ApplicantNameAsOnWillSubmit")
-        .post(BaseURL + "/applicant-name-as-on-will")
-        .headers(CommonHeader)
-        .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
-        .formParam("nameAsOnTheWill", "optionYes")
-        .check(CsrfCheck.save)
         .check(regex("What is your phone number")))
 
     }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Probate_270_ApplicantPhoneSubmit") {
+    .group("Intestacy_240_ApplicantPhoneSubmit") {
 
       exec(http("ApplicantPhoneSubmit")
         .post(BaseURL + "/applicant-phone")
@@ -561,7 +465,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Probate_280_ApplicantAddressSubmit") {
+    .group("Intestacy_250_ApplicantAddressSubmit") {
 
       exec(http("ApplicantAddressSubmit")
         .post(BaseURL + "/applicant-address")
@@ -574,142 +478,15 @@ object ProbateApp_ExecOne_Apply {
         .formParam("postTown", "Perf ${randomString} Town")
         .formParam("newPostCode", "${randomPostcode}")
         .formParam("country", "")
-        .check(CsrfCheck.save)
-        .check(regex("How many past and present executors")))
+        .check(regex("2.</span> Give details about the people applying(?s).*?<span class=.govuk-tag task-completed.>Completed</span>|Equality and diversity questions")))
 
     }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Probate_290_ExecutorsNumberSubmit") {
+  val IntestacyApplicationSection3 =
 
-      exec(http("ExecutorsNumberSubmit")
-        .post(BaseURL + "/executors-number")
-        .headers(CommonHeader)
-        .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
-        .formParam("executorsNumber", "2")
-        .check(CsrfCheck.save)
-        .check(regex("What are the executors")))
-
-    }
-
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
-
-    .group("Probate_300_ExecutorsNamesSubmit") {
-
-      exec(http("ExecutorsNamesSubmit")
-        .post(BaseURL + "/executors-names")
-        .headers(CommonHeader)
-        .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
-        .formParam("executorName[0]", "Perf Exec Two")
-        .check(CsrfCheck.save)
-        .check(regex("Are all the executors alive")))
-
-    }
-
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
-
-    .group("Probate_310_ExecutorsAllAliveSubmit") {
-
-      exec(http("ExecutorsAllAliveSubmit")
-        .post(BaseURL + "/executors-all-alive")
-        .headers(CommonHeader)
-        .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
-        .formParam("allalive", "optionYes")
-        .check(CsrfCheck.save)
-        .check(regex("Will any of the other executors be dealing with the estate")))
-
-    }
-
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
-
-    .group("Probate_320_OtherExecutorsSubmit") {
-
-      exec(http("OtherExecutorsSubmit")
-        .post(BaseURL + "/other-executors-applying")
-        .headers(CommonHeader)
-        .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
-        .formParam("otherExecutorsApplying", "optionYes")
-        .check(CsrfCheck.save)
-        .check(regex("Which executors will be dealing with the estate")))
-
-    }
-
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
-
-    .group("Probate_330_ExecutorsDealingSubmit") {
-
-      exec(http("ExecutorsDealingSubmit")
-        .post(BaseURL + "/executors-dealing-with-estate")
-        .headers(CommonHeader)
-        .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
-        .formParam("executorsApplying[]", "Perf Exec Two")
-        .check(CsrfCheck.save)
-        .check(regex("Do any of these executors now have a different name")))
-
-    }
-
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
-
-    .group("Probate_340_ExecutorsAliasSubmit") {
-
-      exec(http("ExecutorsAliasSubmit")
-        .post(BaseURL + "/executors-alias")
-        .headers(CommonHeader)
-        .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
-        .formParam("alias", "optionNo")
-        .check(CsrfCheck.save)
-        .check(regex("email address and mobile number")))
-
-    }
-
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
-
-    .group("Probate_350_ExecTwoContactDetailsSubmit") {
-
-      exec(http("ExecTwoContactDetailsSubmit")
-        .post(BaseURL + "/executor-contact-details/1")
-        .headers(CommonHeader)
-        .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
-        .formParam("email", "exec-two@perftest${randomString}.com")
-        .formParam("mobile", "07000000001")
-        .check(CsrfCheck.save)
-        .check(regex("permanent address")))
-
-    }
-
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
-
-    .group("Probate_360_ExecTwoAddressSubmit") {
-
-      exec(http("ExecTwoAddressSubmit")
-        .post(BaseURL + "/executor-address/1")
-        .headers(CommonHeader)
-        .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
-        .formParam("addressLine1", "3 Perf${randomString} Road")
-        .formParam("addressLine2", "")
-        .formParam("addressLine3", "")
-        .formParam("postTown", "Perf ${randomString} Town")
-        .formParam("newPostCode", "${randomPostcode}")
-        .formParam("country", "")
-        //PCQ (Equality/diversity survey) might pop up at this point, so cater for either outcome in the text check
-        .check(regex("2.</span> Give details about the executors(?s).*?<span class=.govuk-tag task-completed.>Completed</span>|Equality and diversity questions")))
-
-    }
-
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
-
-  val ProbateApplicationSection3 =
-
-    group("Probate_370_SectionThreeStart") {
+    group("Intestacy_260_SectionThreeStart") {
 
       exec(http("SectionThreeStart")
         .get(BaseURL + "/summary/declaration")
@@ -720,7 +497,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Probate_380_Declaration") {
+    .group("Intestacy_270_Declaration") {
 
       exec(http("Declaration")
         .get(BaseURL + "/declaration")
@@ -732,7 +509,7 @@ object ProbateApp_ExecOne_Apply {
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Probate_390_DeclarationSubmit") {
+    .group("Intestacy_280_DeclarationSubmit") {
 
       exec(http("DeclarationSubmit")
         .post(BaseURL + "/declaration")
@@ -740,35 +517,192 @@ object ProbateApp_ExecOne_Apply {
         .headers(PostHeader)
         .formParam("_csrf", "${csrf}")
         .formParam("declarationCheckbox", "true")
-        .check(CsrfCheck.save)
-        .check(regex("Notify the other executors")))
+        .check(regex("Complete these steps"))
+        .check(regex("3.</span> Check your answers and make your legal declaration(?s).*?<span class=.govuk-tag task-completed.>Completed</span>")))
 
     }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    .group("Probate_400_ExecutorsInviteSubmit") {
+  val IntestacyApplicationSection4 =
 
-      exec(http("ExecutorsInviteSubmit")
-        .post(BaseURL + "/executors-invite")
+    group("Intestacy_290_SectionFourStart") {
+
+      exec(http("SectionFourStart")
+        .get(BaseURL + "/copies-uk")
+        .headers(CommonHeader)
+        .check(CsrfCheck.save)
+        .check(regex("How many extra official copies")))
+
+    }
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+    .group("Intestacy_300_ExtraCopiesSubmit") {
+
+      exec(http("ExtraCopiesSubmit")
+        .post(BaseURL + "/copies-uk")
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "${csrf}")
-        .check(regex("Complete these steps"))
-        .check(regex("Not declared")))
+        .formParam("uk", "0")
+        .check(CsrfCheck.save)
+        .check(regex("have assets outside the UK")))
 
     }
 
     .pause(MinThinkTime seconds, MaxThinkTime seconds)
 
-    //Get the invite ID associated with the second executor
+    .group("Intestacy_310_AssetsOverseasSubmit") {
 
-    .group("Probate_Util_InviteIdList") {
-
-      exec(http("InviteIdList")
-        .get(BaseURL + "/inviteIdList")
+      exec(http("AssetsOverseasSubmit")
+        .post(BaseURL + "/assets-overseas")
         .headers(CommonHeader)
-        .check(regex("\\\"ids\\\":\\[\\\"(.+?)\\\"").saveAs("inviteId")))
+        .headers(PostHeader)
+        .formParam("_csrf", "${csrf}")
+        .formParam("assetsoverseas", "optionNo")
+        .check(regex("Check your answers")))
+
+    }
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+    .group("Intestacy_320_TaskList") {
+
+      exec(http("TaskList")
+        .get(BaseURL + "/task-list")
+        .headers(CommonHeader)
+        .check(regex("Complete these steps"))
+        .check(regex("""4.</span> Order copies of the letters of administration\n    </h2>\n    \n        <span class="govuk-tag task-completed">Completed</span>""")))
+
+    }
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+  val IntestacyApplicationSection5 =
+
+    group("Intestacy_330_SectionFiveStart") {
+
+      exec(http("SectionFiveStart")
+        .get(BaseURL + "/payment-breakdown")
+        .headers(CommonHeader)
+        .check(CsrfCheck.save)
+        .check(regex("Application fee")))
+
+    }
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+    .group("Intestacy_340_PaymentBreakdownSubmit") {
+
+      exec(http("PaymentBreakdownSubmit")
+        .post(BaseURL + "/payment-breakdown")
+        .headers(CommonHeader)
+        .headers(PostHeader)
+        .formParam("_csrf", "${csrf}")
+        .check(regex("Enter card details"))
+        .check(css("input[name='csrfToken']", "value").saveAs("csrf"))
+        .check(css("input[name='chargeId']", "value").saveAs("ChargeId")))
+
+    }
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+    .group("Intestacy_350_CheckCard") {
+
+      exec(http("CheckCard")
+        .post(PaymentURL + "/check_card/${ChargeId}")
+        .headers(PostHeader)
+        .formParam("cardNo", "4444333322221111")
+        .check(jsonPath("$.accepted").is("true")))
+
+    }
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+    // Gov Pay does strict postcode validation, so won't accept all postcodes in the format XXN NXX
+    // Therefore, not using the postcode random function as payments with an invalid postcode fail
+
+    .group("Intestacy_360_CardDetailsSubmit") {
+
+      exec(http("CardDetailsSubmit")
+        .post(PaymentURL + "/card_details/${ChargeId}")
+        .headers(PostHeader)
+        .formParam("chargeId", "${ChargeId}")
+        .formParam("csrfToken", "${csrf}")
+        .formParam("cardNo", "4444333322221111")
+        .formParam("expiryMonth", "01")
+        .formParam("expiryYear", "25")
+        .formParam("cardholderName", "Perf Tester ${randomString}")
+        .formParam("cvc", "123")
+        .formParam("addressCountry", "GB")
+        .formParam("addressLine1", "1 Perf${randomString} Road")
+        .formParam("addressLine2", "")
+        .formParam("addressCity", "Perf ${randomString} Town")
+        .formParam("addressPostcode", "TS1 1ST") //Common.getPostcode()
+        .formParam("email", "intestacy@perftest${randomString}.com")
+        .check(regex("Confirm your payment"))
+        .check(css("input[name='csrfToken']", "value").saveAs("csrf")))
+
+    }
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+    .group("Intestacy_370_CardDetailsConfirmSubmit") {
+
+      exec(http("CardDetailsConfirmSubmit")
+        .post(PaymentURL + "/card_details/${ChargeId}/confirm")
+        .headers(PostHeader)
+        .formParam("chargeId", "${ChargeId}")
+        .formParam("csrfToken", "${csrf}")
+        .check(CsrfCheck.save)
+        .check(substring("Payment received")))
+
+    }
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+    .group("Intestacy_380_PaymentStatusSubmit") {
+
+      exec(http("PaymentStatusSubmit")
+        .post(BaseURL + "/payment-status")
+        .headers(CommonHeader)
+        .headers(PostHeader)
+        .formParam("_csrf", "${csrf}")
+        .check(substring("Application submitted")))
+
+    }
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+    .group("Intestacy_400_DownloadCoverSheetPDF") {
+
+      exec(http("DownloadCoverSheetPDF")
+        .get(BaseURL + "/cover-sheet-pdf")
+        .headers(CommonHeader)
+        .check(bodyString.transform(_.size > 10000).is(true)))
+
+    }
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+    .group("Intestacy_410_DownloadCheckAnswersPDF") {
+
+      exec(http("DownloadCheckAnswersPDF")
+        .get(BaseURL + "/check-answers-pdf")
+        .headers(CommonHeader)
+        .check(bodyString.transform(_.size > 3000).is(true)))
+
+    }
+
+    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+
+    .group("Intestacy_420_DownloadDeclarationPDF") {
+
+      exec(http("DownloadDeclarationPDF")
+        .get(BaseURL + "/declaration-pdf")
+        .headers(CommonHeader)
+        .check(bodyString.transform(_.size > 15000).is(true)))
 
     }
 

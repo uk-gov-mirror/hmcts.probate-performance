@@ -4,7 +4,7 @@ import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import utils.Environment
 
-object ProbateApp_CWIssueGrant {
+object Probate_04_CW_IssueGrant {
 
   val BaseURL = Environment.baseURL
 
@@ -38,32 +38,12 @@ object ProbateApp_CWIssueGrant {
     .pause(1)
 
     //Link uploaded document to case
-    .exec(CCDAPI.CreateEvent("Caseworker", "PROBATE", "GrantOfRepresentation", "boUploadDocumentsForCaseCreated", "bodies/UploadDocumentsForCaseCreated.json"))
+    .exec(CCDAPI.CreateEvent("Caseworker", "PROBATE", "GrantOfRepresentation", "boUploadDocumentsAwaitingDoc", "bodies/CCD_boUploadDocumentsAwaitingDoc.json"))
 
     .pause(1)
 
     //Print the case
-    .exec(CCDAPI.CreateEvent("Caseworker", "PROBATE", "GrantOfRepresentation", "boPrintCase", "bodies/CCD_PrintCase.json"))
-
-    .pause(1)
-
-    //Mark as ready for examination
-    .exec(CCDAPI.CreateEvent("Caseworker", "PROBATE", "GrantOfRepresentation", "boMarkAsReadyForExamination", "bodies/CCD_MarkAsReadyForExamination.json"))
-
-    .pause(1)
-
-    //Find matches (Examining)
-    .exec(CCDAPI.CreateEvent("Caseworker", "PROBATE", "GrantOfRepresentation", "boFindMatchesForReadyForExamining", "bodies/CCD_FindMatchesForReadyForExamining.json"))
-
-    .pause(1)
-
-    //Examine case
-    .exec(CCDAPI.CreateEvent("Caseworker", "PROBATE", "GrantOfRepresentation", "boExamineCase", "bodies/CCD_ExamineCase.json"))
-
-    .pause(1)
-
-    //Mark as ready to issue
-    .exec(CCDAPI.CreateEvent("Caseworker", "PROBATE", "GrantOfRepresentation", "boMarkAsReadyToIssue", "bodies/CCD_MarkAsReadyToIssue.json"))
+    .exec(CCDAPI.CreateEvent("Caseworker", "PROBATE", "GrantOfRepresentation", "boGenerateGrantPreviewForExamining", "bodies/CCD_boGenerateGrantPreviewForExamining.json"))
 
     .pause(1)
 
