@@ -39,7 +39,7 @@ object Probate_Caveat {
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Caveat_020_ApplicantName") {
 
@@ -51,7 +51,7 @@ object Probate_Caveat {
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Caveat_030_ApplicantNameSubmit") {
 
@@ -59,15 +59,15 @@ object Probate_Caveat {
         .post(BaseURL + "/caveats/applicant-name")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
-        .formParam("firstName", "Perf${randomString}")
-        .formParam("lastName", "Test${randomString}")
+        .formParam("_csrf", "#{csrf}")
+        .formParam("firstName", "Perf#{randomString}")
+        .formParam("lastName", "Test#{randomString}")
         .check(CsrfCheck.save)
         .check(regex("What is your email address")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Caveat_040_EmailAddressSubmit") {
 
@@ -75,14 +75,14 @@ object Probate_Caveat {
         .post(BaseURL + "/caveats/applicant-email")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
-        .formParam("email", "caveat@perftest${randomString}.com")
+        .formParam("_csrf", "#{csrf}")
+        .formParam("email", "caveat@perftest#{randomString}.com")
         .check(CsrfCheck.save)
         .check(regex("What is your address")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Caveat_050_AddressSubmit") {
 
@@ -90,19 +90,19 @@ object Probate_Caveat {
         .post(BaseURL + "/caveats/applicant-address")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
-        .formParam("addressLine1", "1 Perf${randomString} Road")
+        .formParam("_csrf", "#{csrf}")
+        .formParam("addressLine1", "1 Perf#{randomString} Road")
         .formParam("addressLine2", "")
         .formParam("addressLine3", "")
-        .formParam("postTown", "Perf ${randomString} Town")
-        .formParam("newPostCode", "${randomPostcode}")
+        .formParam("postTown", "Perf #{randomString} Town")
+        .formParam("newPostCode", "#{randomPostcode}")
         .formParam("country", "")
         .check(CsrfCheck.save)
         .check(regex("full name of the person")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Caveat_060_DeceasedNameSubmit") {
 
@@ -110,15 +110,15 @@ object Probate_Caveat {
         .post(BaseURL + "/caveats/deceased-name")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
-        .formParam("firstName", "Perf${randomString}")
-        .formParam("lastName", "Tester${randomString}")
+        .formParam("_csrf", "#{csrf}")
+        .formParam("firstName", "Perf#{randomString}")
+        .formParam("lastName", "Tester#{randomString}")
         .check(CsrfCheck.save)
         .check(regex("What was the date that they died")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Caveat_070_DeceasedDodSubmit") {
 
@@ -126,16 +126,16 @@ object Probate_Caveat {
         .post(BaseURL + "/caveats/deceased-dod")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
-        .formParam("dod-day", "${dodDay}")
-        .formParam("dod-month", "${dodMonth}")
-        .formParam("dod-year", "${dodYear}")
+        .formParam("_csrf", "#{csrf}")
+        .formParam("dod-day", "#{dodDay}")
+        .formParam("dod-month", "#{dodMonth}")
+        .formParam("dod-year", "#{dodYear}")
         .check(CsrfCheck.save)
         .check(regex("known by any other names")))
 
     }
 /*
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Caveat_080_DeceasedDobKnownSubmit") {
 
@@ -143,14 +143,14 @@ object Probate_Caveat {
         .post(BaseURL + "/caveats/deceased-dob-known")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .formParam("dobknown", "optionYes")
         .check(CsrfCheck.save)
         .check(regex("What was their date of birth")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Caveat_090_DeceasedDobSubmit") {
 
@@ -158,7 +158,7 @@ object Probate_Caveat {
         .post(BaseURL + "/caveats/deceased-dob")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .formParam("dob-day", Common.getDay())
         .formParam("dob-month", Common.getMonth())
         .formParam("dob-year", Common.getDobYear())
@@ -167,7 +167,7 @@ object Probate_Caveat {
 
     }
 */
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Caveat_100_DeceasedAliasSubmit") {
 
@@ -175,14 +175,14 @@ object Probate_Caveat {
         .post(BaseURL + "/caveats/deceased-alias")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .formParam("alias", "optionNo")
         .check(CsrfCheck.save)
         .check(regex("What was the permanent address")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Caveat_110_DeceasedAddressSubmit") {
 
@@ -190,19 +190,19 @@ object Probate_Caveat {
         .post(BaseURL + "/caveats/deceased-address")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
-        .formParam("addressLine1", "2 Perf${randomString} Road")
+        .formParam("_csrf", "#{csrf}")
+        .formParam("addressLine1", "2 Perf#{randomString} Road")
         .formParam("addressLine2", "")
         .formParam("addressLine3", "")
-        .formParam("postTown", "Perf ${randomString} Town")
-        .formParam("newPostCode", "${randomPostcode}")
+        .formParam("postTown", "Perf #{randomString} Town")
+        .formParam("newPostCode", "#{randomPostcode}")
         .formParam("country", "")
         .check(CsrfCheck.save)
         .check(regex("English and Welsh")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Caveat_120_BilingualSubmit") {
 
@@ -210,13 +210,13 @@ object Probate_Caveat {
         .post(BaseURL + "/caveats/bilingual-gop")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .formParam("bilingual", "optionNo")
         .check(regex("Check your answers|Equality and diversity questions")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Caveat_130_PaymentBreakdown") {
 
@@ -228,7 +228,7 @@ object Probate_Caveat {
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Caveat_140_PaymentBreakdownSubmit") {
 
@@ -236,26 +236,26 @@ object Probate_Caveat {
         .post(BaseURL + "/caveats/payment-breakdown")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .check(regex("Enter card details"))
         .check(css("input[name='csrfToken']", "value").saveAs("csrf"))
         .check(css("input[name='chargeId']", "value").saveAs("ChargeId")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Caveat_150_CheckCard") {
 
       exec(http("CheckCard")
-        .post(PaymentURL + "/check_card/${ChargeId}")
+        .post(PaymentURL + "/check_card/#{ChargeId}")
         .headers(PostHeader)
         .formParam("cardNo", "4444333322221111")
         .check(jsonPath("$.accepted").is("true")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     // Gov Pay does strict postcode validation, so won't accept all postcodes in the format XXN NXX
     // Therefore, not using the postcode random function as payments with an invalid postcode fail
@@ -263,35 +263,35 @@ object Probate_Caveat {
     .group("Caveat_160_CardDetailsSubmit") {
 
       exec(http("CardDetailsSubmit")
-        .post(PaymentURL + "/card_details/${ChargeId}")
+        .post(PaymentURL + "/card_details/#{ChargeId}")
         .headers(PostHeader)
-        .formParam("chargeId", "${ChargeId}")
-        .formParam("csrfToken", "${csrf}")
+        .formParam("chargeId", "#{ChargeId}")
+        .formParam("csrfToken", "#{csrf}")
         .formParam("cardNo", "4444333322221111")
         .formParam("expiryMonth", "01")
         .formParam("expiryYear", "25")
-        .formParam("cardholderName", "Perf Tester ${randomString}")
+        .formParam("cardholderName", "Perf Tester #{randomString}")
         .formParam("cvc", "123")
         .formParam("addressCountry", "GB")
-        .formParam("addressLine1", "1 Perf${randomString} Road")
+        .formParam("addressLine1", "1 Perf#{randomString} Road")
         .formParam("addressLine2", "")
-        .formParam("addressCity", "Perf ${randomString} Town")
+        .formParam("addressCity", "Perf #{randomString} Town")
         .formParam("addressPostcode", "TS1 1ST") //Common.getPostcode()
-        .formParam("email", "caveat@perftest${randomString}.com")
+        .formParam("email", "caveat@perftest#{randomString}.com")
         .check(regex("Confirm your payment"))
         .check(css("input[name='csrfToken']", "value").saveAs("csrf")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Caveat_170_CardDetailsConfirmSubmit") {
 
       exec(http("CardDetailsConfirmSubmit")
-        .post(PaymentURL + "/card_details/${ChargeId}/confirm")
+        .post(PaymentURL + "/card_details/#{ChargeId}/confirm")
         .headers(PostHeader)
-        .formParam("chargeId", "${ChargeId}")
-        .formParam("csrfToken", "${csrf}")
+        .formParam("chargeId", "#{ChargeId}")
+        .formParam("csrfToken", "#{csrf}")
         .check(regex("Application complete"))
         .check(regex("Your reference number is</span><br>(?s).*?<strong class=.govuk-!-font-weight-bold. aria-label=..>([0-9|-]*)<").saveAs("referenceNo"))
         .check(status.saveAs("statusValue")))
@@ -306,6 +306,6 @@ object Probate_Caveat {
     }
        */
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
 }

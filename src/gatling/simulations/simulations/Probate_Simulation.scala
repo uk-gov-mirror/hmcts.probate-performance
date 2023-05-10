@@ -66,7 +66,7 @@ class Probate_Simulation extends Simulation {
   val httpProtocol = Environment.HttpProtocol
     .baseUrl(BaseURL)
     .doNotTrackHeader("1")
-    .inferHtmlResources(BlackList("https://card.payments.service.gov.uk/.*", "https://webchat-client.training.ctsc.hmcts.net/.*"), WhiteList())
+    .inferHtmlResources(DenyList("https://card.payments.service.gov.uk/.*", "https://webchat-client.training.ctsc.hmcts.net/.*"))
     .silentResources
 
   before{
@@ -127,7 +127,7 @@ class Probate_Simulation extends Simulation {
           Logout.ProbateLogout)
       }
     }
-    .doIf("${emailAddress.exists()}") {
+    .doIf("#{emailAddress.exists()}") {
       exec(DeleteUser.DeleteCitizen)
     }
 
@@ -156,7 +156,7 @@ class Probate_Simulation extends Simulation {
             Logout.ProbateLogout)
         }
     }
-    .doIf("${emailAddress.exists()}") {
+    .doIf("#{emailAddress.exists()}") {
       exec(DeleteUser.DeleteCitizen)
     }
 

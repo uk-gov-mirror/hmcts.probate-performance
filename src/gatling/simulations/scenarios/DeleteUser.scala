@@ -11,7 +11,7 @@ object DeleteUser {
   val DeleteCitizen =
     group("Probate_000_DeleteCitizen") {
       exec(http("DeleteCitizen")
-        .delete(IdamAPIURL + "/testing-support/accounts/${emailAddress}")
+        .delete(IdamAPIURL + "/testing-support/accounts/#{emailAddress}")
         .check(status.is(204)))
     }
 }
