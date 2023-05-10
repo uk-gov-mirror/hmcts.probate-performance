@@ -21,8 +21,8 @@ object Probate_04_CW_IssueGrant {
 
     .exec(http("Probate_000_DocumentUpload")
       .post(CaseDocUrl + "/cases/documents")
-      .header("Authorization", "Bearer ${bearerToken}")
-      .header("ServiceAuthorization", "${authToken}")
+      .header("Authorization", "Bearer #{bearerToken}")
+      .header("ServiceAuthorization", "#{authToken}")
       .header("accept", "application/json")
       .header("Content-Type", "multipart/form-data")
       .formParam("classification", "PUBLIC")

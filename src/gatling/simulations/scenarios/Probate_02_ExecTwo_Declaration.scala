@@ -38,14 +38,14 @@ object Probate_02_ExecTwo_Declaration {
     group("Probate_410_InviteId") {
 
       exec(http("InviteId")
-        .get(BaseURL + "/executors/invitation/${inviteId}")
+        .get(BaseURL + "/executors/invitation/#{inviteId}")
         .headers(CommonHeader)
         .check(CsrfCheck.save)
         .check(regex("Before making an application for probate")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     //Retrieve the PIN code that was sent to the mobile phone by text message
 
@@ -58,7 +58,7 @@ object Probate_02_ExecTwo_Declaration {
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     //Simulate clicking the email link to display the page with a pin input box
 
@@ -68,13 +68,13 @@ object Probate_02_ExecTwo_Declaration {
         .post(BaseURL + "/sign-in")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
-        .formParam("pin", "${pin}")
+        .formParam("_csrf", "#{csrf}")
+        .formParam("pin", "#{pin}")
         .check(regex("been named as an executor")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_430_ExecTwoDeclaration") {
 
@@ -86,7 +86,7 @@ object Probate_02_ExecTwo_Declaration {
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_440_ExecTwoDeclarationSubmit") {
 
@@ -94,13 +94,13 @@ object Probate_02_ExecTwo_Declaration {
         .post(BaseURL + "/co-applicant-declaration")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .formParam("agreement", "optionYes")
         .check(regex("made your legal declaration")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .exec(flushHttpCache)
   }

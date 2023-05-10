@@ -38,7 +38,7 @@ object Probate_01_ExecOne_Apply {
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_020_DeathCertificateSubmit") {
 
@@ -46,14 +46,14 @@ object Probate_01_ExecOne_Apply {
         .post(BaseURL + "/death-certificate")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .formParam("deathCertificate", "optionYes")
         .check(CsrfCheck.save)
         .check(regex("Is the original death certificate in English")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_025_DeathCertEnglishSubmit") {
 
@@ -61,14 +61,14 @@ object Probate_01_ExecOne_Apply {
         .post(BaseURL + "/death-certificate-english")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .formParam("deathCertificateInEnglish", "optionYes")
         .check(CsrfCheck.save)
         .check(regex("Did the person who died live permanently")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_030_DomicileSubmit") {
 
@@ -76,14 +76,14 @@ object Probate_01_ExecOne_Apply {
         .post(BaseURL + "/deceased-domicile")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .formParam("domicile", "optionYes")
         .check(CsrfCheck.save)
         .check(regex("1 January 2022")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_035_ExceptedEstatesDodSubmit") {
 
@@ -91,14 +91,14 @@ object Probate_01_ExecOne_Apply {
         .post(BaseURL + "/ee-deceased-dod")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .formParam("eeDeceasedDod", "optionYes")
         .check(CsrfCheck.save)
         .check(regex("Have you worked out")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_040_ExceptedEstatesValuedSubmit") {
 
@@ -106,14 +106,14 @@ object Probate_01_ExecOne_Apply {
         .post(BaseURL + "/ee-estate-valued")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .formParam("eeEstateValued", "optionYes")
         .check(CsrfCheck.save)
         .check(regex("Did the person who died leave a will")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_050_WillLeftSubmit") {
 
@@ -121,14 +121,14 @@ object Probate_01_ExecOne_Apply {
         .post(BaseURL + "/will-left")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .formParam("left", "optionYes")
         .check(CsrfCheck.save)
         .check(regex("Do you have the original will")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_060_WillOriginalSubmit") {
 
@@ -136,14 +136,14 @@ object Probate_01_ExecOne_Apply {
         .post(BaseURL + "/will-original")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .formParam("original", "optionYes")
         .check(CsrfCheck.save)
         .check(regex("Are you named as an executor")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_070_NamedExecutorSubmit") {
 
@@ -151,14 +151,14 @@ object Probate_01_ExecOne_Apply {
         .post(BaseURL + "/applicant-executor")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .formParam("executor", "optionYes")
         .check(CsrfCheck.save)
         .check(regex("Are all the executors able to make their own decisions")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_080_MentalCapacitySubmit") {
 
@@ -166,7 +166,7 @@ object Probate_01_ExecOne_Apply {
         .post(BaseURL + "/mental-capacity")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .formParam("mentalCapacity", "optionYes")
         .check(regex("a href=./get-case/([0-9]+).probateType=PA").find.saveAs("caseId"))
         .check(substring("IN PROGRESS")))
@@ -174,13 +174,13 @@ object Probate_01_ExecOne_Apply {
     }
 
     //WORKAROUND: Sometimes ElasticSearch isn't indexed quick enough with the new case, so the case will not be listed
-    //on the dashboard. If this is the case, wait 5 seconds and refresh the dashboard
+    //on the dashboard. If this is the case, wait 5.seconds and refresh the dashboard
 
     //UPDATE FEB 2023: this should no longer be required due to the implementation of https://tools.hmcts.net/jira/browse/DTSPB-3060
     //which has switched the call from ES to the CCD Data Store DB
     /*
 
-    .doIf("${caseId.isUndefined()}") {
+    .doIf("#{caseId.isUndefined()}") {
 
       pause(5)
 
@@ -206,7 +206,7 @@ object Probate_01_ExecOne_Apply {
         session
     }
 
-  .pause(MinThinkTime seconds, MaxThinkTime seconds)
+  .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     //At this point, the user will be redirected to their dashboard, listing the new application as 'In progress'
 
@@ -215,13 +215,13 @@ object Probate_01_ExecOne_Apply {
     group("Probate_090_ContinueApplication") {
 
       exec(http("ContinueApplication")
-        .get(BaseURL + "/get-case/${caseId}?probateType=PA")
+        .get(BaseURL + "/get-case/#{caseId}?probateType=PA")
         .headers(CommonHeader)
         .check(regex("Complete these steps")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_100_SectionOneStart") {
 
@@ -233,7 +233,7 @@ object Probate_01_ExecOne_Apply {
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_110_BilingualGrantSubmit") {
 
@@ -241,14 +241,14 @@ object Probate_01_ExecOne_Apply {
         .post(BaseURL + "/bilingual-gop")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .formParam("bilingual", "optionNo")
         .check(CsrfCheck.save)
         .check(regex("full name of the person who died")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_120_DeceasedNameSubmit") {
 
@@ -256,15 +256,15 @@ object Probate_01_ExecOne_Apply {
         .post(BaseURL + "/deceased-name")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
-        .formParam("firstName", "Perf${randomString}")
-        .formParam("lastName", "Test${randomString}")
+        .formParam("_csrf", "#{csrf}")
+        .formParam("firstName", "Perf#{randomString}")
+        .formParam("lastName", "Test#{randomString}")
         .check(CsrfCheck.save)
         .check(regex("What was their date of birth")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_130_DeceasedDOBSubmit") {
 
@@ -272,16 +272,16 @@ object Probate_01_ExecOne_Apply {
         .post(BaseURL + "/deceased-dob")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
-        .formParam("dob-day", "${dobDay}")
-        .formParam("dob-month", "${dobMonth}")
-        .formParam("dob-year", "${dobYear}")
+        .formParam("_csrf", "#{csrf}")
+        .formParam("dob-day", "#{dobDay}")
+        .formParam("dob-month", "#{dobMonth}")
+        .formParam("dob-year", "#{dobYear}")
         .check(CsrfCheck.save)
         .check(regex("What was the date that they died")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_140_DeceasedDODSubmit") {
 
@@ -289,16 +289,16 @@ object Probate_01_ExecOne_Apply {
         .post(BaseURL + "/deceased-dod")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
-        .formParam("dod-day", "${dodDay}")
-        .formParam("dod-month", "${dodMonth}")
-        .formParam("dod-year", "${dodYear}")
+        .formParam("_csrf", "#{csrf}")
+        .formParam("dod-day", "#{dodDay}")
+        .formParam("dod-month", "#{dodMonth}")
+        .formParam("dod-year", "#{dodYear}")
         .check(CsrfCheck.save)
         .check(regex("What was the permanent address")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_150_DeceasedAddressSubmit") {
 
@@ -306,19 +306,19 @@ object Probate_01_ExecOne_Apply {
         .post(BaseURL + "/deceased-address")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
-        .formParam("addressLine1", "1 Perf${randomString} Road")
+        .formParam("_csrf", "#{csrf}")
+        .formParam("addressLine1", "1 Perf#{randomString} Road")
         .formParam("addressLine2", "")
         .formParam("addressLine3", "")
-        .formParam("postTown", "Perf ${randomString} Town")
-        .formParam("newPostCode", "${randomPostcode}")
+        .formParam("postTown", "Perf #{randomString} Town")
+        .formParam("newPostCode", "#{randomPostcode}")
         .formParam("country", "")
         .check(CsrfCheck.save)
         .check(regex("die in England or Wales")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_160_DiedEngOrWalesSubmit") {
 
@@ -326,14 +326,14 @@ object Probate_01_ExecOne_Apply {
         .post(BaseURL + "/died-eng-or-wales")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .formParam("diedEngOrWales", "optionYes")
         .check(CsrfCheck.save)
         .check(regex("Do you have a death certificate")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_170_CertificateInterimSubmit") {
 
@@ -341,14 +341,14 @@ object Probate_01_ExecOne_Apply {
         .post(BaseURL + "/certificate-interim")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .formParam("deathCertificate", "optionDeathCertificate")
         .check(CsrfCheck.save)
         .check(regex("Did you complete IHT forms")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_175_EstateValuedSubmit") {
 
@@ -356,14 +356,14 @@ object Probate_01_ExecOne_Apply {
         .post(BaseURL + "/estate-valued")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .formParam("estateValueCompleted", "optionYes")
         .check(CsrfCheck.save)
         .check(regex("Which IHT forms")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_180_EstateFormSubmit") {
 
@@ -371,14 +371,14 @@ object Probate_01_ExecOne_Apply {
         .post(BaseURL + "/estate-form")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .formParam("ihtFormEstateId", "optionIHT400421")
         .check(CsrfCheck.save)
         .check(regex("What are the values of the estate")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_190_EstateValuesSubmit") {
 
@@ -386,7 +386,7 @@ object Probate_01_ExecOne_Apply {
         .post(BaseURL + "/probate-estate-values")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .formParam("grossValueField", "900000")
         .formParam("netValueField", "800000")
         .check(CsrfCheck.save)
@@ -394,7 +394,7 @@ object Probate_01_ExecOne_Apply {
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_200_DeceasedAliasSubmit") {
 
@@ -402,14 +402,14 @@ object Probate_01_ExecOne_Apply {
         .post(BaseURL + "/deceased-alias")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .formParam("alias", "optionNo")
         .check(CsrfCheck.save)
         .check(regex("get married or enter into a civil partnership")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_210_DeceasedMarriedSubmit") {
 
@@ -417,14 +417,14 @@ object Probate_01_ExecOne_Apply {
         .post(BaseURL + "/deceased-married")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .formParam("married", "optionNo")
         .check(CsrfCheck.save)
         .check(regex("Does the will have any damage or marks")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_215_WillDamagesSubmit") {
 
@@ -432,7 +432,7 @@ object Probate_01_ExecOne_Apply {
         .post(BaseURL + "/will-has-damage")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .formParam("otherDamageDescription", "")
         .formParam("willHasVisibleDamage", "optionNo")
         .check(CsrfCheck.save)
@@ -440,7 +440,7 @@ object Probate_01_ExecOne_Apply {
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_220_WillCodicilsSubmit") {
 
@@ -448,14 +448,14 @@ object Probate_01_ExecOne_Apply {
         .post(BaseURL + "/will-codicils")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .formParam("codicils", "optionYes")
         .check(CsrfCheck.save)
         .check(regex("How many codicils were made to the will")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_230_WillNumberSubmit") {
 
@@ -463,13 +463,13 @@ object Probate_01_ExecOne_Apply {
         .post(BaseURL + "/codicils-number")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .formParam("codicilsNumber", "1")
         .check(regex("Do the codicils have any damage or marks")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_235_CodicilsDamageSubmit") {
 
@@ -477,14 +477,14 @@ object Probate_01_ExecOne_Apply {
         .post(BaseURL + "/codicils-have-damage")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .formParam("otherDamageDescription", "")
         .formParam("codicilsHasVisibleDamage", "optionNo")
         .check(regex("Did the person who died leave any other written wishes")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_238_WrittenWishesSubmit") {
 
@@ -492,14 +492,14 @@ object Probate_01_ExecOne_Apply {
         .post(BaseURL + "/deceased-written-wishes")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .formParam("deceasedWrittenWishes", "optionNo")
         .check(regex("Complete these steps"))
         .check(regex("""1.</span> Tell us about the person who has died\n    </h2>\n    \n        <span class="govuk-tag task-completed">Completed</span>""")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
   val ProbateApplicationSection2 =
 
@@ -513,7 +513,7 @@ object Probate_01_ExecOne_Apply {
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_250_ApplicantNameSubmit") {
 
@@ -521,15 +521,15 @@ object Probate_01_ExecOne_Apply {
         .post(BaseURL + "/applicant-name")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
-        .formParam("firstName", "Perf${randomString}")
-        .formParam("lastName", "ExecOne${randomString}")
+        .formParam("_csrf", "#{csrf}")
+        .formParam("firstName", "Perf#{randomString}")
+        .formParam("lastName", "ExecOne#{randomString}")
         .check(CsrfCheck.save)
         .check(regex("exactly what appears on the will")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_260_ApplicantNameAsOnWillSubmit") {
 
@@ -537,14 +537,14 @@ object Probate_01_ExecOne_Apply {
         .post(BaseURL + "/applicant-name-as-on-will")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .formParam("nameAsOnTheWill", "optionYes")
         .check(CsrfCheck.save)
         .check(regex("What is your phone number")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_270_ApplicantPhoneSubmit") {
 
@@ -552,14 +552,14 @@ object Probate_01_ExecOne_Apply {
         .post(BaseURL + "/applicant-phone")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .formParam("phoneNumber", "07000000000")
         .check(CsrfCheck.save)
         .check(regex("What is your address")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_280_ApplicantAddressSubmit") {
 
@@ -567,19 +567,19 @@ object Probate_01_ExecOne_Apply {
         .post(BaseURL + "/applicant-address")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
-        .formParam("addressLine1", "2 Perf${randomString} Road")
+        .formParam("_csrf", "#{csrf}")
+        .formParam("addressLine1", "2 Perf#{randomString} Road")
         .formParam("addressLine2", "")
         .formParam("addressLine3", "")
-        .formParam("postTown", "Perf ${randomString} Town")
-        .formParam("newPostCode", "${randomPostcode}")
+        .formParam("postTown", "Perf #{randomString} Town")
+        .formParam("newPostCode", "#{randomPostcode}")
         .formParam("country", "")
         .check(CsrfCheck.save)
         .check(regex("How many executors are named")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_290_ExecutorsNumberSubmit") {
 
@@ -587,14 +587,14 @@ object Probate_01_ExecOne_Apply {
         .post(BaseURL + "/executors-number")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .formParam("executorsNumber", "2")
         .check(CsrfCheck.save)
         .check(regex("What are the executors")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_300_ExecutorsNamesSubmit") {
 
@@ -602,14 +602,14 @@ object Probate_01_ExecOne_Apply {
         .post(BaseURL + "/executors-names")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .formParam("executorName[0]", "Perf Exec Two")
         .check(CsrfCheck.save)
         .check(regex("Are all the executors alive")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_310_ExecutorsAllAliveSubmit") {
 
@@ -617,14 +617,14 @@ object Probate_01_ExecOne_Apply {
         .post(BaseURL + "/executors-all-alive")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .formParam("allalive", "optionYes")
         .check(CsrfCheck.save)
         .check(regex("Will any of the other executors be dealing with the estate")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_320_OtherExecutorsSubmit") {
 
@@ -632,14 +632,14 @@ object Probate_01_ExecOne_Apply {
         .post(BaseURL + "/other-executors-applying")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .formParam("otherExecutorsApplying", "optionYes")
         .check(CsrfCheck.save)
         .check(regex("Which executors will be dealing with the estate")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_330_ExecutorsDealingSubmit") {
 
@@ -647,14 +647,14 @@ object Probate_01_ExecOne_Apply {
         .post(BaseURL + "/executors-dealing-with-estate")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .formParam("executorsApplying[]", "Perf Exec Two")
         .check(CsrfCheck.save)
         .check(regex("Do any of these executors now have a different name")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_340_ExecutorsAliasSubmit") {
 
@@ -662,14 +662,14 @@ object Probate_01_ExecOne_Apply {
         .post(BaseURL + "/executors-alias")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .formParam("alias", "optionNo")
         .check(CsrfCheck.save)
         .check(regex("email address and mobile number")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_350_ExecTwoContactDetailsSubmit") {
 
@@ -677,15 +677,15 @@ object Probate_01_ExecOne_Apply {
         .post(BaseURL + "/executor-contact-details/1")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
-        .formParam("email", "exec-two@perftest${randomString}.com")
+        .formParam("_csrf", "#{csrf}")
+        .formParam("email", "exec-two@perftest#{randomString}.com")
         .formParam("mobile", "07000000001")
         .check(CsrfCheck.save)
         .check(regex("permanent address")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_360_ExecTwoAddressSubmit") {
 
@@ -693,19 +693,19 @@ object Probate_01_ExecOne_Apply {
         .post(BaseURL + "/executor-address/1")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
-        .formParam("addressLine1", "3 Perf${randomString} Road")
+        .formParam("_csrf", "#{csrf}")
+        .formParam("addressLine1", "3 Perf#{randomString} Road")
         .formParam("addressLine2", "")
         .formParam("addressLine3", "")
-        .formParam("postTown", "Perf ${randomString} Town")
-        .formParam("newPostCode", "${randomPostcode}")
+        .formParam("postTown", "Perf #{randomString} Town")
+        .formParam("newPostCode", "#{randomPostcode}")
         .formParam("country", "")
         //PCQ (Equality/diversity survey) might pop up at this point, so cater for either outcome in the text check
         .check(regex("2.</span> Give details about the executors(?s).*?<span class=.govuk-tag task-completed.>Completed</span>|Equality and diversity questions")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
   val ProbateApplicationSection3 =
 
@@ -718,7 +718,7 @@ object Probate_01_ExecOne_Apply {
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_380_Declaration") {
 
@@ -730,7 +730,7 @@ object Probate_01_ExecOne_Apply {
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_390_DeclarationSubmit") {
 
@@ -738,14 +738,14 @@ object Probate_01_ExecOne_Apply {
         .post(BaseURL + "/declaration")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .formParam("declarationCheckbox", "true")
         .check(CsrfCheck.save)
         .check(regex("Notify the other executors")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_400_ExecutorsInviteSubmit") {
 
@@ -753,13 +753,13 @@ object Probate_01_ExecOne_Apply {
         .post(BaseURL + "/executors-invite")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .check(regex("Complete these steps"))
         .check(regex("Not declared")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     //Get the invite ID associated with the second executor
 
@@ -772,6 +772,6 @@ object Probate_01_ExecOne_Apply {
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
 }

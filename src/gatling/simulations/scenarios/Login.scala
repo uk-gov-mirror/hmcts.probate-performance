@@ -21,18 +21,18 @@ object Login {
 
     group("Probate_000_Login") {
       exec(http("Login")
-        .post(IdamURL + "/login?ui_locales=en&response_type=code&state=${state}&client_id=probate&redirect_uri=" + BaseURL + "/oauth2/callback")
+        .post(IdamURL + "/login?ui_locales=en&response_type=code&state=#{state}&client_id=probate&redirect_uri=" + BaseURL + "/oauth2/callback")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("username", "${emailAddress}")
-        .formParam("password", "${password}")
+        .formParam("username", "#{emailAddress}")
+        .formParam("password", "#{password}")
         .formParam("save", "Sign in")
         .formParam("selfRegistrationEnabled", "true")
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .check(regex("Apply for probate|Probate applications")))
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
 
 }

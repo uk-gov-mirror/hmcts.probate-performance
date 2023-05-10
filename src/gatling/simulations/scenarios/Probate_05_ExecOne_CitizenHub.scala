@@ -21,12 +21,12 @@ object Probate_05_ExecOne_CitizenHub {
     group("Probate_600_LoadCitizenHub") {
 
       exec(http("LoadCitizenHub")
-        .get(BaseURL + "/get-case/${caseId}?probateType=PA")
+        .get(BaseURL + "/get-case/#{caseId}?probateType=PA")
         .headers(CommonHeader)
         .check(substring("hmcts-progress-bar__icon--complete").count.in(1, 4))) //Application received or Grant Issued
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
 }

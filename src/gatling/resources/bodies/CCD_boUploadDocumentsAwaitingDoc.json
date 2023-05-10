@@ -6,10 +6,10 @@
           "DocumentType": "will",
           "Comment": "Will document upload",
           "DocumentLink": {
-            "document_url": "${DocumentURL}",
-            "document_binary_url": "${DocumentURL}/binary",
+            "document_url": "#{DocumentURL}",
+            "document_binary_url": "#{DocumentURL}/binary",
             "document_filename": "2MB.pdf",
-            "document_hash": "${hashToken}"
+            "document_hash": "#{hashToken}"
           }
         },
         "id": null
@@ -21,6 +21,6 @@
     "summary": "",
     "description": ""
   },
-  "event_token": "${eventToken}",
+  "event_token": "#{eventToken}",
   "ignore_warning": false
 }

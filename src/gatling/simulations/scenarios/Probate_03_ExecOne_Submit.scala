@@ -23,14 +23,14 @@ object Probate_03_ExecOne_Submit {
     group("Probate_450_GetCase") {
 
       exec(http("GetCase")
-        .get(BaseURL + "/get-case/${caseId}?probateType=PA")
+        .get(BaseURL + "/get-case/#{caseId}?probateType=PA")
         .headers(CommonHeader)
         .check(regex("Complete these steps"))
         .check(regex("""3.</span> Check your answers and make your legal declaration\n    </h2>\n    \n        <span class="govuk-tag task-completed">Completed</span>""")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_460_SectionFourStart") {
 
@@ -42,7 +42,7 @@ object Probate_03_ExecOne_Submit {
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_470_ExtraCopiesSubmit") {
 
@@ -50,14 +50,14 @@ object Probate_03_ExecOne_Submit {
         .post(BaseURL + "/copies-uk")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .formParam("uk", "0")
         .check(CsrfCheck.save)
         .check(regex("have assets outside the UK")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_480_AssetsOverseasSubmit") {
 
@@ -65,13 +65,13 @@ object Probate_03_ExecOne_Submit {
         .post(BaseURL + "/assets-overseas")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .formParam("assetsoverseas", "optionNo")
         .check(regex("Check your answers")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_490_TaskList") {
 
@@ -83,7 +83,7 @@ object Probate_03_ExecOne_Submit {
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_500_SectionFiveStart") {
 
@@ -95,7 +95,7 @@ object Probate_03_ExecOne_Submit {
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_510_PaymentBreakdownSubmit") {
 
@@ -103,19 +103,19 @@ object Probate_03_ExecOne_Submit {
         .post(BaseURL + "/payment-breakdown")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .check(regex("Enter card details"))
         .check(css("input[name='csrfToken']", "value").saveAs("csrf"))
         .check(css("input[name='chargeId']", "value").saveAs("ChargeId")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_520_CheckCard") {
 
       exec(http("CheckCard")
-        .post(PaymentURL + "/check_card/${ChargeId}")
+        .post(PaymentURL + "/check_card/#{ChargeId}")
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("cardNo", "4444333322221111")
@@ -123,7 +123,7 @@ object Probate_03_ExecOne_Submit {
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     // Gov Pay does strict postcode validation, so won't accept all postcodes in the format XXN NXX
     // Therefore, not using the postcode random function as payments with an invalid postcode fail
@@ -131,43 +131,43 @@ object Probate_03_ExecOne_Submit {
     .group("Probate_530_CardDetailsSubmit") {
 
       exec(http("CardDetailsSubmit")
-        .post(PaymentURL + "/card_details/${ChargeId}")
+        .post(PaymentURL + "/card_details/#{ChargeId}")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("chargeId", "${ChargeId}")
-        .formParam("csrfToken", "${csrf}")
+        .formParam("chargeId", "#{ChargeId}")
+        .formParam("csrfToken", "#{csrf}")
         .formParam("cardNo", "4444333322221111")
         .formParam("expiryMonth", "01")
         .formParam("expiryYear", "25")
-        .formParam("cardholderName", "Perf Tester ${randomString}")
+        .formParam("cardholderName", "Perf Tester #{randomString}")
         .formParam("cvc", "123")
         .formParam("addressCountry", "GB")
-        .formParam("addressLine1", "1 Perf${randomString} Road")
+        .formParam("addressLine1", "1 Perf#{randomString} Road")
         .formParam("addressLine2", "")
-        .formParam("addressCity", "Perf ${randomString} Town")
+        .formParam("addressCity", "Perf #{randomString} Town")
         .formParam("addressPostcode", "TS1 1ST") //Common.getPostcode()
-        .formParam("email", "probate@perftest${randomString}.com")
+        .formParam("email", "probate@perftest#{randomString}.com")
         .check(regex("Confirm your payment"))
         .check(css("input[name='csrfToken']", "value").saveAs("csrf")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_540_CardDetailsConfirmSubmit") {
 
       exec(http("CardDetailsConfirmSubmit")
-        .post(PaymentURL + "/card_details/${ChargeId}/confirm")
+        .post(PaymentURL + "/card_details/#{ChargeId}/confirm")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("chargeId", "${ChargeId}")
-        .formParam("csrfToken", "${csrf}")
+        .formParam("chargeId", "#{ChargeId}")
+        .formParam("csrfToken", "#{csrf}")
         .check(CsrfCheck.save)
         .check(substring("Payment received")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_550_PaymentStatusSubmit") {
 
@@ -175,12 +175,12 @@ object Probate_03_ExecOne_Submit {
         .post(BaseURL + "/payment-status")
         .headers(CommonHeader)
         .headers(PostHeader)
-        .formParam("_csrf", "${csrf}")
+        .formParam("_csrf", "#{csrf}")
         .check(substring("Application submitted")))
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_570_DownloadCoverSheetPDF") {
 
@@ -191,7 +191,7 @@ object Probate_03_ExecOne_Submit {
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_580_DownloadCheckAnswersPDF") {
 
@@ -202,7 +202,7 @@ object Probate_03_ExecOne_Submit {
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Probate_590_DownloadDeclarationPDF") {
 
@@ -213,6 +213,6 @@ object Probate_03_ExecOne_Submit {
 
     }
 
-    .pause(MinThinkTime seconds, MaxThinkTime seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
 }
