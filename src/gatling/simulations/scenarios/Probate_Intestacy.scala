@@ -293,37 +293,67 @@ object Probate_Intestacy {
         .formParam("_csrf", "#{csrf}")
         .formParam("deathCertificate", "optionDeathCertificate")
         .check(CsrfCheck.save)
-        .check(regex("Did you complete IHT forms")))
+        .check(regex("report the estate value to HMRC")))
 
     }
 
     .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
-    .group("Intestacy_160_EstateValuedSubmit") {
+    .group("Intestacy_155_CalcCheckSubmit") {
 
-      exec(http("EstateValuedSubmit")
-        .post(BaseURL + "/estate-valued")
+      exec(http("CalcCheckSubmit")
+        .post(BaseURL + "/calc-check")
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "#{csrf}")
-        .formParam("estateValueCompleted", "optionYes")
+        .formParam("calcCheckCompleted", "optionYes")
         .check(CsrfCheck.save)
-        .check(regex("Which IHT forms")))
+        .check(regex("Which forms did you submit to HMRC")))
 
     }
 
     .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
-    .group("Intestacy_170_EstateFormSubmit") {
+    .group("Intestacy_160_HMRCFormsSubmit") {
 
-      exec(http("EstateFormSubmit")
-        .post(BaseURL + "/estate-form")
+      exec(http("HMRCFormsSubmit")
+        .post(BaseURL + "/new-submitted-to-hmrc")
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "#{csrf}")
-        .formParam("ihtFormEstateId", "optionIHT400421")
+        .formParam("ihtFormEstateId", "optionIHT400")
         .check(CsrfCheck.save)
-        .check(regex("What are the values of the estate")))
+        .check(regex("Have you received a letter from HMRC")))
+
+    }
+
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
+
+    .group("Intestacy_165_HMRCLetterSubmit") {
+
+      exec(http("HMRCLetterSubmit")
+        .post(BaseURL + "/hmrc-letter")
+        .headers(CommonHeader)
+        .headers(PostHeader)
+        .formParam("_csrf", "#{csrf}")
+        .formParam("hmrcLetterId", "optionYes")
+        .check(CsrfCheck.save)
+        .check(regex("Enter the unique probate code")))
+
+    }
+
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
+
+    .group("Intestacy_170_HMRCCodeSubmit") {
+
+      exec(http("HMRCCodeSubmit")
+        .post(BaseURL + "/unique-probate-code")
+        .headers(CommonHeader)
+        .headers(PostHeader)
+        .formParam("_csrf", "#{csrf}")
+        .formParam("uniqueProbateCodeId", "CTS 040523 1104 3tpp s8e9")
+        .check(CsrfCheck.save)
+        .check(regex("What are the values of assets")))
 
     }
 
