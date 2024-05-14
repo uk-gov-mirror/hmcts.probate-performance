@@ -168,39 +168,17 @@ object Probate_Intestacy {
         .headers(PostHeader)
         .formParam("_csrf", "#{csrf}")
         .formParam("otherApplicants", "optionNo")
-        .check(regex("a href=./get-case/([0-9]+).probateType=INTESTACY").find.saveAs("caseId"))
-        .check(substring("IN PROGRESS")))
-
-    }
-
-      /*
-    .exec {
-      session =>
-        println("APPLICANT EMAIL: " + session("emailAddress").as[String])
-        println("CASE ID: " + session("caseId").as[String])
-        println("APPLICATION TYPE: INTESTACY")
-        session
-    }
-       */
-
-    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
-
-    //At this point, the user will be redirected to their dashboard, listing the new application as 'In progress'
-
-  val IntestacyApplicationSection1 =
-
-    group("Intestacy_090_ContinueApplication") {
-
-      exec(http("ContinueApplication")
-        .get(BaseURL + "/get-case/#{caseId}?probateType=INTESTACY")
-        .headers(CommonHeader)
         .check(regex("Complete these steps")))
 
     }
 
     .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
-    .group("Intestacy_100_SectionOneStart") {
+  //Update May 2024: The user is no longer shown the dashboard, but will now be taken directly to the task-list
+
+  val IntestacyApplicationSection1 =
+
+    group("Intestacy_100_SectionOneStart") {
 
       exec(http("SectionOneStart")
         .get(BaseURL + "/bilingual-gop")

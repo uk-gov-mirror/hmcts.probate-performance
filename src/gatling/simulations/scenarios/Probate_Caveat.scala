@@ -134,39 +134,7 @@ object Probate_Caveat {
         .check(regex("known by any other names")))
 
     }
-/*
-    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
-    .group("Caveat_080_DeceasedDobKnownSubmit") {
-
-      exec(http("DeceasedDobKnownSubmit")
-        .post(BaseURL + "/caveats/deceased-dob-known")
-        .headers(CommonHeader)
-        .headers(PostHeader)
-        .formParam("_csrf", "#{csrf}")
-        .formParam("dobknown", "optionYes")
-        .check(CsrfCheck.save)
-        .check(regex("What was their date of birth")))
-
-    }
-
-    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
-
-    .group("Caveat_090_DeceasedDobSubmit") {
-
-      exec(http("DeceasedDobSubmit")
-        .post(BaseURL + "/caveats/deceased-dob")
-        .headers(CommonHeader)
-        .headers(PostHeader)
-        .formParam("_csrf", "#{csrf}")
-        .formParam("dob-day", Common.getDay())
-        .formParam("dob-month", Common.getMonth())
-        .formParam("dob-year", Common.getDobYear())
-        .check(CsrfCheck.save)
-        .check(regex("known by any other names")))
-
-    }
-*/
     .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     .group("Caveat_100_DeceasedAliasSubmit") {
@@ -297,14 +265,6 @@ object Probate_Caveat {
         .check(status.saveAs("statusValue")))
 
     }
-
-      /*
-    .exec {
-      session =>
-        println("CAVEAT REFERENCE NO: " + session("referenceNo").as[String])
-        session
-    }
-       */
 
     .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 

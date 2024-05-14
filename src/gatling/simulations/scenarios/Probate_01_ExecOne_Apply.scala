@@ -168,62 +168,17 @@ object Probate_01_ExecOne_Apply {
         .headers(PostHeader)
         .formParam("_csrf", "#{csrf}")
         .formParam("mentalCapacity", "optionYes")
-        .check(regex("a href=./get-case/([0-9]+).probateType=PA").find.saveAs("caseId"))
-        .check(substring("IN PROGRESS")))
-
-    }
-
-    //WORKAROUND: Sometimes ElasticSearch isn't indexed quick enough with the new case, so the case will not be listed
-    //on the dashboard. If this is the case, wait 5.seconds and refresh the dashboard
-
-    //UPDATE FEB 2023: this should no longer be required due to the implementation of https://tools.hmcts.net/jira/browse/DTSPB-3060
-    //which has switched the call from ES to the CCD Data Store DB
-    /*
-
-    .doIf("#{caseId.isUndefined()}") {
-
-      pause(5)
-
-      .group("Probate_085_RefreshDashboard") {
-
-        exec(http("RefreshDashboard")
-          .get(BaseURL + "/dashboard")
-          .headers(CommonHeader)
-          .header("sec-fetch-site", "none")
-          .check(regex("a href=./get-case/([0-9]+).probateType=PA").find.saveAs("caseId"))
-          .check(regex("In progress")))
-
-      }
-
-    }
-     */
-
-    .exec {
-      session =>
-        println("EXEC1 EMAIL: " + session("emailAddress").as[String])
-        println("CASE ID: " + session("caseId").as[String])
-        println("APPLICATION TYPE: PA")
-        session
-    }
-
-  .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
-
-    //At this point, the user will be redirected to their dashboard, listing the new application as 'In progress'
-
-  val ProbateApplicationSection1 =
-
-    group("Probate_090_ContinueApplication") {
-
-      exec(http("ContinueApplication")
-        .get(BaseURL + "/get-case/#{caseId}?probateType=PA")
-        .headers(CommonHeader)
         .check(regex("Complete these steps")))
 
     }
 
     .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
-    .group("Probate_100_SectionOneStart") {
+  //Update May 2024: The user is no longer shown the dashboard, but will now be taken directly to the task-list
+
+  val ProbateApplicationSection1 =
+
+    group("Probate_100_SectionOneStart") {
 
       exec(http("SectionOneStart")
         .get(BaseURL + "/bilingual-gop")
