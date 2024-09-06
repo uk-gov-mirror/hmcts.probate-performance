@@ -66,7 +66,8 @@ class Probate_Simulation extends Simulation {
   val httpProtocol = Environment.HttpProtocol
     .baseUrl(BaseURL)
     .doNotTrackHeader("1")
-    .inferHtmlResources(DenyList("https://card.payments.service.gov.uk/.*", "https://webchat-client.training.ctsc.hmcts.net/.*"))
+    .inferHtmlResources(DenyList("https://card.payments.service.gov.uk/.*", "https://webchat-client.training.ctsc.hmcts.net/.*",
+      "https://webchat-client.pp.ctsc.hmcts.net/.*"))
     .silentResources
 
   before{

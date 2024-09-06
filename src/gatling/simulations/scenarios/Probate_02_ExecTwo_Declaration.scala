@@ -69,6 +69,7 @@ object Probate_02_ExecTwo_Declaration {
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "#{csrf}")
+        .formParam("isSaveAndClose", "false")
         .formParam("pin", "#{pin}")
         .check(regex("been named as an executor")))
 
@@ -95,6 +96,7 @@ object Probate_02_ExecTwo_Declaration {
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "#{csrf}")
+        .formParam("isSaveAndClose", "false")
         .formParam("agreement", "optionYes")
         .check(regex("made your legal declaration")))
 
