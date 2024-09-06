@@ -51,6 +51,7 @@ object Probate_03_ExecOne_Submit {
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "#{csrf}")
+        .formParam("isSaveAndClose", "false")
         .formParam("uk", "0")
         .check(CsrfCheck.save)
         .check(regex("have assets outside the UK")))
@@ -66,6 +67,7 @@ object Probate_03_ExecOne_Submit {
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "#{csrf}")
+        .formParam("isSaveAndClose", "false")
         .formParam("assetsoverseas", "optionNo")
         .check(regex("Check your answers")))
 
@@ -104,6 +106,7 @@ object Probate_03_ExecOne_Submit {
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "#{csrf}")
+        .formParam("isSaveAndClose", "false")
         .check(regex("Enter card details"))
         .check(css("input[name='csrfToken']", "value").saveAs("csrf"))
         .check(css("input[name='chargeId']", "value").saveAs("ChargeId")))
@@ -176,6 +179,7 @@ object Probate_03_ExecOne_Submit {
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "#{csrf}")
+        .formParam("isSaveAndClose", "false")
         .check(substring("Application submitted")))
 
     }
