@@ -555,7 +555,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("firstName", "Perf#{randomString}")
         .formParam("lastName", "ExecOne#{randomString}")
         .check(CsrfCheck.save)
-        .check(regex("exactly what appears on the will")))
+        .check(regex("exactly how your name is written in the will")))
 
     }
 
