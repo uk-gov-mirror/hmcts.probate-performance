@@ -17,7 +17,7 @@ object Logout {
       exec(http("Logout")
         .get(BaseURL + "/sign-out")
         .headers(CommonHeader)
-        .check(regex("signed out")))
+        .check(substring("signed out")))
 
     }
 

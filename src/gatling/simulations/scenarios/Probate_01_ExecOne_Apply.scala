@@ -24,8 +24,9 @@ object Probate_01_ExecOne_Apply {
       "dobMonth" -> Common.getMonth(),
       "dobYear" -> Common.getDobYear(),
       "dodDay" -> Common.getDay(),
-      "dodMonth" -> "03", //Removing random DOD to test Excepted Estates (requires DOD after 01/01/2022)
-      "dodYear" -> "2022",
+      "dodMonth" -> Common.getMonth(),
+      "dodYear" -> Common.getDodYear(),
+      "cardExpiryYear" -> Common.getCardExpiryYear(),
       "randomPostcode" -> Common.getPostcode()))
 
     .group("Probate_010_StartEligibility") {
@@ -34,7 +35,7 @@ object Probate_01_ExecOne_Apply {
         .get(BaseURL + "/death-certificate")
         .headers(CommonHeader)
         .check(CsrfCheck.save)
-        .check(regex("Do you have the death certificate")))
+        .check(substring("Do you have the death certificate")))
 
     }
 
@@ -50,7 +51,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("isSaveAndClose", "false")
         .formParam("deathCertificate", "optionYes")
         .check(CsrfCheck.save)
-        .check(regex("Is the original death certificate in English")))
+        .check(substring("Is the original death certificate in English")))
 
     }
 
@@ -66,7 +67,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("isSaveAndClose", "false")
         .formParam("deathCertificateInEnglish", "optionYes")
         .check(CsrfCheck.save)
-        .check(regex("Did the person who died live permanently")))
+        .check(substring("Did the person who died live permanently")))
 
     }
 
@@ -82,7 +83,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("isSaveAndClose", "false")
         .formParam("domicile", "optionYes")
         .check(CsrfCheck.save)
-        .check(regex("1 January 2022")))
+        .check(substring("1 January 2022")))
 
     }
 
@@ -98,7 +99,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("isSaveAndClose", "false")
         .formParam("eeDeceasedDod", "optionYes")
         .check(CsrfCheck.save)
-        .check(regex("Have you worked out")))
+        .check(substring("Have you worked out")))
 
     }
 
@@ -114,7 +115,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("isSaveAndClose", "false")
         .formParam("eeEstateValued", "optionYes")
         .check(CsrfCheck.save)
-        .check(regex("Did the person who died leave a will")))
+        .check(substring("Did the person who died leave a will")))
 
     }
 
@@ -130,7 +131,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("isSaveAndClose", "false")
         .formParam("left", "optionYes")
         .check(CsrfCheck.save)
-        .check(regex("Do you have the original will")))
+        .check(substring("Do you have the original will")))
 
     }
 
@@ -146,7 +147,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("isSaveAndClose", "false")
         .formParam("original", "optionYes")
         .check(CsrfCheck.save)
-        .check(regex("Are you named as an executor")))
+        .check(substring("Are you named as an executor")))
 
     }
 
@@ -162,7 +163,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("isSaveAndClose", "false")
         .formParam("executor", "optionYes")
         .check(CsrfCheck.save)
-        .check(regex("Are all the executors able to make their own decisions")))
+        .check(substring("Are all the executors able to make their own decisions")))
 
     }
 
@@ -177,7 +178,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("_csrf", "#{csrf}")
         .formParam("isSaveAndClose", "false")
         .formParam("mentalCapacity", "optionYes")
-        .check(regex("Complete these steps")))
+        .check(substring("Complete these steps")))
 
     }
 
@@ -193,7 +194,7 @@ object Probate_01_ExecOne_Apply {
         .get(BaseURL + "/bilingual-gop")
         .headers(CommonHeader)
         .check(CsrfCheck.save)
-        .check(regex("Do you require a bilingual grant")))
+        .check(substring("Do you require a bilingual grant")))
 
     }
 
@@ -209,7 +210,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("isSaveAndClose", "false")
         .formParam("bilingual", "optionNo")
         .check(CsrfCheck.save)
-        .check(regex("full name of the person who died")))
+        .check(substring("full name of the person who died")))
 
     }
 
@@ -226,7 +227,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("firstName", "Perf#{randomString}")
         .formParam("lastName", "Test#{randomString}")
         .check(CsrfCheck.save)
-        .check(regex("exactly how the name is written on the will")))
+        .check(substring("exactly how the name is written on the will")))
 
     }
 
@@ -242,7 +243,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("isSaveAndClose", "false")
         .formParam("nameAsOnTheWill", "optionYes")
         .check(CsrfCheck.save)
-        .check(regex("What was their date of birth")))
+        .check(substring("What was their date of birth")))
 
     }
 
@@ -260,7 +261,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("dob-month", "#{dobMonth}")
         .formParam("dob-year", "#{dobYear}")
         .check(CsrfCheck.save)
-        .check(regex("What was the date that they died")))
+        .check(substring("What was the date that they died")))
 
     }
 
@@ -278,7 +279,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("dod-month", "#{dodMonth}")
         .formParam("dod-year", "#{dodYear}")
         .check(CsrfCheck.save)
-        .check(regex("What was the permanent address")))
+        .check(substring("permanent address at the time of their death")))
 
     }
 
@@ -299,7 +300,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("newPostCode", "#{randomPostcode}")
         .formParam("country", "")
         .check(CsrfCheck.save)
-        .check(regex("die in England or Wales")))
+        .check(substring("die in England or Wales")))
 
     }
 
@@ -315,7 +316,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("isSaveAndClose", "false")
         .formParam("diedEngOrWales", "optionYes")
         .check(CsrfCheck.save)
-        .check(regex("Do you have a death certificate")))
+        .check(substring("Do you have a death certificate")))
 
     }
 
@@ -331,7 +332,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("isSaveAndClose", "false")
         .formParam("deathCertificate", "optionDeathCertificate")
         .check(CsrfCheck.save)
-        .check(regex("report the estate value to HMRC")))
+        .check(substring("report the estate value to HMRC")))
 
     }
 
@@ -347,7 +348,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("isSaveAndClose", "false")
         .formParam("calcCheckCompleted", "optionYes")
         .check(CsrfCheck.save)
-        .check(regex("Which forms did you submit to HMRC")))
+        .check(substring("Which forms did you submit to HMRC")))
 
     }
 
@@ -363,7 +364,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("isSaveAndClose", "false")
         .formParam("ihtFormEstateId", "optionIHT400")
         .check(CsrfCheck.save)
-        .check(regex("Have you received a letter from HMRC")))
+        .check(substring("Have you received a letter from HMRC")))
 
     }
 
@@ -379,7 +380,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("isSaveAndClose", "false")
         .formParam("hmrcLetterId", "optionYes")
         .check(CsrfCheck.save)
-        .check(regex("Enter the unique probate code")))
+        .check(substring("Enter the unique probate code")))
 
     }
 
@@ -395,7 +396,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("isSaveAndClose", "false")
         .formParam("uniqueProbateCodeId", "CTS 040523 1104 3tpp s8e9")
         .check(CsrfCheck.save)
-        .check(regex("What are the values of assets")))
+        .check(substring("What are the values of assets")))
 
     }
 
@@ -412,7 +413,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("grossValueField", "900000")
         .formParam("netValueField", "800000")
         .check(CsrfCheck.save)
-        .check(regex("have assets in another name")))
+        .check(substring("have assets in another name")))
 
     }
 
@@ -428,7 +429,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("isSaveAndClose", "false")
         .formParam("alias", "optionNo")
         .check(CsrfCheck.save)
-        .check(regex("get married or enter into a civil partnership")))
+        .check(substring("get married or enter into a civil partnership")))
 
     }
 
@@ -444,7 +445,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("isSaveAndClose", "false")
         .formParam("married", "optionNo")
         .check(CsrfCheck.save)
-        .check(regex("Does the will have any damage or marks")))
+        .check(substring("Does the will have any damage or marks")))
 
     }
 
@@ -461,7 +462,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("otherDamageDescription", "")
         .formParam("willHasVisibleDamage", "optionNo")
         .check(CsrfCheck.save)
-        .check(regex("Were any codicils made to the will")))
+        .check(substring("Were any codicils made to the will")))
 
     }
 
@@ -477,7 +478,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("isSaveAndClose", "false")
         .formParam("codicils", "optionYes")
         .check(CsrfCheck.save)
-        .check(regex("How many codicils were made to the will")))
+        .check(substring("How many codicils were made to the will")))
 
     }
 
@@ -492,7 +493,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("_csrf", "#{csrf}")
         .formParam("isSaveAndClose", "false")
         .formParam("codicilsNumber", "1")
-        .check(regex("Do the codicils have any damage or marks")))
+        .check(substring("Do the codicils have any damage or marks")))
 
     }
 
@@ -508,7 +509,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("isSaveAndClose", "false")
         .formParam("otherDamageDescription", "")
         .formParam("codicilsHasVisibleDamage", "optionNo")
-        .check(regex("Did the person who died leave any other written wishes")))
+        .check(substring("Did the person who died leave any other written wishes")))
 
     }
 
@@ -523,8 +524,8 @@ object Probate_01_ExecOne_Apply {
         .formParam("_csrf", "#{csrf}")
         .formParam("isSaveAndClose", "false")
         .formParam("deceasedWrittenWishes", "optionNo")
-        .check(regex("Complete these steps"))
-        .check(regex("""1.</span> Tell us about the person who has died\n    </h2>\n    \n        <span class="govuk-tag task-completed">Completed</span>""")))
+        .check(substring("Complete these steps"))
+        .check(regex("Tell us about the person who has died(?s).*?govuk-task-list__status\">(.+?)</div>").is("Completed")))
 
     }
 
@@ -538,7 +539,7 @@ object Probate_01_ExecOne_Apply {
         .get(BaseURL + "/applicant-name")
         .headers(CommonHeader)
         .check(CsrfCheck.save)
-        .check(regex("What is your full name")))
+        .check(substring("What is your full name")))
 
     }
 
@@ -555,7 +556,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("firstName", "Perf#{randomString}")
         .formParam("lastName", "ExecOne#{randomString}")
         .check(CsrfCheck.save)
-        .check(regex("exactly how your name is written in the will")))
+        .check(substring("exactly how your name is written in the will")))
 
     }
 
@@ -571,7 +572,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("isSaveAndClose", "false")
         .formParam("nameAsOnTheWill", "optionYes")
         .check(CsrfCheck.save)
-        .check(regex("What is your phone number")))
+        .check(substring("What is your phone number")))
 
     }
 
@@ -587,7 +588,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("isSaveAndClose", "false")
         .formParam("phoneNumber", "07000000000")
         .check(CsrfCheck.save)
-        .check(regex("What is your address")))
+        .check(substring("What is your address")))
 
     }
 
@@ -608,7 +609,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("newPostCode", "#{randomPostcode}")
         .formParam("country", "")
         .check(CsrfCheck.save)
-        .check(regex("How many executors are named")))
+        .check(substring("How many executors are named")))
 
     }
 
@@ -624,7 +625,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("isSaveAndClose", "false")
         .formParam("executorsNumber", "2")
         .check(CsrfCheck.save)
-        .check(regex("What are the executors")))
+        .check(substring("What are the executors")))
 
     }
 
@@ -640,7 +641,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("isSaveAndClose", "false")
         .formParam("executorName[0]", "Perf Exec Two")
         .check(CsrfCheck.save)
-        .check(regex("Are all the executors alive")))
+        .check(substring("Are all the executors alive")))
 
     }
 
@@ -656,7 +657,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("isSaveAndClose", "false")
         .formParam("allalive", "optionYes")
         .check(CsrfCheck.save)
-        .check(regex("Will any of the other executors be dealing with the estate")))
+        .check(substring("Will any of the other executors be dealing with the estate")))
 
     }
 
@@ -672,7 +673,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("isSaveAndClose", "false")
         .formParam("otherExecutorsApplying", "optionYes")
         .check(CsrfCheck.save)
-        .check(regex("Which executors will be dealing with the estate")))
+        .check(substring("Which executors will be dealing with the estate")))
 
     }
 
@@ -688,7 +689,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("isSaveAndClose", "false")
         .formParam("executorsApplying[]", "Perf Exec Two")
         .check(CsrfCheck.save)
-        .check(regex("Do any of these executors now have a different name")))
+        .check(substring("Do any of these executors now have a different name")))
 
     }
 
@@ -704,7 +705,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("isSaveAndClose", "false")
         .formParam("alias", "optionNo")
         .check(CsrfCheck.save)
-        .check(regex("email address and mobile number")))
+        .check(substring("email address and mobile number")))
 
     }
 
@@ -719,9 +720,9 @@ object Probate_01_ExecOne_Apply {
         .formParam("_csrf", "#{csrf}")
         .formParam("isSaveAndClose", "false")
         .formParam("email", "exec-two@perftest#{randomString}.com")
-        .formParam("mobile", "07000000001")
+        .formParam("mobile", "07800000001")
         .check(CsrfCheck.save)
-        .check(regex("permanent address")))
+        .check(substring("permanent address")))
 
     }
 
@@ -742,7 +743,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("newPostCode", "#{randomPostcode}")
         .formParam("country", "")
         //PCQ (Equality/diversity survey) might pop up at this point, so cater for either outcome in the text check
-        .check(regex("2.</span> Give details about the executors(?s).*?<span class=.govuk-tag task-completed.>Completed</span>|Equality and diversity questions")))
+        .check(regex("Give details about the executors(?s).*?<span class=.govuk-tag task-completed.>Completed</span>|Equality and diversity questions")))
 
     }
 
@@ -755,7 +756,7 @@ object Probate_01_ExecOne_Apply {
       exec(http("SectionThreeStart")
         .get(BaseURL + "/summary/declaration")
         .headers(CommonHeader)
-        .check(regex("Check your answers")))
+        .check(substring("Check your answers")))
 
     }
 
@@ -767,7 +768,7 @@ object Probate_01_ExecOne_Apply {
         .get(BaseURL + "/declaration")
         .headers(CommonHeader)
         .check(CsrfCheck.save)
-        .check(regex("Check the legal statement and make your declaration")))
+        .check(substring("Check the legal statement and make your declaration")))
 
     }
 
@@ -783,7 +784,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("isSaveAndClose", "false")
         .formParam("declarationCheckbox", "true")
         .check(CsrfCheck.save)
-        .check(regex("Notify the other executors")))
+        .check(substring("Notify the other executors")))
 
     }
 
@@ -797,8 +798,8 @@ object Probate_01_ExecOne_Apply {
         .headers(PostHeader)
         .formParam("_csrf", "#{csrf}")
         .formParam("isSaveAndClose", "false")
-        .check(regex("Complete these steps"))
-        .check(regex("Not declared")))
+        .check(substring("Complete these steps"))
+        .check(substring("Not declared")))
 
     }
 

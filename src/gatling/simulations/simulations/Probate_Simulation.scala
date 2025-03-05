@@ -153,7 +153,7 @@ class Probate_Simulation extends Simulation {
             Probate_Intestacy.IntestacyApplicationSection2,
             Probate_Intestacy.IntestacyApplicationSection3,
             Probate_Intestacy.IntestacyApplicationSection4,
-            Probate_Intestacy.IntestacyApplicationSection5,
+            Probate_Intestacy.IntestacyPayment,
             Logout.ProbateLogout)
         }
     }

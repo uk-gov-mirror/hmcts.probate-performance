@@ -26,6 +26,7 @@ object Probate_Intestacy {
       "dodDay" -> Common.getDay(),
       "dodMonth" -> "03", //Removing random DOD to test Excepted Estates (requires DOD after 01/01/2022)
       "dodYear" -> "2022",
+      "cardExpiryYear" -> Common.getCardExpiryYear(),
       "randomPostcode" -> Common.getPostcode()))
 
     .group("Intestacy_010_StartEligibility") {
@@ -34,7 +35,7 @@ object Probate_Intestacy {
         .get(BaseURL + "/death-certificate")
         .headers(CommonHeader)
         .check(CsrfCheck.save)
-        .check(regex("Do you have the death certificate")))
+        .check(substring("Do you have the death certificate")))
 
     }
 
@@ -50,7 +51,7 @@ object Probate_Intestacy {
         .formParam("isSaveAndClose", "false")
         .formParam("deathCertificate", "optionYes")
         .check(CsrfCheck.save)
-        .check(regex("Is the original death certificate in English")))
+        .check(substring("Is the original death certificate in English")))
 
     }
 
@@ -66,7 +67,7 @@ object Probate_Intestacy {
         .formParam("isSaveAndClose", "false")
         .formParam("deathCertificateInEnglish", "optionYes")
         .check(CsrfCheck.save)
-        .check(regex("Did the person who died live permanently")))
+        .check(substring("Did the person who died live permanently")))
 
     }
 
@@ -82,7 +83,7 @@ object Probate_Intestacy {
         .formParam("isSaveAndClose", "false")
         .formParam("domicile", "optionYes")
         .check(CsrfCheck.save)
-        .check(regex("1 January 2022")))
+        .check(substring("1 January 2022")))
 
     }
 
@@ -98,7 +99,7 @@ object Probate_Intestacy {
         .formParam("isSaveAndClose", "false")
         .formParam("eeDeceasedDod", "optionYes")
         .check(CsrfCheck.save)
-        .check(regex("Have you worked out")))
+        .check(substring("Have you worked out")))
 
     }
 
@@ -114,7 +115,7 @@ object Probate_Intestacy {
         .formParam("isSaveAndClose", "false")
         .formParam("eeEstateValued", "optionYes")
         .check(CsrfCheck.save)
-        .check(regex("Did the person who died leave a will")))
+        .check(substring("Did the person who died leave a will")))
 
     }
 
@@ -130,7 +131,7 @@ object Probate_Intestacy {
         .formParam("isSaveAndClose", "false")
         .formParam("left", "optionNo")
         .check(CsrfCheck.save)
-        .check(regex("Did the person die on or after 1 October 2014")))
+        .check(substring("Did the person die on or after 1 October 2014")))
 
     }
 
@@ -146,7 +147,7 @@ object Probate_Intestacy {
         .formParam("isSaveAndClose", "false")
         .formParam("diedAfter", "optionYes")
         .check(CsrfCheck.save)
-        .check(regex("Are you the spouse")))
+        .check(substring("Are you the spouse")))
 
     }
 
@@ -162,7 +163,7 @@ object Probate_Intestacy {
         .formParam("isSaveAndClose", "false")
         .formParam("related", "optionYes")
         .check(CsrfCheck.save)
-        .check(regex("Are you planning to make a joint application")))
+        .check(substring("Are you planning to make a joint application")))
 
     }
 
@@ -177,7 +178,7 @@ object Probate_Intestacy {
         .formParam("_csrf", "#{csrf}")
         .formParam("isSaveAndClose", "false")
         .formParam("otherApplicants", "optionNo")
-        .check(regex("Complete these steps")))
+        .check(substring("Complete these steps")))
 
     }
 
@@ -193,7 +194,7 @@ object Probate_Intestacy {
         .get(BaseURL + "/bilingual-gop")
         .headers(CommonHeader)
         .check(CsrfCheck.save)
-        .check(regex("Do you require a bilingual grant")))
+        .check(substring("Do you require a bilingual grant")))
 
     }
 
@@ -209,7 +210,7 @@ object Probate_Intestacy {
         .formParam("isSaveAndClose", "false")
         .formParam("bilingual", "optionNo")
         .check(CsrfCheck.save)
-        .check(regex("What are the details of the person")))
+        .check(substring("What are the details of the person")))
 
     }
 
@@ -232,7 +233,7 @@ object Probate_Intestacy {
         .formParam("dod-month", "#{dodMonth}")
         .formParam("dod-year", "#{dodYear}")
         .check(CsrfCheck.save)
-        .check(regex("What was the permanent address")))
+        .check(substring("permanent address at the time of their death")))
 
     }
 
@@ -253,7 +254,7 @@ object Probate_Intestacy {
         .formParam("newPostCode", "#{randomPostcode}")
         .formParam("country", "")
         .check(CsrfCheck.save)
-        .check(regex("die in England or Wales")))
+        .check(substring("die in England or Wales")))
 
     }
 
@@ -269,7 +270,7 @@ object Probate_Intestacy {
         .formParam("isSaveAndClose", "false")
         .formParam("diedEngOrWales", "optionYes")
         .check(CsrfCheck.save)
-        .check(regex("Do you have a death certificate")))
+        .check(substring("Do you have a death certificate")))
 
     }
 
@@ -285,7 +286,7 @@ object Probate_Intestacy {
         .formParam("isSaveAndClose", "false")
         .formParam("deathCertificate", "optionDeathCertificate")
         .check(CsrfCheck.save)
-        .check(regex("report the estate value to HMRC")))
+        .check(substring("report the estate value to HMRC")))
 
     }
 
@@ -301,7 +302,7 @@ object Probate_Intestacy {
         .formParam("isSaveAndClose", "false")
         .formParam("calcCheckCompleted", "optionYes")
         .check(CsrfCheck.save)
-        .check(regex("Which forms did you submit to HMRC")))
+        .check(substring("Which forms did you submit to HMRC")))
 
     }
 
@@ -317,7 +318,7 @@ object Probate_Intestacy {
         .formParam("isSaveAndClose", "false")
         .formParam("ihtFormEstateId", "optionIHT400")
         .check(CsrfCheck.save)
-        .check(regex("Have you received a letter from HMRC")))
+        .check(substring("Have you received a letter from HMRC")))
 
     }
 
@@ -333,7 +334,7 @@ object Probate_Intestacy {
         .formParam("isSaveAndClose", "false")
         .formParam("hmrcLetterId", "optionYes")
         .check(CsrfCheck.save)
-        .check(regex("Enter the unique probate code")))
+        .check(substring("Enter the unique probate code")))
 
     }
 
@@ -349,7 +350,7 @@ object Probate_Intestacy {
         .formParam("isSaveAndClose", "false")
         .formParam("uniqueProbateCodeId", "CTS 040523 1104 3tpp s8e9")
         .check(CsrfCheck.save)
-        .check(regex("What are the values of assets")))
+        .check(substring("What are the values of assets")))
 
     }
 
@@ -366,7 +367,7 @@ object Probate_Intestacy {
         .formParam("grossValueField", "900000")
         .formParam("netValueField", "800000")
         .check(CsrfCheck.save)
-        .check(regex("any assets outside of England")))
+        .check(substring("any assets outside of England")))
 
     }
 
@@ -382,7 +383,7 @@ object Probate_Intestacy {
         .formParam("isSaveAndClose", "false")
         .formParam("assetsOutside", "optionNo")
         .check(CsrfCheck.save)
-        .check(regex("assets in another name")))
+        .check(substring("assets in another name")))
 
     }
 
@@ -398,7 +399,7 @@ object Probate_Intestacy {
         .formParam("isSaveAndClose", "false")
         .formParam("alias", "optionNo")
         .check(CsrfCheck.save)
-        .check(regex("marital status")))
+        .check(substring("marital status")))
 
     }
 
@@ -413,8 +414,8 @@ object Probate_Intestacy {
         .formParam("_csrf", "#{csrf}")
         .formParam("isSaveAndClose", "false")
         .formParam("maritalStatus", "optionMarried")
-        .check(regex("Complete these steps"))
-        .check(regex("""1.</span> Tell us about the person who has died\n    </h2>\n    \n        <span class="govuk-tag task-completed">Completed</span>""")))
+        .check(substring("Complete these steps"))
+        .check(regex("Tell us about the person who has died(?s).*?govuk-task-list__status\">(.+?)</div>").is("Completed")))
 
     }
 
@@ -428,7 +429,7 @@ object Probate_Intestacy {
         .get(BaseURL + "/relationship-to-deceased")
         .headers(CommonHeader)
         .check(CsrfCheck.save)
-        .check(regex("What was your relationship")))
+        .check(substring("What was your relationship")))
 
     }
 
@@ -444,7 +445,7 @@ object Probate_Intestacy {
         .formParam("isSaveAndClose", "false")
         .formParam("relationshipToDeceased", "optionSpousePartner")
         .check(CsrfCheck.save)
-        .check(regex("have any children")))
+        .check(substring("have any children")))
 
     }
 
@@ -460,7 +461,7 @@ object Probate_Intestacy {
         .formParam("isSaveAndClose", "false")
         .formParam("anyChildren", "optionNo")
         .check(CsrfCheck.save)
-        .check(regex("What is your full name")))
+        .check(substring("What is your full name")))
 
     }
 
@@ -477,7 +478,7 @@ object Probate_Intestacy {
         .formParam("firstName", "Perf#{randomString}")
         .formParam("lastName", "ExecOne#{randomString}")
         .check(CsrfCheck.save)
-        .check(regex("What is your phone number")))
+        .check(substring("What is your phone number")))
 
     }
 
@@ -493,7 +494,7 @@ object Probate_Intestacy {
         .formParam("isSaveAndClose", "false")
         .formParam("phoneNumber", "07000000000")
         .check(CsrfCheck.save)
-        .check(regex("What is your address")))
+        .check(substring("What is your address")))
 
     }
 
@@ -513,7 +514,7 @@ object Probate_Intestacy {
         .formParam("postTown", "Perf #{randomString} Town")
         .formParam("newPostCode", "#{randomPostcode}")
         .formParam("country", "")
-        .check(regex("2.</span> Give details about the people applying(?s).*?<span class=.govuk-tag task-completed.>Completed</span>|Equality and diversity questions")))
+        .check(regex("Give details about the people applying(?s).*?<span class=.govuk-tag task-completed.>Completed</span>|Equality and diversity questions")))
 
     }
 
@@ -526,7 +527,7 @@ object Probate_Intestacy {
       exec(http("SectionThreeStart")
         .get(BaseURL + "/summary/declaration")
         .headers(CommonHeader)
-        .check(regex("Check your answers")))
+        .check(substring("Check your answers")))
 
     }
 
@@ -538,7 +539,7 @@ object Probate_Intestacy {
         .get(BaseURL + "/declaration")
         .headers(CommonHeader)
         .check(CsrfCheck.save)
-        .check(regex("Check the legal statement and make your declaration")))
+        .check(substring("Check the legal statement and make your declaration")))
 
     }
 
@@ -553,8 +554,8 @@ object Probate_Intestacy {
         .formParam("_csrf", "#{csrf}")
         .formParam("isSaveAndClose", "false")
         .formParam("declarationCheckbox", "true")
-        .check(regex("Complete these steps"))
-        .check(regex("3.</span> Check your answers and make your legal declaration(?s).*?<span class=.govuk-tag task-completed.>Completed</span>")))
+        .check(substring("Complete these steps"))
+        .check(regex("Check your answers and make your legal declaration(?s).*?govuk-task-list__status\">(.+?)</div>").is("Completed")))
 
     }
 
@@ -568,7 +569,7 @@ object Probate_Intestacy {
         .get(BaseURL + "/copies-uk")
         .headers(CommonHeader)
         .check(CsrfCheck.save)
-        .check(regex("How many extra official copies")))
+        .check(substring("How many extra official copies")))
 
     }
 
@@ -584,7 +585,7 @@ object Probate_Intestacy {
         .formParam("isSaveAndClose", "false")
         .formParam("uk", "0")
         .check(CsrfCheck.save)
-        .check(regex("have assets outside the UK")))
+        .check(substring("have assets outside the UK")))
 
     }
 
@@ -599,33 +600,21 @@ object Probate_Intestacy {
         .formParam("_csrf", "#{csrf}")
         .formParam("isSaveAndClose", "false")
         .formParam("assetsoverseas", "optionNo")
-        .check(regex("Check your answers")))
+        .check(substring("Check your answers")))
 
     }
 
     .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
-    .group("Intestacy_320_TaskList") {
+  val IntestacyPayment =
 
-      exec(http("TaskList")
-        .get(BaseURL + "/task-list")
-        .headers(CommonHeader)
-        .check(regex("Complete these steps"))
-        .check(regex("""4.</span> Order copies of the letters of administration\n    </h2>\n    \n        <span class="govuk-tag task-completed">Completed</span>""")))
+    group("Intestacy_330_PaymentBreakdown") {
 
-    }
-
-    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
-
-  val IntestacyApplicationSection5 =
-
-    group("Intestacy_330_SectionFiveStart") {
-
-      exec(http("SectionFiveStart")
+      exec(http("PaymentBreakdown")
         .get(BaseURL + "/payment-breakdown")
         .headers(CommonHeader)
         .check(CsrfCheck.save)
-        .check(regex("Application fee")))
+        .check(substring("Application fee")))
 
     }
 
@@ -639,7 +628,7 @@ object Probate_Intestacy {
         .headers(PostHeader)
         .formParam("_csrf", "#{csrf}")
         .formParam("isSaveAndClose", "false")
-        .check(regex("Enter card details"))
+        .check(substring("Enter card details"))
         .check(css("input[name='csrfToken']", "value").saveAs("csrf"))
         .check(css("input[name='chargeId']", "value").saveAs("ChargeId")))
 
@@ -671,7 +660,7 @@ object Probate_Intestacy {
         .formParam("csrfToken", "#{csrf}")
         .formParam("cardNo", "4444333322221111")
         .formParam("expiryMonth", "01")
-        .formParam("expiryYear", "25")
+        .formParam("expiryYear", "#{cardExpiryYear}")
         .formParam("cardholderName", "Perf Tester #{randomString}")
         .formParam("cvc", "123")
         .formParam("addressCountry", "GB")
@@ -680,7 +669,7 @@ object Probate_Intestacy {
         .formParam("addressCity", "Perf #{randomString} Town")
         .formParam("addressPostcode", "TS1 1ST") //Common.getPostcode()
         .formParam("email", "intestacy@perftest#{randomString}.com")
-        .check(regex("Confirm your payment"))
+        .check(substring("Confirm your payment"))
         .check(css("input[name='csrfToken']", "value").saveAs("csrf")))
 
     }
