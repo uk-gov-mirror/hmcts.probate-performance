@@ -41,7 +41,7 @@ object Probate_02_ExecTwo_Declaration {
         .get(BaseURL + "/executors/invitation/#{inviteId}")
         .headers(CommonHeader)
         .check(CsrfCheck.save)
-        .check(regex("Before making an application for probate")))
+        .check(substring("Before making an application for probate")))
 
     }
 
@@ -71,7 +71,7 @@ object Probate_02_ExecTwo_Declaration {
         .formParam("_csrf", "#{csrf}")
         .formParam("isSaveAndClose", "false")
         .formParam("pin", "#{pin}")
-        .check(regex("been named as an executor")))
+        .check(substring("been named as an executor")))
 
     }
 
@@ -83,7 +83,7 @@ object Probate_02_ExecTwo_Declaration {
         .get(BaseURL + "/co-applicant-declaration")
         .headers(CommonHeader)
         .check(CsrfCheck.save)
-        .check(regex("Check legal statement and make declaration")))
+        .check(substring("Check legal statement and make declaration")))
 
     }
 
@@ -98,7 +98,7 @@ object Probate_02_ExecTwo_Declaration {
         .formParam("_csrf", "#{csrf}")
         .formParam("isSaveAndClose", "false")
         .formParam("agreement", "optionYes")
-        .check(regex("made your legal declaration")))
+        .check(substring("made your legal declaration")))
 
     }
 

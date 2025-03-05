@@ -12,6 +12,7 @@ object Common {
   val patternDay = DateTimeFormatter.ofPattern("dd")
   val patternMonth = DateTimeFormatter.ofPattern("MM")
   val patternYear = DateTimeFormatter.ofPattern("yyyy")
+  val patternExpiryYear = DateTimeFormatter.ofPattern("yy")
   val patternDate = DateTimeFormatter.ofPattern("yyyyMMdd")
 
   def randomString(length: Int) = {
@@ -34,9 +35,13 @@ object Common {
   def getDobYear(): String = {
     now.minusYears(25 + rnd.nextInt(70)).format(patternYear)
   }
-  //Dod <= 21 years
+  //Dod <= 2 years
   def getDodYear(): String = {
-    now.minusYears(1 + rnd.nextInt(20)).format(patternYear)
+    now.minusYears(1 + rnd.nextInt(2)).format(patternYear)
+  }
+
+  def getCardExpiryYear(): String = {
+    now.plusYears(1 + rnd.nextInt(2)).format(patternExpiryYear)
   }
 
   def getPostcode(): String = {
