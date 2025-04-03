@@ -429,7 +429,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("isSaveAndClose", "false")
         .formParam("alias", "optionNo")
         .check(CsrfCheck.save)
-        .check(substring("get married or enter into a civil partnership")))
+        .check(substring("get married or form a civil partnership")))
 
     }
 
