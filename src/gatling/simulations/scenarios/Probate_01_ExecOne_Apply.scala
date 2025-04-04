@@ -609,23 +609,39 @@ object Probate_01_ExecOne_Apply {
         .formParam("newPostCode", "#{randomPostcode}")
         .formParam("country", "")
         .check(CsrfCheck.save)
-        .check(substring("How many executors are named")))
+        .check(substring("Check the original will and codicils now")))
 
     }
 
     .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
-    .group("Probate_290_ExecutorsNumberSubmit") {
+    .group("Probate_285_CheckWillExecSubmit") {
 
-      exec(http("ExecutorsNumberSubmit")
-        .post(BaseURL + "/executors-number")
+      exec(http("CheckWillExecSubmit")
+        .post(BaseURL + "/check-will-executors")
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "#{csrf}")
         .formParam("isSaveAndClose", "false")
-        .formParam("executorsNumber", "2")
         .check(CsrfCheck.save)
-        .check(substring("What are the executors")))
+        .check(substring("Executors named in the will")))
+
+    }
+
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
+
+    .group("Probate_290_ExecutorsNamedSubmit") {
+
+      exec(http("ExecutorsNamedSubmit")
+        .post(BaseURL + "/executors-named")
+        .headers(CommonHeader)
+        .headers(PostHeader)
+        .formParam("_csrf", "#{csrf}")
+        .formParam("isSaveAndClose", "false")
+        .formParam("executorsNamed", "optionYes")
+        .formParam("executorsNamedChecked", "true")
+        .check(CsrfCheck.save)
+        .check(substring("name written in the will or codicil")))
 
     }
 
@@ -639,15 +655,32 @@ object Probate_01_ExecOne_Apply {
         .headers(PostHeader)
         .formParam("_csrf", "#{csrf}")
         .formParam("isSaveAndClose", "false")
-        .formParam("executorName[0]", "Perf Exec Two")
+        .formParam("executorName", "Perf Exec Two")
         .check(CsrfCheck.save)
-        .check(substring("Are all the executors alive")))
+        .check(substring("Executors named in the will")))
 
     }
 
     .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
-    .group("Probate_310_ExecutorsAllAliveSubmit") {
+    .group("Probate_310_ExecutorsNamed2Submit") {
+
+      exec(http("ExecutorsNamed2Submit")
+        .post(BaseURL + "/executors-named")
+        .headers(CommonHeader)
+        .headers(PostHeader)
+        .formParam("_csrf", "#{csrf}")
+        .formParam("isSaveAndClose", "false")
+        .formParam("executorsNamed", "optionNo")
+        .formParam("executorsNamedChecked", "true")
+        .check(CsrfCheck.save)
+        .check(substring("died since the will was signed")))
+
+    }
+
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
+
+    .group("Probate_320_ExecutorsAllAliveSubmit") {
 
       exec(http("ExecutorsAllAliveSubmit")
         .post(BaseURL + "/executors-all-alive")
@@ -655,17 +688,17 @@ object Probate_01_ExecOne_Apply {
         .headers(PostHeader)
         .formParam("_csrf", "#{csrf}")
         .formParam("isSaveAndClose", "false")
-        .formParam("allalive", "optionYes")
+        .formParam("allalive", "optionNo")
         .check(CsrfCheck.save)
-        .check(substring("Will any of the other executors be dealing with the estate")))
+        .check(substring("Executors dealing with the estate")))
 
     }
 
     .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
-    .group("Probate_320_OtherExecutorsSubmit") {
+    .group("Probate_330_OtherExecsApplyingSubmit") {
 
-      exec(http("OtherExecutorsSubmit")
+      exec(http("OtherExecsApplyingSubmit")
         .post(BaseURL + "/other-executors-applying")
         .headers(CommonHeader)
         .headers(PostHeader)
@@ -673,23 +706,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("isSaveAndClose", "false")
         .formParam("otherExecutorsApplying", "optionYes")
         .check(CsrfCheck.save)
-        .check(substring("Which executors will be dealing with the estate")))
-
-    }
-
-    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
-
-    .group("Probate_330_ExecutorsDealingSubmit") {
-
-      exec(http("ExecutorsDealingSubmit")
-        .post(BaseURL + "/executors-dealing-with-estate")
-        .headers(CommonHeader)
-        .headers(PostHeader)
-        .formParam("_csrf", "#{csrf}")
-        .formParam("isSaveAndClose", "false")
-        .formParam("executorsApplying[]", "Perf Exec Two")
-        .check(CsrfCheck.save)
-        .check(substring("Do any of these executors now have a different name")))
+        .check(substring("different to how it appears on their passport")))
 
     }
 
@@ -698,14 +715,14 @@ object Probate_01_ExecOne_Apply {
     .group("Probate_340_ExecutorsAliasSubmit") {
 
       exec(http("ExecutorsAliasSubmit")
-        .post(BaseURL + "/executors-alias")
+        .post(BaseURL + "/executors-alias/1")
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "#{csrf}")
         .formParam("isSaveAndClose", "false")
         .formParam("alias", "optionNo")
         .check(CsrfCheck.save)
-        .check(substring("email address and mobile number")))
+        .check(substring("contact details")))
 
     }
 
@@ -722,7 +739,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("email", "exec-two@perftest#{randomString}.com")
         .formParam("mobile", "07800000001")
         .check(CsrfCheck.save)
-        .check(substring("permanent address")))
+        .check(substring("s address")))
 
     }
 
