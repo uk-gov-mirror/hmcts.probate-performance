@@ -131,22 +131,6 @@ object Probate_Intestacy {
         .formParam("isSaveAndClose", "false")
         .formParam("left", "optionNo")
         .check(CsrfCheck.save)
-        .check(substring("Did the person die on or after 1 October 2014")))
-
-    }
-
-    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
-
-    .group("Intestacy_060_DiedAfterSubmit") {
-
-      exec(http("DiedAfterSubmit")
-        .post(BaseURL + "/died-after-october-2014")
-        .headers(CommonHeader)
-        .headers(PostHeader)
-        .formParam("_csrf", "#{csrf}")
-        .formParam("isSaveAndClose", "false")
-        .formParam("diedAfter", "optionYes")
-        .check(CsrfCheck.save)
         .check(substring("Are you the spouse")))
 
     }
