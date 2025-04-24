@@ -680,15 +680,15 @@ object Probate_01_ExecOne_Apply {
 
     .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
-    .group("Probate_320_ExecutorsAllAliveSubmit") {
+    .group("Probate_320_AnyExecutorsDiedSubmit") {
 
-      exec(http("ExecutorsAllAliveSubmit")
-        .post(BaseURL + "/executors-all-alive")
+      exec(http("AnyExecutorsDiedSubmit")
+        .post(BaseURL + "/any-executors-died")
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "#{csrf}")
         .formParam("isSaveAndClose", "false")
-        .formParam("allalive", "optionNo")
+        .formParam("anyExecutorsDied", "optionNo")
         .check(CsrfCheck.save)
         .check(substring("Executors dealing with the estate")))
 
