@@ -151,21 +151,6 @@ object Probate_03_ExecOne_Submit {
         .headers(PostHeader)
         .formParam("chargeId", "#{ChargeId}")
         .formParam("csrfToken", "#{csrf}")
-        .check(CsrfCheck.save)
-        .check(substring("Payment received")))
-
-    }
-
-    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
-
-    .group("Probate_550_PaymentStatusSubmit") {
-
-      exec(http("PaymentStatusSubmit")
-        .post(BaseURL + "/payment-status")
-        .headers(CommonHeader)
-        .headers(PostHeader)
-        .formParam("_csrf", "#{csrf}")
-        .formParam("isSaveAndClose", "false")
         .check(substring("Application submitted")))
 
     }
