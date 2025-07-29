@@ -8,6 +8,5 @@ target/**
 build/**
 *.log
 out/**
-*.csv
 *.lock
 .java-version
