@@ -2,15 +2,16 @@ package scenarios
 
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
+import utilities.{DateUtils, StringUtils}
 
-import utils.{Environment, Common}
+import utils.Environment
 
 object CreateUser {
 
   val IdamAPIURL = Environment.idamAPIURL
 
   val newUserFeeder = Iterator.continually(Map(
-    "emailAddress" -> ("perftest" + Common.getDate() + "@perftest-" + Common.randomString(10) + ".com"),
+    "emailAddress" -> ("perftest" + DateUtils.getDateNow("yyyyMMdd") + "@perftest-" + StringUtils.randomString(10) + ".com"),
     "password" -> "Pa55word11",
     "role" -> "citizen"
   ))

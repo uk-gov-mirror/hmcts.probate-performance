@@ -3,7 +3,8 @@ package scenarios
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import utils.CsrfCheck
-import utils.{Common, Environment}
+import utils.Environment
+import utilities.{DateUtils, StringUtils}
 
 import scala.concurrent.duration._
 
@@ -17,17 +18,20 @@ object Probate_01_ExecOne_Apply {
   val CommonHeader = Environment.commonHeader
   val PostHeader = Environment.postHeader
 
+  val postcodeFeeder = csv("postcodes.csv").random
+
   val ProbateEligibility =
 
-    exec(_.setAll("randomString" -> Common.randomString(5),
-      "dobDay" -> Common.getDay(),
-      "dobMonth" -> Common.getMonth(),
-      "dobYear" -> Common.getDobYear(),
-      "dodDay" -> Common.getDay(),
-      "dodMonth" -> Common.getMonth(),
-      "dodYear" -> Common.getDodYear(),
-      "cardExpiryYear" -> Common.getCardExpiryYear(),
-      "randomPostcode" -> Common.getPostcode()))
+    exec(_.setAll("randomString" -> StringUtils.randomString(5),
+      "dobDay" -> DateUtils.getRandomDayOfMonth(),
+      "dobMonth" -> DateUtils.getRandomMonthOfYear(),
+      "dobYear" -> DateUtils.getDatePastRandom("yyyy", minYears = 25, maxYears = 70),
+      "dodDay" -> DateUtils.getRandomDayOfMonth(),
+      "dodMonth" -> DateUtils.getRandomMonthOfYear(),
+      "dodYear" -> DateUtils.getDatePastRandom("yyyy", minYears = 1, maxYears = 2),
+      "cardExpiryYear" -> DateUtils.getDateNow("yy")))
+
+    .feed(postcodeFeeder)
 
     .group("Probate_010_StartEligibility") {
 
@@ -297,7 +301,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("addressLine2", "")
         .formParam("addressLine3", "")
         .formParam("postTown", "Perf #{randomString} Town")
-        .formParam("newPostCode", "#{randomPostcode}")
+        .formParam("newPostCode", "#{postcode}")
         .formParam("country", "")
         .check(CsrfCheck.save)
         .check(substring("die in England or Wales")))
@@ -606,7 +610,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("addressLine2", "")
         .formParam("addressLine3", "")
         .formParam("postTown", "Perf #{randomString} Town")
-        .formParam("newPostCode", "#{randomPostcode}")
+        .formParam("newPostCode", "#{postcode}")
         .formParam("country", "")
         .check(CsrfCheck.save)
         .check(substring("Check the original will and codicils now")))
@@ -757,7 +761,7 @@ object Probate_01_ExecOne_Apply {
         .formParam("addressLine2", "")
         .formParam("addressLine3", "")
         .formParam("postTown", "Perf #{randomString} Town")
-        .formParam("newPostCode", "#{randomPostcode}")
+        .formParam("newPostCode", "#{postcode}")
         .formParam("country", "")
         //PCQ (Equality/diversity survey) might pop up at this point, so cater for either outcome in the text check
         .check(regex("Give details about the executors(?s).*?<span class=.govuk-tag task-completed.>Completed</span>|Equality and diversity questions")))
