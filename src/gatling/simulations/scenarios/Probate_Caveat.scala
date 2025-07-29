@@ -2,7 +2,8 @@ package scenarios
 
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
-import utils.{Common, CsrfCheck, Environment}
+import utils.{CsrfCheck, Environment}
+import utilities.{DateUtils, StringUtils}
 
 import scala.concurrent.duration._
 
@@ -17,17 +18,20 @@ object Probate_Caveat {
   val CommonHeader = Environment.commonHeader
   val PostHeader = Environment.postHeader
 
+  val postcodeFeeder = csv("postcodes.csv").random
+
   val ProbateCaveat =
 
-    exec(_.setAll("randomString" -> Common.randomString(5),
-      "dobDay" -> Common.getDay(),
-      "dobMonth" -> Common.getMonth(),
-      "dobYear" -> Common.getDobYear(),
-      "dodDay" -> Common.getDay(),
-      "dodMonth" -> "03", //Removing random DOD to test Excepted Estates (requires DOD after 01/01/2022)
-      "dodYear" -> "2022",
-      "cardExpiryYear" -> Common.getCardExpiryYear(),
-      "randomPostcode" -> Common.getPostcode()))
+    exec(_.setAll("randomString" -> StringUtils.randomString(5),
+      "dobDay" -> DateUtils.getRandomDayOfMonth(),
+      "dobMonth" -> DateUtils.getRandomMonthOfYear(),
+      "dobYear" -> DateUtils.getDatePastRandom("yyyy", minYears = 25, maxYears = 70),
+      "dodDay" -> DateUtils.getRandomDayOfMonth(),
+      "dodMonth" -> DateUtils.getRandomMonthOfYear(),
+      "dodYear" -> DateUtils.getDatePastRandom("yyyy", minYears = 1, maxYears = 2),
+      "cardExpiryYear" -> DateUtils.getDateFuture("yy", years = 2)))
+
+    .feed(postcodeFeeder)
 
     .group("Caveat_010_Homepage") {
 
@@ -96,7 +100,7 @@ object Probate_Caveat {
         .formParam("addressLine2", "")
         .formParam("addressLine3", "")
         .formParam("postTown", "Perf #{randomString} Town")
-        .formParam("newPostCode", "#{randomPostcode}")
+        .formParam("newPostCode", "#{postcode}")
         .formParam("country", "")
         .check(CsrfCheck.save)
         .check(substring("full name of the person")))
@@ -164,7 +168,7 @@ object Probate_Caveat {
         .formParam("addressLine2", "")
         .formParam("addressLine3", "")
         .formParam("postTown", "Perf #{randomString} Town")
-        .formParam("newPostCode", "#{randomPostcode}")
+        .formParam("newPostCode", "#{postcode}")
         .formParam("country", "")
         .check(CsrfCheck.save)
         .check(substring("English and Welsh")))
@@ -226,9 +230,6 @@ object Probate_Caveat {
 
     .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
-    // Gov Pay does strict postcode validation, so won't accept all postcodes in the format XXN NXX
-    // Therefore, not using the postcode random function as payments with an invalid postcode fail
-
     .group("Caveat_160_CardDetailsSubmit") {
 
       exec(http("CardDetailsSubmit")
@@ -245,7 +246,7 @@ object Probate_Caveat {
         .formParam("addressLine1", "1 Perf#{randomString} Road")
         .formParam("addressLine2", "")
         .formParam("addressCity", "Perf #{randomString} Town")
-        .formParam("addressPostcode", "TS1 1ST") //Common.getPostcode()
+        .formParam("addressPostcode", "#{postcode}")
         .formParam("email", "caveat@perftest#{randomString}.com")
         .check(substring("Confirm your payment"))
         .check(css("input[name='csrfToken']", "value").saveAs("csrf")))

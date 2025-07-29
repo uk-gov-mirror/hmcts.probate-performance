@@ -2,7 +2,7 @@ package scenarios
 
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
-import utils.{Common, CsrfCheck, Environment}
+import utils.{CsrfCheck, Environment}
 
 import scala.concurrent.duration._
 import scala.util.Random
@@ -18,9 +18,13 @@ object Probate_03_ExecOne_Submit {
   val CommonHeader = Environment.commonHeader
   val PostHeader = Environment.postHeader
 
-  val ProbateSubmit =
+  val postcodeFeeder = csv("postcodes.csv").random
 
-    group("Probate_450_GetCase") {
+  val ProbateSubmit = {
+
+    feed(postcodeFeeder)
+
+    .group("Probate_450_GetCase") {
 
       exec(http("GetCase")
         .get(BaseURL + "/get-case/#{caseId}?probateType=PA")
@@ -114,9 +118,6 @@ object Probate_03_ExecOne_Submit {
 
     .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
-    // Gov Pay does strict postcode validation, so won't accept all postcodes in the format XXN NXX
-    // Therefore, not using the postcode random function as payments with an invalid postcode fail
-
     .group("Probate_530_CardDetailsSubmit") {
 
       exec(http("CardDetailsSubmit")
@@ -134,7 +135,7 @@ object Probate_03_ExecOne_Submit {
         .formParam("addressLine1", "1 Perf#{randomString} Road")
         .formParam("addressLine2", "")
         .formParam("addressCity", "Perf #{randomString} Town")
-        .formParam("addressPostcode", "TS1 1ST")
+        .formParam("addressPostcode", "#{postcode}")
         .formParam("email", "probate@perftest#{randomString}.com")
         .check(substring("Confirm your payment"))
         .check(css("input[name='csrfToken']", "value").saveAs("csrf")))
@@ -189,5 +190,6 @@ object Probate_03_ExecOne_Submit {
     }
 
     .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
+  }
 
 }
