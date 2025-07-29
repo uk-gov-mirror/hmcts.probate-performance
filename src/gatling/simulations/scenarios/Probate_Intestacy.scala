@@ -29,7 +29,7 @@ object Probate_Intestacy {
       "dodDay" -> DateUtils.getRandomDayOfMonth(),
       "dodMonth" -> DateUtils.getRandomMonthOfYear(),
       "dodYear" -> DateUtils.getDatePastRandom("yyyy", minYears = 1, maxYears = 2),
-      "cardExpiryYear" -> DateUtils.getDateNow("yy")))
+      "cardExpiryYear" -> DateUtils.getDateFuture("yy", years = 2)))
 
     .feed(postcodeFeeder)
 
