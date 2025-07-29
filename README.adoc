@@ -1,5 +1,15 @@
 ### Probate Gatling Performance Tests
 
+Initial setup:
+- After cloning, run `git submodule update --init --recursive` to populate the common-performance submodule code
+- Run `./gradlew build` to rebuild with the submodule code
+
+To keep the code up to date with the latest common-performance code:
+- `git submodule update --recursive --remote`
+- `./gradlew build`
+
+For further details on the submodule, refere to https://github.com/hmcts/common-performance/
+
 To run locally:
 - Performance test against the perftest environment: `./gradlew gatlingRun`
 
@@ -7,6 +17,8 @@ Flags:
 - Debug (single-user mode): `-Ddebug=on e.g. ./gradlew gatlingRun -Ddebug=on`
 - Run against AAT: `Denv=aat e.g. ./gradlew gatlingRun -Denv=aat`
 
-Before running locally, update the client secret in src/gatling/resources/application.conf then run `git update-index --assume-unchanged src/gatling/resources/application.conf` to ensure the changes aren't pushed to github.
-
-To make other configuration changes to the file, first run `git update-index --no-assume-unchanged src/gatling/resources/application.conf`, ensuring to remove the client secret before pushing to origin
+Notes:
+- Ensure JAVA_HOME for the repo's directory is set to a Java 21 installation
+- Run `./gradlew -v` to confirm the version of Java being used by Gradle
+- The code must be compiled and executed against the same version of Java
+- Ensure your IDE is configured to use appropriate software versions (as specified in the build.gradle)
