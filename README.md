@@ -13,6 +13,7 @@ Gatling performance tests for the Probate citizen application
 For further details on the submodule, refere to https://github.com/hmcts/common-performance/
 
 **To run locally:**
+- Run `az login` using Azure CLI, as authentication is required to retrieve secrets from the Key Vault
 - Performance test against the perftest environment: `./gradlew gatlingRun`
 
 **Flags:**
