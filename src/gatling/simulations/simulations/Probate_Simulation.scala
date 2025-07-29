@@ -55,7 +55,7 @@ class Probate_Simulation extends Simulation {
   //If running in debug mode, disable pauses between steps
   val pauseOption:PauseType = debugMode match{
     case "off" => constantPauses
-    case _ => disabledPauses
+    case _ => customPauses(1000.toLong)
   }
   /* ******************************** */
 
@@ -188,16 +188,16 @@ class Probate_Simulation extends Simulation {
       case "perftest" =>
         if (debugMode == "off") {
           Seq(
-            rampUsersPerSec(0.00) to (userPerSecRate) during (rampUpDurationMins minutes),
-            constantUsersPerSec(userPerSecRate) during (testDurationMins minutes),
-            rampUsersPerSec(userPerSecRate) to (0.00) during (rampDownDurationMins minutes)
+            rampUsersPerSec(0.00) to (userPerSecRate) during (rampUpDurationMins.minutes),
+            constantUsersPerSec(userPerSecRate) during (testDurationMins.minutes),
+            rampUsersPerSec(userPerSecRate) to (0.00) during (rampDownDurationMins.minutes)
           )
         }
         else{
           Seq(atOnceUsers(1))
         }
       case "pipeline" =>
-        Seq(rampUsers(numberOfPipelineUsers.toInt) during (2 minutes))
+        Seq(rampUsers(numberOfPipelineUsers.toInt) during (2.minutes))
       case _ =>
         Seq(nothingFor(0))
     }
@@ -223,8 +223,8 @@ class Probate_Simulation extends Simulation {
 
   setUp(
     ProbateGoR.inject(simulationProfile(testType, probateRatePerSec, numberOfPipelineUsers)).pauses(pauseOption),
-    ProbateIntestacy.inject(simulationProfile(testType, intestacyRatePerSec, numberOfPipelineUsers)).pauses(pauseOption),
-    ProbateCaveat.inject(simulationProfile(testType, caveatRatePerSec, numberOfPipelineUsers)).pauses(pauseOption)
+    //ProbateIntestacy.inject(simulationProfile(testType, intestacyRatePerSec, numberOfPipelineUsers)).pauses(pauseOption),
+    //ProbateCaveat.inject(simulationProfile(testType, caveatRatePerSec, numberOfPipelineUsers)).pauses(pauseOption)
   ).protocols(httpProtocol)
     .assertions(assertions(testType))
 
