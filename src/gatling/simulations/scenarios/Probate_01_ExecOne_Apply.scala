@@ -352,23 +352,23 @@ object Probate_01_ExecOne_Apply {
         .formParam("isSaveAndClose", "false")
         .formParam("calcCheckCompleted", "optionYes")
         .check(CsrfCheck.save)
-        .check(substring("Which forms did you submit to HMRC")))
+        .check(substring("Did you need to submit form IHT400")))
 
     }
 
     .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
-    .group("Probate_175_HMRCFormsSubmit") {
+    .group("Probate_175_Iht400ToHmrcSubmit") {
 
-      exec(http("HMRCFormsSubmit")
+      exec(http("Iht400ToHmrcSubmit")
         .post(BaseURL + "/new-submitted-to-hmrc")
         .headers(CommonHeader)
         .headers(PostHeader)
         .formParam("_csrf", "#{csrf}")
         .formParam("isSaveAndClose", "false")
-        .formParam("ihtFormEstateId", "optionIHT400")
+        .formParam("estateValueCompleted", "optionYes")
         .check(CsrfCheck.save)
-        .check(substring("Have you received a letter from HMRC")))
+        .check(substring("Have you received a letter or email from HMRC")))
 
     }
 

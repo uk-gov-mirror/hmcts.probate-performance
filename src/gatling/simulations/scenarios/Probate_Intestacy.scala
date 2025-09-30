@@ -290,7 +290,7 @@ object Probate_Intestacy {
         .formParam("isSaveAndClose", "false")
         .formParam("calcCheckCompleted", "optionYes")
         .check(CsrfCheck.save)
-        .check(substring("Which forms did you submit to HMRC")))
+        .check(substring("Did you need to submit form IHT400")))
 
     }
 
@@ -304,9 +304,9 @@ object Probate_Intestacy {
         .headers(PostHeader)
         .formParam("_csrf", "#{csrf}")
         .formParam("isSaveAndClose", "false")
-        .formParam("ihtFormEstateId", "optionIHT400")
+        .formParam("estateValueCompleted", "optionYes")
         .check(CsrfCheck.save)
-        .check(substring("Have you received a letter from HMRC")))
+        .check(substring("Have you received a letter or email from HMRC")))
 
     }
 
