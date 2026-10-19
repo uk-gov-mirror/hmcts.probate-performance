@@ -2,7 +2,7 @@ package scenarios
 
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
-import utils.Environment
+import utils.{CsrfCheck, Environment}
 
 import scala.concurrent.duration._
 
@@ -19,7 +19,7 @@ object Login {
 
   val ProbateLogin =
 
-    .group("Probate_001_LoadLoginPage") {
+    group("Probate_001_LoadLoginPage") {
       exec(http("Login Applicant")
         .get(IdamURL + "/enter-email")
         .headers(CommonHeader)
