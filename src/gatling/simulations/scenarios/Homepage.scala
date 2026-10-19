@@ -32,16 +32,6 @@ object Homepage {
 
     }
 
-     .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
-
-     .group("Probate_002_ClickSignIn") {
-       exec(http("Probate_001_010_ClickSignIn")
-         .get(IdamURL + "/sign-in-or-create")
-         .headers(CommonHeader)
-         .header("sec-fetch-site", "same-origin")
-         .check(status.is(200)))
-     }
-
-     .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
 }
