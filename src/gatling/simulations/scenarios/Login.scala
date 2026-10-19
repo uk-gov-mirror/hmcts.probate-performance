@@ -20,7 +20,7 @@ object Login {
   val ProbateLogin =
 
     group("Probate_001_LoadLoginPage") {
-      exec(http("Login Applicant")
+      exec(http("Probate Load Login Page")
         .get(IdamURL + "/enter-email")
         .headers(CommonHeader)
         .check(CsrfCheck.save)
@@ -30,7 +30,7 @@ object Login {
     .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
   
     .group("Probate_002_Login_EnterEmail") {
-      exec(http("Probate Login Email")
+      exec(http("Probate Login Enter Email")
         .post(IdamURL + "/enter-email")
         .headers(CommonHeader)
         .formParam("email", "#{emailAddress}")
@@ -42,7 +42,7 @@ object Login {
     .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
 
     group("Probate_003_Login_EnterPassword") {
-      exec(http("Probate Login Password")
+      exec(http("Probate Login Enter Password")
         .post(IdamURL + "/enter-password")
         .headers(CommonHeader)
         .formParam("action", "_submit")
