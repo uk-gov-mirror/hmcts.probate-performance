@@ -2,7 +2,6 @@ package scenarios
 
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
-import utils.CsrfCheck
 import utils.Environment
 
 import scala.concurrent.duration._
@@ -28,8 +27,6 @@ object Homepage {
         .get(BaseURL + "/")
         .headers(CommonHeader)
         .header("sec-fetch-site", "none")
-        .check(regex("state=([a-z0-9-]+)&client").saveAs("state"))
-        .check(CsrfCheck.save)
         .check(substring("Sign in or create an account")))
 
     }

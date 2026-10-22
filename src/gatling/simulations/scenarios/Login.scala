@@ -2,7 +2,7 @@ package scenarios
 
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
-import utils.Environment
+import utils.{CsrfCheck, Environment}
 
 import scala.concurrent.duration._
 
@@ -19,21 +19,38 @@ object Login {
 
   val ProbateLogin =
 
-    group("Probate_000_Login") {
-      exec(http("Login")
-        .post(IdamURL + "/login?ui_locales=en&response_type=code&state=#{state}&client_id=probate&redirect_uri=" + BaseURL + "/oauth2/callback")
+    group("Probate_001_LoadLoginPage") {
+      exec(http("Probate Load Login Page")
+        .get(IdamURL + "/enter-email")
         .headers(CommonHeader)
-        .headers(PostHeader)
-        .formParam("username", "#{emailAddress}")
+        .check(CsrfCheck.save)
+        .check(substring("Enter your email address")))
+    }
+
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
+  
+    .group("Probate_002_Login_EnterEmail") {
+      exec(http("Probate Login Enter Email")
+        .post(IdamURL + "/enter-email")
+        .headers(CommonHeader)
+        .formParam("email", "#{emailAddress}")
+        .formParam("_csrf", "#{csrf}")
+        .check(CsrfCheck.save)
+        .check(substring("Enter your password")))
+    }
+  
+    .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
+
+    group("Probate_003_Login_EnterPassword") {
+      exec(http("Probate Login Enter Password")
+        .post(IdamURL + "/enter-password")
+        .headers(CommonHeader)
+        .formParam("action", "_submit")
         .formParam("password", "#{password}")
-        .formParam("save", "Sign in")
-        .formParam("selfRegistrationEnabled", "true")
         .formParam("_csrf", "#{csrf}")
         .check(regex("Apply for probate|Probate applications"))
         .check(regex("a href=./get-case/([0-9]+).probateType=(?:PA|INTESTACY)").optional.saveAs("caseId")))
     }
-
+  
     .pause(MinThinkTime.seconds, MaxThinkTime.seconds)
-
-
 }
